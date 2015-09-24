@@ -80,6 +80,9 @@
     <Compile Include="Core\Events\SwitchTask.cs" />
     <Compile Include="Core\ServiceProvider.cs" />
     <Compile Include="DayCareBootstrapper.cs" />
+    <Compile Include="Model\Database\Account.cs" />
+    <Compile Include="Model\Database\Member.cs" />
+    <Compile Include="Model\Database\Petoeter.cs" />
     <Compile Include="ViewModels\Dashboard\DashBoardViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="Views\Dashboard\DashBoardView.xaml.cs">
@@ -115,7 +118,12 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\close.png" />
+    <Resource Include="Resources\family.png" />
+    <Resource Include="Resources\olaf.png" />
+    <Resource Include="Resources\Presence.png" />
+  </ItemGroup>
   <ItemGroup>
     <Page Include="ThemeDictionary.xaml">
       <SubType>Designer</SubType>
