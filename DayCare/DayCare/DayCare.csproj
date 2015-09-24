@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DayCare</RootNamespace>
     <AssemblyName>DayCare</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -49,6 +49,7 @@
       <HintPath>..\packages\Caliburn.Micro.3.0.0-beta1\lib\net45\Caliburn.Micro.Platform.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MySql.Data, Version=6.9.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -81,8 +82,10 @@
     <Compile Include="Core\ServiceProvider.cs" />
     <Compile Include="DayCareBootstrapper.cs" />
     <Compile Include="Model\Database\Account.cs" />
+    <Compile Include="Model\Database\Child.cs" />
     <Compile Include="Model\Database\Member.cs" />
     <Compile Include="Model\Database\Petoeter.cs" />
+    <Compile Include="Model\Database\QueryInfo.cs" />
     <Compile Include="ViewModels\Dashboard\DashBoardViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="Views\Dashboard\DashBoardView.xaml.cs">
