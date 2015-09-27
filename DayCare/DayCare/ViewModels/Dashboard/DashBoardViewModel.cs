@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
+using DayCare.ViewModels.Accounts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace DayCare.ViewModels.Dashboard
             ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
                   new Core.Events.SwitchTask
                   {
-                      //Task = new MainAccountViewModel()
+                      Task = new AccountMainViewModel()
                   });
         }
 

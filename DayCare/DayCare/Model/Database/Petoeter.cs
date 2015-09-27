@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,6 +58,30 @@ namespace DayCare.Model.Database
 
         }
 
+        public IEnumerable<Account> GetAccount(Expression<Func<Account, bool>> predicate = null) 
+        {
+            var query = _accounts.AsEnumerable();
+
+            if (predicate != null)
+            {
+                query = query.Where(predicate.Compile());
+            }
+
+            return query.AsEnumerable();
+        }
+
+        public IEnumerable<Child> GetChild(Expression<Func<Child, bool>> predicate = null)
+        {
+            var query = _children.AsEnumerable();
+
+            if (predicate != null)
+            {
+                query = query.Where(predicate.Compile());
+            }
+
+            return query.AsEnumerable();
+        }
+
         #region Database Helper
         private void CreateQueries(Type type)
         {
@@ -73,9 +98,7 @@ namespace DayCare.Model.Database
 
                 if (DataBase.State == ConnectionState.Open)
                 {
-                    var cmd = DataBase.CreateCommand();
-                    cmd.CommandText = query.Select;
-
+                    var cmd = query.SelectQuery(DataBase);
                     var rdr = cmd.ExecuteReader();
 
                     while (rdr.Read())
@@ -95,5 +118,43 @@ namespace DayCare.Model.Database
 
         }
         #endregion
+
+        public void UpdateRecord(DatabaseRecord record)
+        {
+            try
+            {
+                DataBase.Open();
+
+                var command = Queries[record.GetType()].UpdateQuery(DataBase, record);
+                int result = command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+            }
+            finally 
+            {
+                DataBase.Close();
+            }
+        }
+
+        internal void DeleteRecord(DatabaseRecord record)
+        {
+            record.Deleted = true;
+
+            try
+            {
+                DataBase.Open();
+
+                var command = Queries[record.GetType()].DeleteQuery(DataBase, record);
+                int result = command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+            }
+            finally
+            {
+                DataBase.Close();
+            }
+        }
     }
 }

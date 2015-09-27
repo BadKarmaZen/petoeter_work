@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace DayCare.Model.Database
 {
-    public class Account : DatabaseRecord
+    public class DatabaseRecord
     {
-        public string Name { get; set; }
+        public Guid Id { get; set; }
+        public bool Deleted { get; set; }
     }
 }

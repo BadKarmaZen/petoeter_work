@@ -9,11 +9,24 @@ using System.Threading.Tasks;
 namespace DayCare.ViewModels
 {
     public class ShellViewModel : Screen,
-        IHandle<Core.Events.SwitchTask>,
-        IHandle<Core.Events.Close>
+        IHandle<Events.SwitchTask>,
+        IHandle<Events.Close>,
+        IHandle<Events.ShowDialog>
     {
         private Screen _task;
         private Screen _menu;
+        private Screen _dialog;
+
+        public Screen Dialog
+        {
+            get { return _dialog; }
+            set { _dialog = value; NotifyOfPropertyChange(() => Dialog); NotifyOfPropertyChange(() => ShowDialog); }
+        }
+
+        public bool ShowDialog 
+        {
+            get { return _dialog != null; }
+        }
 
         public Screen Menu
         {
@@ -47,14 +60,19 @@ namespace DayCare.ViewModels
             //  Menu = new MainMenuBarViewModel();
         }
 
-        public void Handle(Core.Events.SwitchTask message)
+        public void Handle(Events.SwitchTask message)
         {
             Task = message.Task;
         }
 
-        public void Handle(Core.Events.Close message)
+        public void Handle(Events.Close message)
         {
             TryClose();
+        }
+
+        public void Handle(Events.ShowDialog message)
+        {
+            Dialog = message.Dialog;
         }
     }
 }
