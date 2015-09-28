@@ -33,13 +33,6 @@ namespace DayCare.Model.Database
             CreateQueries(typeof(Child));
 
             InitalizeDatabase();
-
-            //Account test = new Account { Id = Guid.NewGuid(), Name = "Kurt" };
-
-            //var insert = Queries[typeof(Account)].CreateQuery(QueryKind.Update, test);
-
-            //test.Name = insert;
-
         }
 
         private void InitalizeDatabase()

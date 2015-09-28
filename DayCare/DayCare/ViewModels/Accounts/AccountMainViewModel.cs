@@ -84,7 +84,7 @@ namespace DayCare.ViewModels.Accounts
                   new Core.Events.SwitchTask
                   {
                       Task = new AddAccountViewModel()
-                  });            
+                  });
         }
 
         public void EditAction()

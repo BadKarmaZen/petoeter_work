@@ -93,6 +93,8 @@
     <Compile Include="ViewModels\Accounts\AccountUI.cs" />
     <Compile Include="ViewModels\Accounts\AddAccountViewModel.cs" />
     <Compile Include="ViewModels\Accounts\EditAccountViewModel.cs" />
+    <Compile Include="ViewModels\Children\AddChildViewModel.cs" />
+    <Compile Include="ViewModels\Children\ChildDetailViewModel.cs" />
     <Compile Include="ViewModels\Children\ChildrenMainViewModel.cs" />
     <Compile Include="ViewModels\Children\ChildUI.cs" />
     <Compile Include="ViewModels\Dashboard\DashBoardViewModel.cs" />
@@ -109,6 +111,12 @@
     </Compile>
     <Compile Include="Views\Accounts\AddAccountView.xaml.cs">
       <DependentUpon>AddAccountView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Children\AddChildView.xaml.cs">
+      <DependentUpon>AddChildView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Children\ChildDetailView.xaml.cs">
+      <DependentUpon>ChildDetailView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Children\ChildrenMainView.xaml.cs">
       <DependentUpon>ChildrenMainView.xaml</DependentUpon>
@@ -173,6 +181,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Accounts\AddAccountView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Children\AddChildView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Children\ChildDetailView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

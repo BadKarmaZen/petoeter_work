@@ -62,7 +62,15 @@ namespace DayCare.ViewModels.Children
 
             SelectedChild = child;
             SelectedChild.Selected = true;
+        }
 
+        public void AddAction()
+        {
+            ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+                  new Core.Events.SwitchTask
+                  {
+                      Task = new AddChildViewModel(_account)
+                  });
         }
     }
 }

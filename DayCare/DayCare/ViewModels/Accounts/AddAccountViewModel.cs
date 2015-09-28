@@ -18,7 +18,7 @@ namespace DayCare.ViewModels.Accounts
 
         public AddAccountViewModel()
         {
-            _account = new Account();
+            _account = new Account { Id = Guid.NewGuid() };
 
             Detail = new AccountDetailViewModel(_account);
             ChildrenDetail = new ChildrenMainViewModel(_account);

@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 
 namespace DayCare.Model.Database
 {
-    public class Child
+    public class Child : DatabaseRecord
     {
-        public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime BirthDay { get; set; }
         public Guid Account_Id { get; set; }
         public bool Present { get; set; }
-        public bool Deleted { get; set; }
     }
 }
