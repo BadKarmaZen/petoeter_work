@@ -1,6 +1,8 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
 using DayCare.ViewModels.Accounts;
+using DayCare.ViewModels.Precense;
+using DayCare.ViewModels.Scheduler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,30 +11,70 @@ using System.Threading.Tasks;
 
 namespace DayCare.ViewModels.Dashboard
 {
-    public class DashBoardViewModel : Screen
-    {
-        public void CloseAction()
-        {
-            ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-                new Core.Events.Close());
-        }
+	public class DashBoardViewModel : Screen
+	{
+		private static Events.RegisterMenu AddBackMenu;
+		private static Events.RegisterMenu RemoveBackMenu;
 
-        public void AdministrationAction()
-        {
-            ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-                  new Core.Events.SwitchTask
-                  {
-                      Task = new AccountMainViewModel()
-                  });
-        }
+		static DashBoardViewModel()
+		{
+			AddBackMenu = new Events.RegisterMenu
+			{
+				Caption = "Home",
+				Id = "Menu.Home",
+				Add = true,
+				Action = () =>
+				{
+					ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+					new Core.Events.SwitchTask
+					{
+						Task = new DashBoardViewModel()
+					});
+					ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(RemoveBackMenu);
+				}
+			};
 
-        public void StartPrecenseAction()
-        {
-            ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-                new Core.Events.SwitchTask
-                {
-                    //Task = new LoginViewModel()
-                });
-        }
-    }
+			RemoveBackMenu = new Events.RegisterMenu
+			{
+				Id = "Menu.Home",
+				Add = false
+			};
+		}
+
+		public void CloseAction()
+		{
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				new Core.Events.Close());
+		}
+
+		public void AdministrationAction()
+		{
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				new Core.Events.SwitchTask
+				{
+					Task = new AccountMainViewModel()
+				});
+		}
+
+		public void ManageSchedulesAction()
+		{
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				new Core.Events.SwitchTask
+				{
+					Task = new SchedulerMainViewModel()
+				});
+		}
+
+		public void StartPrecenseAction()
+		{
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				new Core.Events.SwitchTask
+				{
+					Task = new PresenceMainViewModel()
+				});
+		}
+	}
 }

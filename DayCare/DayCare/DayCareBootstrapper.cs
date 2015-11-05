@@ -18,6 +18,7 @@ namespace DayCare
             Initialize();
 
             ServiceProvider.Instance.RegisterService(new EventAggregator());
+            ServiceProvider.Instance.RegisterService(new TaskManager());
             ServiceProvider.Instance.RegisterService(new Petoeter());
         }
 

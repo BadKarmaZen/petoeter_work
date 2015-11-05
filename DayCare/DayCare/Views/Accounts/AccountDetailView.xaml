@@ -7,9 +7,10 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="112*"/>
+            <ColumnDefinition Width="109*"/>
             <ColumnDefinition Width="20"/>
-            <ColumnDefinition Width="175*"/>
+            <ColumnDefinition Width="124*"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -17,7 +18,12 @@
         </Grid.RowDefinitions>
 
         <TextBlock Text="Naam" Style="{DynamicResource LabelStyle}" />
-        <TextBox Grid.Column="2" Text="{Binding Name}"  VerticalAlignment="Center" Style="{DynamicResource TextBoxStyle}" Margin="2" />
+        <Border Grid.Column="2" Margin="2" BorderBrush="Gray" BorderThickness="2" CornerRadius="2" Background="#20000000">
+            <TextBlock Text="{Binding Name}"  Style="{DynamicResource LabelStyle}" Margin="2" />
+        </Border>
+        <!--<TextBox   VerticalAlignment="Center" Style="{DynamicResource TextBoxStyle}" Margin="2"  IsReadOnly="True"/>-->
+        <Button x:Name="RenameAction" Grid.Column="3" Content="Wijzigen" Margin="10,0" VerticalAlignment="Center" Style="{DynamicResource ButtonStyle}" 
+                MinHeight="30" MinWidth="100"/>
 
     </Grid>
 </UserControl>

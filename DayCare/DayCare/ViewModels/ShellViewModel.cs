@@ -57,12 +57,18 @@ namespace DayCare.ViewModels
             ServiceProvider.Instance.GetService<EventAggregator>().Subscribe(this);
 
             Task = new Dashboard.DashBoardViewModel();
-            //  Menu = new MainMenuBarViewModel();
+            Menu = new Menu.MenuBarViewModel();
         }
 
         public void Handle(Events.SwitchTask message)
         {
             Task = message.Task;
+
+            var reactivateTask = Task as ReactivatableScreen;
+            if (reactivateTask != null)
+            {
+                reactivateTask.Reactivate();                
+            }
         }
 
         public void Handle(Events.Close message)

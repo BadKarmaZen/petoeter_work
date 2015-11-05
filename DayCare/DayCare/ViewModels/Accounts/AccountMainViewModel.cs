@@ -81,20 +81,20 @@ namespace DayCare.ViewModels.Accounts
         public void AddAction ()
         {
             ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-                  new Core.Events.SwitchTask
-                  {
-                      Task = new AddAccountViewModel()
-                  });
+                new Core.Events.ShowDialog
+                {
+                    Dialog = new AddAccountViewModel()
+                });
         }
 
         public void EditAction()
         {
 
             ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-                  new Core.Events.SwitchTask
-                  {
-                      Task = new EditAccountViewModel(SelectedAccount.Tag)
-                  });
+                new Core.Events.SwitchTask
+                {
+                    Task = new EditAccountViewModel(SelectedAccount.Tag)
+                });
         }
 
         public void DeleteAction()

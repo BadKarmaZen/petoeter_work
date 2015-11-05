@@ -10,5 +10,7 @@ namespace DayCare.Model.Database
     {
         public Guid Id { get; set; }
         public bool Deleted { get; set; }
+
+        public virtual DatabaseRecord Copy() { return null; }
     }
 }

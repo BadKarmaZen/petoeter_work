@@ -5,42 +5,20 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DayCare.Views.Children"
              xmlns:cal="http://www.caliburnproject.org"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             mc:Ignorable="d" >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
 
-        <Border BorderBrush="Black" BorderThickness="0,0,0,4" Margin="10,0">
-            <TextBlock Text="Kind toevoegen" Style="{DynamicResource LabelTitleStyle}" HorizontalAlignment="Center" />
+        <Border BorderBrush="Black" BorderThickness="2" CornerRadius="5">
+            <ContentControl cal:View.Model="{Binding Detail}" Margin="10" />
         </Border>
 
-        <Grid Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-
-            <GroupBox HorizontalAlignment="Stretch" Margin="10">
-                <GroupBox.Header>
-                    <TextBlock Text="Detail" Style="{DynamicResource GroupBoxHeaderStyle}" />
-                </GroupBox.Header>
-
-                <ContentControl cal:View.Model="{Binding Detail}" Margin="10" />
-
-            </GroupBox>
-
-
-
-            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-                <Button x:Name="SaveAction" Content="Bewaren" Style="{DynamicResource ButtonStyle}" Height="30" MinWidth="100" Margin="5,0"/>
-                <Button x:Name="CancelAction" Content="Annuleren" Style="{DynamicResource ButtonStyle}" Height="30" MinWidth="100" Margin="5,0"/>
-            </StackPanel>
-        </Grid>
-
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+            <Button x:Name="SaveAction" Content="Bewaren" Style="{DynamicResource ButtonStyle}" Height="30" MinWidth="100" Margin="5,0"/>
+            <Button x:Name="CancelAction" Content="Annuleren" Style="{DynamicResource ButtonStyle}" Height="30" MinWidth="100" Margin="5,0"/>
+        </StackPanel>
     </Grid>
 </UserControl>

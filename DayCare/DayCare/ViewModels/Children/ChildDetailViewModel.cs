@@ -10,25 +10,36 @@ namespace DayCare.ViewModels.Children
 {
     public class ChildDetailViewModel : Screen
     {
-        private Child _child;
+        private string _firstName;
+        private string _lastName;
 
         #region Properties
         public string FirstName
         {
-            get { return _child.FirstName; }
-            set { _child.FirstName = value; NotifyOfPropertyChange(() => FirstName); }
+            get { return _firstName; }
+            set { _firstName = value; NotifyOfPropertyChange(() => FirstName); }
         }
 
         public string LastName
         {
-            get { return _child.LastName; }
-            set { _child.LastName = value; NotifyOfPropertyChange(() => FirstName); }
+            get { return _lastName; }
+            set { _lastName = value; NotifyOfPropertyChange(() => FirstName); }
         }
         #endregion
 
-        public ChildDetailViewModel(Child child)
+        public ChildDetailViewModel(Child child = null)
         {
-            _child = child;
+            if (child != null)
+            {
+                _firstName = child.FirstName;
+                _lastName = child.LastName;                
+            }
+        }
+
+        internal void GetData(Child child)
+        {
+            child.FirstName = _firstName;
+            child.LastName = _lastName;
         }
     }
 }

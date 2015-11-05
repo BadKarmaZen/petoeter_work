@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="800" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -20,7 +20,8 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="1*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
@@ -38,9 +39,16 @@
                 <ContentControl cal:View.Model="{Binding ChildrenDetail}" Margin="10" />
             </GroupBox>
 
-            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-                <Button x:Name="SaveAction" Content="Bewaren" Style="{DynamicResource ButtonStyle}" Height="30" MinWidth="100" Margin="5,0"/>
-                <Button x:Name="CancelAction" Content="Annuleren" Style="{DynamicResource ButtonStyle}" Height="30" MinWidth="100" Margin="5,0"/>
+            <GroupBox Grid.Row="2" HorizontalAlignment="Stretch" Margin="10,10,10,5">
+                <GroupBox.Header>
+                    <TextBlock Text="Familie" Style="{DynamicResource GroupBoxHeaderStyle}" />
+                </GroupBox.Header>
+                <ContentControl cal:View.Model="{Binding MembersDetail}" Margin="10" />
+            </GroupBox>
+
+            <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,10,10">
+                <!--<Button x:Name="SaveAction" Content="Bewaren" Style="{DynamicResource ButtonStyle}" Height="30" MinWidth="100" Margin="5,0"/>-->
+                <Button x:Name="CancelAction" Content="Terug" Style="{DynamicResource ButtonStyle}" Height="30" MinWidth="100" Margin="5,0"/>
             </StackPanel>
         </Grid>
     </Grid>

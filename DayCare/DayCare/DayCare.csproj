@@ -79,26 +79,44 @@
     </Compile>
     <Compile Include="Converters\BooleanVisibilityConverter .cs" />
     <Compile Include="Core\Events.cs" />
+    <Compile Include="Core\ReactivatableScreen.cs" />
     <Compile Include="Core\ServiceProvider.cs" />
+    <Compile Include="Core\TaskManager.cs" />
     <Compile Include="DayCareBootstrapper.cs" />
     <Compile Include="Model\Database\Account.cs" />
     <Compile Include="Model\Database\Child.cs" />
+    <Compile Include="Model\Database\DatabaseIgnoreAttribute.cs" />
     <Compile Include="Model\Database\DatabaseRecord.cs" />
     <Compile Include="Model\Database\Member.cs" />
     <Compile Include="Model\Database\Petoeter.cs" />
+    <Compile Include="Model\Database\Presence.cs" />
     <Compile Include="Model\Database\QueryInfo.cs" />
+    <Compile Include="Model\Database\Schedule.cs" />
+    <Compile Include="Model\Tasks\AddAccountTask.cs" />
+    <Compile Include="Model\Tasks\EditAccountTask.cs" />
     <Compile Include="Model\UI\BaseItemUI.cs" />
     <Compile Include="ViewModels\Accounts\AccountDetailViewModel.cs" />
     <Compile Include="ViewModels\Accounts\AccountMainViewModel.cs" />
     <Compile Include="ViewModels\Accounts\AccountUI.cs" />
     <Compile Include="ViewModels\Accounts\AddAccountViewModel.cs" />
     <Compile Include="ViewModels\Accounts\EditAccountViewModel.cs" />
+    <Compile Include="ViewModels\Accounts\RenameAccountViewModel.cs" />
     <Compile Include="ViewModels\Children\AddChildViewModel.cs" />
     <Compile Include="ViewModels\Children\ChildDetailViewModel.cs" />
     <Compile Include="ViewModels\Children\ChildrenMainViewModel.cs" />
     <Compile Include="ViewModels\Children\ChildUI.cs" />
+    <Compile Include="ViewModels\Children\EditChildViewModel.cs" />
     <Compile Include="ViewModels\Dashboard\DashBoardViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\YesNoDialogViewModel.cs" />
+    <Compile Include="ViewModels\Members\AddMemberViewModel.cs" />
+    <Compile Include="ViewModels\Members\EditMemberViewModel.cs" />
+    <Compile Include="ViewModels\Members\MembersMainViewModel.cs" />
+    <Compile Include="ViewModels\Menu\MenuBarViewModel.cs" />
+    <Compile Include="ViewModels\Precense\EditPrecenseViewModel.cs" />
+    <Compile Include="ViewModels\Precense\PresenceMainViewModel.cs" />
+    <Compile Include="ViewModels\Scheduler\AddScheduleViewModel.cs" />
+    <Compile Include="ViewModels\Scheduler\EditChildScheduleViewModel.cs" />
+    <Compile Include="ViewModels\Scheduler\SchedulerMainViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="Views\Accounts\AccountDetailView.xaml.cs">
       <DependentUpon>AccountDetailView.xaml</DependentUpon>
@@ -112,6 +130,9 @@
     <Compile Include="Views\Accounts\AddAccountView.xaml.cs">
       <DependentUpon>AddAccountView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Accounts\RenameAccountView.xaml.cs">
+      <DependentUpon>RenameAccountView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Children\AddChildView.xaml.cs">
       <DependentUpon>AddChildView.xaml</DependentUpon>
     </Compile>
@@ -121,11 +142,41 @@
     <Compile Include="Views\Children\ChildrenMainView.xaml.cs">
       <DependentUpon>ChildrenMainView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Children\EditChildView.xaml.cs">
+      <DependentUpon>EditChildView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Dashboard\DashBoardView.xaml.cs">
       <DependentUpon>DashBoardView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Dialogs\YesNoDialogView.xaml.cs">
       <DependentUpon>YesNoDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Members\AddMemberView.xaml.cs">
+      <DependentUpon>AddMemberView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Members\EditMemberView.xaml.cs">
+      <DependentUpon>EditMemberView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Members\MembersMainView.xaml.cs">
+      <DependentUpon>MembersMainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Menu\MenuBarView.xaml.cs">
+      <DependentUpon>MenuBarView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Precense\EditPrecenseView.xaml.cs">
+      <DependentUpon>EditPrecenseView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Precense\PresenceMainView.xaml.cs">
+      <DependentUpon>PresenceMainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Scheduler\AddScheduleView.xaml.cs">
+      <DependentUpon>AddScheduleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Scheduler\EditChildScheduleView.xaml.cs">
+      <DependentUpon>EditChildScheduleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Scheduler\SchedulerMainView.xaml.cs">
+      <DependentUpon>SchedulerMainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
@@ -184,6 +235,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Accounts\RenameAccountView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Children\AddChildView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -196,6 +251,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Children\EditChildView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Dashboard\DashBoardView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -204,12 +263,50 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Members\AddMemberView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Members\EditMemberView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Members\MembersMainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Menu\MenuBarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Precense\EditPrecenseView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Precense\PresenceMainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Scheduler\AddScheduleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Scheduler\EditChildScheduleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Scheduler\SchedulerMainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ShellView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Schedule.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

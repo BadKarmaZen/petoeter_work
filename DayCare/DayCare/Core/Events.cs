@@ -20,5 +20,13 @@ namespace DayCare.Core
         {
             public Screen Dialog { get; set; }
         }
+
+        public class RegisterMenu
+        {
+            public bool Add { get; set; }
+            public string Id { get; set; }
+            public string Caption { get; set; }
+            public System.Action Action { get; set; }
+        }
     }
 }

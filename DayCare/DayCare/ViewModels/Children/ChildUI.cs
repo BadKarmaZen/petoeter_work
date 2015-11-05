@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DayCare.ViewModels.Children
 {
-    public class ChildUI : BaseItemUI<Child>
+    public class ChildUI : TaggedItemUI<Child>
     {
     }
 }

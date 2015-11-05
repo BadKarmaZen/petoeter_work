@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace DayCare.Model.UI
 {
-    public class BaseItemUI<T> : Screen
-        where T: class
+    public class BaseItemUI : Screen
     {
         private string _name;
         private string _toolTip;
@@ -31,7 +30,10 @@ namespace DayCare.Model.UI
             get { return _name; }
             set { _name = value; NotifyOfPropertyChange(()=> Name); }
         }
-
+    }
+    public class TaggedItemUI<T> : BaseItemUI
+        where T: class
+    {
         public T Tag { get; set; }
     }
 }

@@ -94,4 +94,5 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <SolidColorBrush x:Key="DayScheduleBrush" Color="#FF852323"/>
 </ResourceDictionary>

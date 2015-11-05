@@ -4,48 +4,31 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:cal="http://www.caliburnproject.org"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             mc:Ignorable="d" >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Border BorderBrush="Black" BorderThickness="0,0,0,4" Margin="10,0">
-            <TextBlock Text="Account toevoegen" Style="{DynamicResource LabelTitleStyle}" HorizontalAlignment="Center" />
+        <Border BorderBrush="Black" BorderThickness="2" CornerRadius="5">
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Naam" Style="{DynamicResource LabelStyle}" />
+                <TextBox Text="{Binding Name}" Margin="5" Grid.Column="2" Style="{DynamicResource TextBoxStyle}" MinWidth="200"/>
+            </Grid>
+            <!--<ContentControl cal:View.Model="{Binding Detail}" Margin="10" />-->
         </Border>
 
-        <Grid Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="Auto"/>
 
-
-            </Grid.RowDefinitions>
-
-            <GroupBox HorizontalAlignment="Stretch" Margin="10">
-                <GroupBox.Header>
-                    <TextBlock Text="Algemeen" Style="{DynamicResource GroupBoxHeaderStyle}" />
-                </GroupBox.Header>
-                <ContentControl cal:View.Model="{Binding Detail}" Margin="10" />
-            </GroupBox>
-
-            <GroupBox Grid.Row="1" HorizontalAlignment="Stretch" Margin="10">
-                <GroupBox.Header>
-                    <TextBlock Text="Kinderen" Style="{DynamicResource GroupBoxHeaderStyle}" />
-                </GroupBox.Header>
-                <ContentControl cal:View.Model="{Binding ChildrenDetail}" Margin="10" />
-            </GroupBox>
-
-            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-                <Button x:Name="SaveAction" Content="Bewaren" Style="{DynamicResource ButtonStyle}" Height="30" MinWidth="100" Margin="5,0"/>
-                <Button x:Name="CancelAction" Content="Annuleren" Style="{DynamicResource ButtonStyle}" Height="30" MinWidth="100" Margin="5,0"/>
-            </StackPanel>
-
-
-        </Grid>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+            <Button x:Name="SaveAction" Content="Bewaren" Style="{DynamicResource ButtonStyle}" Height="30" MinWidth="100" Margin="5,0"/>
+            <Button x:Name="CancelAction" Content="Annuleren" Style="{DynamicResource ButtonStyle}" Height="30" MinWidth="100" Margin="5,0"/>
+        </StackPanel>
     </Grid>
 </UserControl>
