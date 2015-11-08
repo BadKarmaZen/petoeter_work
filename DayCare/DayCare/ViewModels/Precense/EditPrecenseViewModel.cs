@@ -63,7 +63,7 @@ namespace DayCare.ViewModels.Precense
 	
 		public string ArrivalTime
 		{
-			get { return _arrivalTime.ToString("HH:MM"); }
+			get { return _arrivalTime.ToString("HH:mm"); }
 		}
 
 		#endregion
@@ -82,7 +82,7 @@ namespace DayCare.ViewModels.Precense
 
 		public string LeaveTime
 		{
-			get { return _leaveTime.ToString("HH:MM"); }
+			get { return _leaveTime.ToString("HH:mm"); }
 		}
 
 		public string LeaveMember

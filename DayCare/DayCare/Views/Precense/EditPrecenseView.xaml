@@ -6,130 +6,133 @@
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:vc="clr-namespace:DayCare.Converters"
              mc:Ignorable="d" >
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <vc:BooleanVisibilityConverter x:Key="BooleanVisibilityConverter" />
-        </ResourceDictionary>
-    </UserControl.Resources>
-    <Grid Width="600" Height="600">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <vc:BooleanVisibilityConverter x:Key="BooleanVisibilityConverter" />
+    </ResourceDictionary>
+  </UserControl.Resources>
+  <Grid Width="Auto"  Height="Auto">
+    <Grid.RowDefinitions>
+      <RowDefinition/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition/>
+      </Grid.ColumnDefinitions>
+
+      <Border BorderBrush="Orange" BorderThickness="2" Height="220" Width="166" Margin="20,20" CornerRadius="5" Background="White" HorizontalAlignment="Left" VerticalAlignment="Top" >
+        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Source="/DayCare;component/Resources/olaf.png"  Margin="5" Stretch="UniformToFill" />
+      </Border>
+
+      <Grid Grid.Column="1" Grid.IsSharedSizeScope="True">
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
+        <Border BorderThickness="0,0,0,2" BorderBrush="Black">
+          <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" Margin="5" Style="{DynamicResource LabelTitleStyle}"/>
+        </Border>
 
-            <Border BorderBrush="Orange" BorderThickness="2" Height="220" Width="166" Margin="20,20" CornerRadius="5" Background="White" HorizontalAlignment="Left" VerticalAlignment="Top" >
-                <Image VerticalAlignment="Center" HorizontalAlignment="Center" Source="/DayCare;component/Resources/olaf.png"  Margin="5" Stretch="UniformToFill" />
-            </Border>
+        <Grid Grid.Row="1" Margin="0,20,0,0">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" SharedSizeGroup="GroupLabel" />
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="1*"/>
+          </Grid.ColumnDefinitions>
 
-            <Grid Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
+          <TextBlock Text="Aankomst:" Style="{DynamicResource LabelStyle}" />
+          <TextBlock Text="{Binding ArrivalTime}" Grid.Column="2" Style="{DynamicResource LabelStyle}" />
 
-                <Border BorderThickness="0,0,0,2" BorderBrush="Black">
-                    <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" Margin="5" Style="{DynamicResource LabelTitleStyle}"/>
-                </Border>
-
-                <Grid Grid.Row="1" Margin="0,20,0,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="10"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <TextBlock Text="Aankomst:" Style="{DynamicResource LabelStyle}" />
-                    <TextBlock Text="{Binding ArrivalTime}" Grid.Column="2" Style="{DynamicResource LabelStyle}" />
-
-                    <TextBlock Text="Gebracht door:" Grid.Row="1" Style="{DynamicResource LabelStyle}" 
+          <TextBlock Text="Gebracht door:" Grid.Row="1" Style="{DynamicResource LabelStyle}" />
+                               <!--Visibility="{Binding Arrived, Converter={StaticResource BooleanVisibilityConverter}}"/>-->
+          <TextBlock Text="{Binding ArrivalMember}" Grid.Row="1" Grid.Column="2" Style="{DynamicResource LabelStyle}" 
                                Visibility="{Binding Arrived, Converter={StaticResource BooleanVisibilityConverter}}"/>
-                    <TextBlock Text="{Binding ArrivalMember}" Grid.Row="1" Grid.Column="2" Style="{DynamicResource LabelStyle}" 
-                               Visibility="{Binding Arrived, Converter={StaticResource BooleanVisibilityConverter}}"/>
-                </Grid>
+        </Grid>
 
-                <Grid Grid.Row="2" Margin="0,20,0,0" Visibility="{Binding Arrived, Converter={StaticResource BooleanVisibilityConverter}}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="10"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
+        <Grid Grid.Row="2" Margin="0,20,0,0" Visibility="{Binding Arrived, Converter={StaticResource BooleanVisibilityConverter}}">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" SharedSizeGroup="GroupLabel"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="1*"/>
+          </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Vertrek:" Style="{DynamicResource LabelStyle}" />
-                    <TextBlock Text="{Binding LeaveTime}" Grid.Column="2" Style="{DynamicResource LabelStyle}" />
+          <TextBlock Text="Vertrek:" Style="{DynamicResource LabelStyle}" />
+          <TextBlock Text="{Binding LeaveTime}" Grid.Column="2" Style="{DynamicResource LabelStyle}" />
 
-                    <TextBlock Text="Meegenomen door:" Grid.Row="1" Style="{DynamicResource LabelStyle}" 
+          <TextBlock Text="Meegenomen door:" Grid.Row="1" Style="{DynamicResource LabelStyle}" 
                                Visibility="{Binding Left, Converter={StaticResource BooleanVisibilityConverter}}"/>
-                    <TextBlock Text="{Binding LeaveMember}" Grid.Row="1" Grid.Column="2" Style="{DynamicResource LabelStyle}" 
+          <TextBlock Text="{Binding LeaveMember}" Grid.Row="1" Grid.Column="2" Style="{DynamicResource LabelStyle}" 
                                Visibility="{Binding Left, Converter={StaticResource BooleanVisibilityConverter}}"/>
-
-                </Grid>
-
-                <Grid Grid.Row="3"
-                      Visibility="{Binding ShowSelection, Converter={StaticResource BooleanVisibilityConverter}}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Text="Wie ben je?" Style="{DynamicResource LabelStyle}" Margin="5"/>
-                    <ItemsControl ItemsSource="{Binding Resposibles}" Grid.Row="1" Margin="5">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Border BorderBrush="Black" BorderThickness="2" CornerRadius="5" MinHeight="75" Margin="5,10"
-                                cal:Message.Attach="[Event MouseUp] = [Action SelectResponsible($this)]">
-                                    <TextBlock Text="{Binding .Name}" Margin="25,0" Style="{DynamicResource LabelStyle}" VerticalAlignment="Center" />
-
-                                    <Border.Style>
-                                        <Style TargetType="Border">
-                                            <Setter Property="Background" Value="#FFEE9449" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Selected}" Value="True" >
-                                                    <Setter Property="Background" Value="#FF88D11E" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Border.Style>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-
-                    </ItemsControl>
-
-                </Grid>
-            </Grid>
-
 
         </Grid>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button x:Name="ConfirmAction" Content="Bevestigen" VerticalAlignment="Bottom" Margin="10,5" HorizontalAlignment="Center" Height="30" MinWidth="150" Style="{DynamicResource ButtonStyle}"
-                    Visibility="{Binding ShowConfirmButton, Converter={StaticResource BooleanVisibilityConverter}}"/>
-            <Button x:Name="CloseAction" Content="Terug" VerticalAlignment="Bottom" Margin="10,5" HorizontalAlignment="Center" Height="30" MinWidth="150" Style="{DynamicResource ButtonStyle}" />
-        </StackPanel >
+
+        <Grid Grid.Row="3"
+                      Visibility="{Binding ShowSelection, Converter={StaticResource BooleanVisibilityConverter}}">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+          </Grid.RowDefinitions>
+
+          <TextBlock Text="Wie ben je?" Style="{DynamicResource LabelStyle}" Margin="5"/>
+          <ScrollViewer Grid.Row="1" Margin="5" MaxHeight="150">
+						
+				
+						<ItemsControl ItemsSource="{Binding Resposibles}" >
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate>
+                <StackPanel />
+              </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Border BorderBrush="Black" BorderThickness="2" CornerRadius="5" MinHeight="45" Margin="5"
+                                cal:Message.Attach="[Event MouseUp] = [Action SelectResponsible($this)]">
+                  <TextBlock Text="{Binding .Name}" Margin="25,0" Style="{DynamicResource LabelStyle}" VerticalAlignment="Center" />
+
+                  <Border.Style>
+                    <Style TargetType="Border">
+                      <Setter Property="Background" Value="#FFEE9449" />
+                      <Style.Triggers>
+                        <DataTrigger Binding="{Binding Selected}" Value="True" >
+                          <Setter Property="Background" Value="#FF88D11E" />
+                        </DataTrigger>
+                      </Style.Triggers>
+                    </Style>
+                  </Border.Style>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+
+          </ItemsControl>
+          </ScrollViewer>
+        </Grid>
+      </Grid>
+
 
     </Grid>
+    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+      <Button x:Name="ConfirmAction" Content="Bevestigen" VerticalAlignment="Bottom" Margin="10,5" HorizontalAlignment="Center" Height="30" MinWidth="150" Style="{DynamicResource ButtonStyle}"
+                    Visibility="{Binding ShowConfirmButton, Converter={StaticResource BooleanVisibilityConverter}}"/>
+      <Button x:Name="CloseAction" Content="Terug" VerticalAlignment="Bottom" Margin="10,5" HorizontalAlignment="Center" Height="30" MinWidth="150" Style="{DynamicResource ButtonStyle}" />
+    </StackPanel >
+
+  </Grid>
 </UserControl>

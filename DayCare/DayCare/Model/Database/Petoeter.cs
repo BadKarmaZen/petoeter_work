@@ -40,8 +40,9 @@ namespace DayCare.Model.Database
 
         private void InitalizeDatabase()
         {
-            ConnectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3};", "192.168.1.100", "petoeter", "admin", "666777");
-            DataBase = new MySqlConnection(ConnectionString);
+			//ConnectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3};", "192.168.1.100", "petoeter", "admin", "666777");
+			ConnectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3};", "localhost", "petoeter", "admin", "666777");
+			DataBase = new MySqlConnection(ConnectionString);
 
             LoadData(Queries[typeof(Account)], _accounts);
             LoadData(Queries[typeof(Member)], _members);
@@ -125,6 +126,7 @@ namespace DayCare.Model.Database
 					if (data.Count == 0)
 					{
 						data = (from c in GetChild(c => c.Deleted == false)
+										from s in GetSchedule(s => s.Child_Id == c.Id && s.ValidDate(today))
 										select new Presence
 										{
 											Id = Guid.NewGuid(),
