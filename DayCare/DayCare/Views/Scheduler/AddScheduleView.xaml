@@ -3,73 +3,74 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+						 xmlns:cal="http://www.caliburnproject.org"
+						 xmlns:vc="clr-namespace:DayCare.Converters"
              mc:Ignorable="d" >
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<vc:BooleanVisibilityConverter x:Key="BooleanVisibilityConverter" />
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
 
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="56*"/>
-                <RowDefinition Height="43*"/>
-            </Grid.RowDefinitions>
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="1*"/>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="56*"/>
+				<RowDefinition Height="43*"/>
+			</Grid.RowDefinitions>
 
-            <TextBlock Text="Start datum:" Style="{DynamicResource LabelStyle}" />
-            <TextBlock Grid.Row="1" Text="Eind datum:" Style="{DynamicResource LabelStyle}" />
+			<TextBlock Text="Start datum:" Style="{DynamicResource LabelStyle}" />
+			<TextBlock Grid.Row="1" Text="Eind datum:" Style="{DynamicResource LabelStyle}" />
 
-            <DatePicker Grid.Column="1" SelectedDate="{Binding StartDate}"/>
-            <DatePicker Grid.Column="1" Grid.Row="1" SelectedDate="{Binding EndDate}"/>
+			<DatePicker Grid.Column="1" SelectedDate="{Binding StartDate}" VerticalAlignment="Center"/>
+			<DatePicker Grid.Column="1" Grid.Row="1" SelectedDate="{Binding EndDate}" VerticalAlignment="Center"/>
 
-        </Grid>
+		</Grid>
 
-        <Grid Grid.Row="1" VerticalAlignment="Bottom" Margin="0,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-            
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-            </Grid.RowDefinitions>
+		<Grid Grid.Row="1">
+			<Grid.RowDefinitions >
+				<RowDefinition />
+				<RowDefinition />
+			</Grid.RowDefinitions>
 
-            <TextBlock Text="Voormiddag" Grid.Row="1" Style="{DynamicResource GroupBoxHeaderStyle}" Margin="10,0"/> 
-            <TextBlock Text="Namiddag"  Grid.Row="2" Style="{DynamicResource GroupBoxHeaderStyle}" Margin="10,0"/>
+			<StackPanel Orientation="Horizontal" Visibility="{Binding ShowWeekSelection, Converter={StaticResource BooleanVisibilityConverter }}">
+				<Button Content="1 week" x:Name="OneWeekAction" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyle}" Height="26" Width="80" Margin="5"/>
+				<Button Content="2 weken" x:Name="TwoWeekAction" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyle}" Height="26" Width="80" Margin="5"/>
+				<Button Content="3 weken" x:Name="ThreeWeekAction" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyle}" Height="26" Width="80" Margin="5"/>
+			</StackPanel>
 
-            <TextBlock Text="Maandag" Grid.Column="1" Style="{DynamicResource GroupBoxHeaderStyle}" Margin="10,0" HorizontalAlignment="Center"/>
-            <TextBlock Text="Dinsdag" Grid.Column="2" Style="{DynamicResource GroupBoxHeaderStyle}" Margin="10,0" HorizontalAlignment="Center"/>
-            <TextBlock Text="Woensdag" Grid.Column="3" Style="{DynamicResource GroupBoxHeaderStyle}" Margin="10,0" HorizontalAlignment="Center"/>
-            <TextBlock Text="Donderdag" Grid.Column="4" Style="{DynamicResource GroupBoxHeaderStyle}" Margin="10,0" HorizontalAlignment="Center"/>
-            <TextBlock Text="Vrijdag" Grid.Column="5" Style="{DynamicResource GroupBoxHeaderStyle}" Margin="10,0" HorizontalAlignment="Center"/>
+			<ItemsControl ItemsSource="{Binding Schedules}" Grid.Row="1" >
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<StackPanel />
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<GroupBox Margin="0,5">
+							<GroupBox.Header>
+								<TextBlock Text="{Binding Header}" />
+							</GroupBox.Header>
+							
+							<ContentControl cal:View.Model="{Binding .}" VerticalAlignment="Stretch" Margin="5"/>
+						</GroupBox>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</Grid>
 
-
-            <CheckBox Grid.Column="1" Grid.Row="1" IsChecked="{Binding MondayMorning}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <CheckBox Grid.Column="1" Grid.Row="2" IsChecked="{Binding MondayAfternoon}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <CheckBox Grid.Column="2" Grid.Row="1" IsChecked="{Binding TuesdayMorning}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <CheckBox Grid.Column="2" Grid.Row="2" IsChecked="{Binding TuesdayAfternoon}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <CheckBox Grid.Column="3" Grid.Row="1" IsChecked="{Binding WednesdayMorning}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <CheckBox Grid.Column="3" Grid.Row="2" IsChecked="{Binding WednesdayAfternoon}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <CheckBox Grid.Column="4" Grid.Row="1" IsChecked="{Binding ThursdayMorning}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <CheckBox Grid.Column="4" Grid.Row="2" IsChecked="{Binding ThursdayAfternoon}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <CheckBox Grid.Column="5" Grid.Row="1" IsChecked="{Binding FridayMorning}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <CheckBox Grid.Column="5" Grid.Row="2" IsChecked="{Binding FridayAfternoon}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        </Grid>
-
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-            <Button x:Name="SaveAction" Content="Bewaren" Style="{DynamicResource ButtonStyle}" Height="30" MinWidth="100" Margin="5,0"/>
-            <Button x:Name="CancelAction" Content="Annuleren" Style="{DynamicResource ButtonStyle}" Height="30" MinWidth="100" Margin="5,0"/>
-        </StackPanel>
-    </Grid>
+		<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+			<Button x:Name="SaveAction" Content="Bewaren" Style="{DynamicResource ButtonStyle}" Height="30" MinWidth="100" Margin="5,0"/>
+			<Button x:Name="CancelAction" Content="Annuleren" Style="{DynamicResource ButtonStyle}" Height="30" MinWidth="100" Margin="5,0"/>
+		</StackPanel>
+	</Grid>
 </UserControl>

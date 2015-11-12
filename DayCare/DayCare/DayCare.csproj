@@ -49,6 +49,10 @@
       <HintPath>..\packages\Caliburn.Micro.3.0.0-beta1\lib\net45\Caliburn.Micro.Platform.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MySql.Data, Version=6.9.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -80,6 +84,11 @@
     <Compile Include="Converters\BooleanVisibilityConverter .cs" />
     <Compile Include="Core\Events.cs" />
     <Compile Include="Core\ReactivatableScreen.cs" />
+    <Compile Include="Core\Reports\ColumnId.cs" />
+    <Compile Include="Core\Reports\CustomStyleSheet.cs" />
+    <Compile Include="Core\Reports\DateCell.cs" />
+    <Compile Include="Core\Reports\ExcelFile.cs" />
+    <Compile Include="Core\Reports\TextCell.cs" />
     <Compile Include="Core\ServiceProvider.cs" />
     <Compile Include="Core\TaskManager.cs" />
     <Compile Include="DayCareBootstrapper.cs" />
@@ -87,6 +96,8 @@
     <Compile Include="Model\Database\Child.cs" />
     <Compile Include="Model\Database\DatabaseIgnoreAttribute.cs" />
     <Compile Include="Model\Database\DatabaseRecord.cs" />
+    <Compile Include="Model\Database\GroupSchedule.cs" />
+    <Compile Include="Model\Database\Holiday.cs" />
     <Compile Include="Model\Database\Member.cs" />
     <Compile Include="Model\Database\Petoeter.cs" />
     <Compile Include="Model\Database\Presence.cs" />
@@ -101,6 +112,8 @@
     <Compile Include="ViewModels\Accounts\AddAccountViewModel.cs" />
     <Compile Include="ViewModels\Accounts\EditAccountViewModel.cs" />
     <Compile Include="ViewModels\Accounts\RenameAccountViewModel.cs" />
+    <Compile Include="ViewModels\Calendar\CalendarMainViewModel.cs" />
+    <Compile Include="ViewModels\Calendar\MonthViewModel.cs" />
     <Compile Include="ViewModels\Children\AddChildViewModel.cs" />
     <Compile Include="ViewModels\Children\ChildDetailViewModel.cs" />
     <Compile Include="ViewModels\Children\ChildrenMainViewModel.cs" />
@@ -114,9 +127,11 @@
     <Compile Include="ViewModels\Menu\MenuBarViewModel.cs" />
     <Compile Include="ViewModels\Precense\EditPrecenseViewModel.cs" />
     <Compile Include="ViewModels\Precense\PresenceMainViewModel.cs" />
+    <Compile Include="ViewModels\Reports\MainReportsViewModel.cs" />
     <Compile Include="ViewModels\Scheduler\AddScheduleViewModel.cs" />
     <Compile Include="ViewModels\Scheduler\EditChildScheduleViewModel.cs" />
     <Compile Include="ViewModels\Scheduler\SchedulerMainViewModel.cs" />
+    <Compile Include="ViewModels\Scheduler\WeekScheduleViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="Views\Accounts\AccountDetailView.xaml.cs">
       <DependentUpon>AccountDetailView.xaml</DependentUpon>
@@ -132,6 +147,12 @@
     </Compile>
     <Compile Include="Views\Accounts\RenameAccountView.xaml.cs">
       <DependentUpon>RenameAccountView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Calendar\CalendarMainView.xaml.cs">
+      <DependentUpon>CalendarMainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Calendar\MonthView.xaml.cs">
+      <DependentUpon>MonthView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Children\AddChildView.xaml.cs">
       <DependentUpon>AddChildView.xaml</DependentUpon>
@@ -169,6 +190,9 @@
     <Compile Include="Views\Precense\PresenceMainView.xaml.cs">
       <DependentUpon>PresenceMainView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Reports\MainReportsView.xaml.cs">
+      <DependentUpon>MainReportsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Scheduler\AddScheduleView.xaml.cs">
       <DependentUpon>AddScheduleView.xaml</DependentUpon>
     </Compile>
@@ -177,6 +201,9 @@
     </Compile>
     <Compile Include="Views\Scheduler\SchedulerMainView.xaml.cs">
       <DependentUpon>SchedulerMainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Scheduler\WeekScheduleView.xaml.cs">
+      <DependentUpon>WeekScheduleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
@@ -239,6 +266,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Calendar\CalendarMainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Calendar\MonthView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Children\AddChildView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -287,6 +322,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Reports\MainReportsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Scheduler\AddScheduleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -299,6 +338,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Scheduler\WeekScheduleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ShellView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -306,6 +349,21 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Schedule.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\calendar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\next.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\umbrella.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\reports.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\report1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

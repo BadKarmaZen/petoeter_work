@@ -1,7 +1,9 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
 using DayCare.ViewModels.Accounts;
+using DayCare.ViewModels.Calendar;
 using DayCare.ViewModels.Precense;
+using DayCare.ViewModels.Reports;
 using DayCare.ViewModels.Scheduler;
 using System;
 using System.Collections.Generic;
@@ -74,6 +76,26 @@ namespace DayCare.ViewModels.Dashboard
 				new Core.Events.SwitchTask
 				{
 					Task = new PresenceMainViewModel()
+				});
+		}
+
+		public void CalendarOverviewAction()
+		{
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				new Core.Events.SwitchTask
+				{
+					Task = new CalendarMainViewModel()
+				});
+		}
+
+		public void ReportsAction()
+		{
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				new Core.Events.SwitchTask
+				{
+					Task = new MainReportsViewModel()
 				});
 		}
 	}

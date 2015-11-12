@@ -1,0 +1,58 @@
+﻿<UserControl x:Class="DayCare.Views.Calendar.CalendarMainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:vc="clr-namespace:DayCare.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<vc:BooleanVisibilityConverter x:Key="BooleanVisibilityConverter" />
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="1*"/>
+		</Grid.RowDefinitions>
+
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="40"/>
+				<ColumnDefinition Width="300"/>
+				<ColumnDefinition Width="40"/>
+				<ColumnDefinition Width="1*"/>
+			</Grid.ColumnDefinitions>
+
+			<Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Background="#FFE47738" Grid.Column="1"
+							cal:Message.Attach="[Event MouseUp] = [Action PrevousMonthAction()]">
+				<Image Source="/DayCare;component/Resources/next.png" Margin="5" RenderTransformOrigin="0.5,0.5">
+					<Image.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform/>
+							<SkewTransform/>
+							<RotateTransform Angle="180"/>
+							<TranslateTransform/>
+						</TransformGroup>
+					</Image.RenderTransform>
+				</Image>
+			</Border>
+
+			<Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Background="#FFE47738" Grid.Column="2">
+				<TextBlock Text="{Binding SelectedMonth}" HorizontalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
+			</Border>
+
+			<Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Background="#FFE47738" Grid.Column="3"
+							cal:Message.Attach="[Event MouseUp] = [Action NextMonthAction()]">
+				<Image Source="/DayCare;component/Resources/next.png" Margin="5"/>
+			</Border>
+
+		</Grid>
+
+		<ContentControl Grid.Row="1" cal:View.Model="{Binding Month}" VerticalAlignment="Center" />
+
+	</Grid>
+</UserControl>

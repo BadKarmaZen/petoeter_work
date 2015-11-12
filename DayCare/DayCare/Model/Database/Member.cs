@@ -10,8 +10,6 @@ namespace DayCare.Model.Database
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-
         public Guid Account_Id { get; set; }
-
     }
 }

@@ -5,57 +5,81 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DayCare.Views.Dashboard"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="600">
-    <Grid>
-        <WrapPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="25">
-            <Border Width="150" Height="200" Margin="25">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Image Source="/DayCare;component/Resources/family.png"/>
-                    <Button Grid.Row="1" Content="Administratie" x:Name="AdministrationAction"
+             d:DesignHeight="600" d:DesignWidth="1000">
+	<Grid>
+		<WrapPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="25">
+			<Border Width="150" Height="200" Margin="25">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="1*"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					<Image Source="/DayCare;component/Resources/family.png"/>
+					<Button Grid.Row="1" Content="Administratie" x:Name="AdministrationAction"
                             Style="{DynamicResource ButtonStyle}" FontFamily="Comic Sans MS" FontSize="22" />
-                </Grid>
-            </Border>
+				</Grid>
+			</Border>
 
-            <Border Width="150" Height="200" Margin="25">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Image Source="/DayCare;component/Resources/Schedule.png"/>
-                    <Button Grid.Row="1" Content="Schedule" x:Name="ManageSchedulesAction"
+			<Border Width="150" Height="200" Margin="25">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="1*"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					<Image Source="/DayCare;component/Resources/Schedule.png"/>
+					<Button Grid.Row="1" Content="Schedule" x:Name="ManageSchedulesAction"
                             Style="{DynamicResource ButtonStyle}" FontFamily="Comic Sans MS" FontSize="22" />
-                </Grid>
-            </Border>
-            
-            <Border Width="150" Height="200" Margin="25">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Image Source="/DayCare;component/Resources/Presence.png"/>
-                    <Button Grid.Row="1" Content="Aanwezigheid" x:Name="StartPrecenseAction"
-                            Style="{DynamicResource ButtonStyle}" FontFamily="Comic Sans MS" FontSize="22" />
-                </Grid>
-            </Border>
+				</Grid>
+			</Border>
 
-            <Border Width="150" Height="200" Margin="25">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Image Source="/DayCare;component/Resources/close.png"/>
-                    <Button Grid.Row="1" Content="Sluiten" x:Name="CloseAction"
+			<Border Width="150" Height="200" Margin="25">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="1*"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					<Image Source="/DayCare;component/Resources/calendar.png"/>
+					<Button Grid.Row="1" Content="Kalender" x:Name="CalendarOverviewAction"
                             Style="{DynamicResource ButtonStyle}" FontFamily="Comic Sans MS" FontSize="22" />
-                </Grid>
-            </Border>
+				</Grid>
+			</Border>
 
-        </WrapPanel>
-    </Grid>
+			<Border Width="150" Height="200" Margin="25">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="1*"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					<Image Source="/DayCare;component/Resources/Presence.png"/>
+					<Button Grid.Row="1" Content="Aanwezigheid" x:Name="StartPrecenseAction"
+                            Style="{DynamicResource ButtonStyle}" FontFamily="Comic Sans MS" FontSize="22" />
+				</Grid>
+			</Border>
+			
+			<Border Width="150" Height="200" Margin="25">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="1*"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					<Image Source="/DayCare;component/Resources/reports.png"/>
+					<Button Grid.Row="1" Content="Lijsten" x:Name="ReportsAction"
+                            Style="{DynamicResource ButtonStyle}" FontFamily="Comic Sans MS" FontSize="22" />
+				</Grid>
+			</Border>
+			
+			<Border Width="150" Height="200" Margin="25">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="1*"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					<Image Source="/DayCare;component/Resources/close.png"/>
+					<Button Grid.Row="1" Content="Sluiten" x:Name="CloseAction"
+                            Style="{DynamicResource ButtonStyle}" FontFamily="Comic Sans MS" FontSize="22" />
+				</Grid>
+			</Border>
+
+		</WrapPanel>
+	</Grid>
 </UserControl>

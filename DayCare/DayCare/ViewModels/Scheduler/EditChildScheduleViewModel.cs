@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DayCare.ViewModels.Scheduler
 {
-	public class ScheduleUI : TaggedItemUI<Schedule>
+	public class ScheduleUI : TaggedItemUI<GroupSchedule>
 	{ }
 
 	public class EditChildScheduleViewModel : ListItemScreen<ScheduleUI>
@@ -28,13 +28,16 @@ namespace DayCare.ViewModels.Scheduler
 		protected override void LoadItems()
 		{
 			var model = ServiceProvider.Instance.GetService<Petoeter>();
+			var groups = from s in model.GetSchedule(s => s.Child_Id == _child.Id && s.Deleted == false)
+									 select s.Group_Id;
 
-			Items = (from s in model.GetSchedule(s => s.Child_Id == _child.Id && s.Deleted == false)
-							 orderby s.StartDate
+			Items = (from id in groups.Distinct()
+							 let g = model.GetGroupSchedule(id)
+							 orderby g.StartDate
 							 select new ScheduleUI
 							 {
-								 Name = string.Format("{0} - {1}", s.StartDate.ToShortDateString(), s.EndDate.ToShortDateString()),
-								 Tag = s
+								 Name = string.Format("{0} - {1}", g.StartDate.ToShortDateString(), g.EndDate.ToShortDateString()),
+								 Tag = g
 							 }).ToList();
 
 			base.LoadItems();

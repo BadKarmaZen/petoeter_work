@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace DayCare.Model.Database
 {
+	public class ScheduleDay
+	{
+		public bool Morning { get; set; }
+		public bool Afternoon { get; set; }
+	}
+
 	public class Schedule : DatabaseRecord
 	{
 		private DateTime _startDate;
@@ -28,6 +34,8 @@ namespace DayCare.Model.Database
 
 		public Guid Child_Id { get; set; }
 		public Guid Group_Id { get; set; }
+
+		public int Group_Index { get; set; }
 
 		public bool MondayMorning { get; set; }
 		public bool MondayAfternoon { get; set; }
@@ -173,6 +181,51 @@ namespace DayCare.Model.Database
 					return 0;
 			}
 		}
+		
+		public bool ThisMorning(DateTime date)
+		{
+			switch (date.DayOfWeek)
+			{
+				case DayOfWeek.Monday:
+					return MondayMorning;
 
+				case DayOfWeek.Tuesday:
+						return TuesdayMorning;
+
+				case DayOfWeek.Wednesday:
+						return WednesdayMorning;
+
+				case DayOfWeek.Thursday:
+						return ThursdayMorning;
+
+				case DayOfWeek.Friday:
+						return FridayMorning;
+			}
+
+			return false;
+		}
+
+		public bool ThisAfternoon(DateTime date)
+		{
+			switch (date.DayOfWeek)
+			{
+				case DayOfWeek.Monday:
+					return MondayAfternoon;
+
+				case DayOfWeek.Tuesday:
+					return TuesdayAfternoon;
+
+				case DayOfWeek.Wednesday:
+					return WednesdayAfternoon;
+
+				case DayOfWeek.Thursday:
+					return ThursdayAfternoon;
+
+				case DayOfWeek.Friday:
+					return FridayAfternoon;
+			}
+
+			return false;
+		}
 	}
 }
