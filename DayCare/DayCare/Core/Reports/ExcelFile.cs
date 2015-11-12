@@ -95,7 +95,7 @@ namespace DayCare.Core.Reports
 		private uint TextAllBorderLight;
 		#endregion
 
-		private static IEnumerable<DateTime> GetDays()
+		public static IEnumerable<DateTime> GetDays()
 		{
 			DateTime start = new DateTime(2015, 11, 1);
 			DateTime end = new DateTime(2015, 11, 30);
@@ -111,7 +111,7 @@ namespace DayCare.Core.Reports
 			yield return end;
 		}
 
-		private static IEnumerable<DateTime> GetWeekDays()
+		public static IEnumerable<DateTime> GetWeekDays()
 		{
 			return from d in GetDays()
 						 where d.DayOfWeek != DayOfWeek.Saturday && d.DayOfWeek != DayOfWeek.Sunday
