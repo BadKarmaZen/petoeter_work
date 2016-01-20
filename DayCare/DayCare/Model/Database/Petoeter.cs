@@ -26,6 +26,8 @@ namespace DayCare.Model.Database
 		private List<Holiday> _holydays = new List<Holiday>();
 		#endregion
 
+		public SystemSetting Settings { get; set; }
+
 
 
 		public Petoeter()
@@ -46,11 +48,46 @@ namespace DayCare.Model.Database
 			ConnectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3};", "localhost", "petoeter", "admin", "666777");
 			DataBase = new MySqlConnection(ConnectionString);
 
+			LoadSystemSettigns();
+
 			LoadData(Queries[typeof(Account)], _accounts);
 			LoadData(Queries[typeof(Member)], _members);
 			LoadData(Queries[typeof(Child)], _children);
 			LoadData(Queries[typeof(Schedule)], _schedules);
 			LoadData(Queries[typeof(Holiday)], _holydays);
+
+
+			//Synchronizer.ExportFromMaster(@"E:\temp\export.xml");
+		}
+
+		private bool LoadSystemSettigns()
+		{
+			try
+			{
+				DataBase.Open();
+
+				var cmd = DataBase.CreateCommand();
+				cmd.CommandText = "select * from system";
+
+				var rdr = cmd.ExecuteReader();
+
+				if (rdr.Read())
+				{
+					Settings = new SystemSetting();
+					Settings.ImageFolder = rdr["picture_folder"] as string;
+				}
+
+				return true;
+			}
+			catch (Exception ex)
+			{
+			}
+			finally
+			{
+				DataBase.Close();
+			}
+
+			return false;
 		}
 
 
@@ -245,6 +282,8 @@ namespace DayCare.Model.Database
 			{
 				DataBase.Open();
 
+				record.Updated = DateTime.Now;
+
 				var command = Queries[record.GetType()].UpdateQuery(DataBase, record);
 				int result = command.ExecuteNonQuery();
 			}
@@ -300,6 +339,8 @@ namespace DayCare.Model.Database
 			try
 			{
 				DataBase.Open();
+
+				record.Updated = DateTime.Now;
 
 				var command = Queries[record.GetType()].InsertQuery(DataBase, record);
 				int result = command.ExecuteNonQuery();
@@ -373,6 +414,7 @@ namespace DayCare.Model.Database
 			}
 		}
 
+
 		internal void UpdatePresence(Presence presence)
 		{
 			try
@@ -407,6 +449,54 @@ namespace DayCare.Model.Database
 			}
 
 			return new Schedule();
+		}
+
+		internal void DeleteAccount(Account account)
+		{
+			//	first delete child and family
+
+			var children = (from c in _children
+										 where c.Account_Id == account.Id
+										 select c).ToList();
+
+			foreach (var child in children)
+			{
+				child.Deleted = true;
+				DeleteChild(child);				
+			}
+
+			var members = (from m in _members
+											where m.Account_Id == account.Id
+											select m).ToList();
+
+			foreach (var member in members)
+			{
+				member.Deleted = true;
+				DeleteMemeber(member);
+			}
+
+			DeleteRecord(account);
+		}
+
+		private void DeleteMemeber(Member member)
+		{
+			DeleteRecord(member);
+		}
+
+		private void DeleteChild(Child child)
+		{
+			//	delete schedules
+			var schedules = (from s in _schedules
+											 where s.Child_Id == child.Id
+											 select s).ToList();
+
+			foreach (var schedule in _schedules)
+			{
+				schedule.Deleted = true;
+				DeleteRecord(schedule);				
+			}
+
+			DeleteRecord(child);
 		}
 	}
 }

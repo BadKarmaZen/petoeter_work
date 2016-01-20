@@ -2,6 +2,7 @@
 using DayCare.Core;
 using DayCare.Model.Database;
 using DayCare.Model.UI;
+using DayCare.ViewModels.Dialogs;
 using DayCare.ViewModels.Members;
 using System;
 using System.Collections.Generic;
@@ -70,5 +71,31 @@ namespace DayCare.ViewModels.Scheduler
 				});
 		}
 
+		public void DeleteAction()
+		{
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				 new Events.ShowDialog
+				 {
+					 Dialog = new YesNoDialogViewModel
+					 {
+						 Message = "Ben je zeker?",
+						 Yes = () => DeleteItem()
+					 }
+				 });
+		}
+
+		protected override void DeleteItem()
+		{
+			var model = ServiceProvider.Instance.GetService<Petoeter>();
+
+			foreach (var schedule in SelectedItem.Tag.Schedules)
+			{
+				model.DeleteRecord(schedule);				
+			}
+
+
+			
+			base.DeleteItem();
+		}
 	}
 }

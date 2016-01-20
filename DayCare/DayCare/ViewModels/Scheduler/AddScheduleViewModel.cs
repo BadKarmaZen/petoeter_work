@@ -192,6 +192,18 @@ namespace DayCare.ViewModels.Scheduler
 			Schedules = schedules;
 		}
 
+		public void FourWeekAction()
+		{
+			var schedules = new List<WeekScheduleViewModel>(Schedules.Take(2));
+
+			for (int index = Schedules.Count; index < 4; index++)
+			{
+				schedules.Add(new WeekScheduleViewModel(new Schedule() { Group_Index = index }) { Header = string.Format("Week {0}", index + 1) });
+			}
+
+			Schedules = schedules;
+		}
+
 
 		public DateTime Min(DateTime left, DateTime right)
 		{

@@ -8,6 +8,7 @@ namespace DayCare.Model.Database
 {
 	public class GroupSchedule
 	{
+		public Guid ChildId { get; set; }
 		public List<Schedule> Schedules { get; set; }
 
 		public Schedule CurrentSchedule { get { return GetScheduleOn(DateTime.Today); } }
@@ -17,6 +18,7 @@ namespace DayCare.Model.Database
 		public GroupSchedule(IEnumerable<Schedule> schedules)
 		{
 			Schedules = new List<Schedule>(schedules);
+			ChildId = Schedules[0].Child_Id;
 
 			//	first
 			var start = Schedules[0].StartDate;

@@ -48,13 +48,17 @@ namespace DayCare.ViewModels.Accounts
             {
                 if (string.IsNullOrWhiteSpace(Filter))
                 {
-                    return _accounts;
+                    return (from a in _accounts
+														let name = a.Name.ToLowerInvariant()
+														orderby name
+														select a).ToList();
                 }
 
                 var f = Filter.ToLowerInvariant();
                 return (from a in _accounts
                         let name = a.Name.ToLowerInvariant()
                         where name.Contains(f)
+												orderby name
                         select a).ToList();
             }
         }
@@ -114,7 +118,7 @@ namespace DayCare.ViewModels.Accounts
         {
             var model = ServiceProvider.Instance.GetService<Petoeter>();
 
-            model.DeleteRecord(SelectedAccount.Tag);
+            model.DeleteAccount(SelectedAccount.Tag);
             SelectAction(null);
 
             LoadData();

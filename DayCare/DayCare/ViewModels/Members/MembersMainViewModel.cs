@@ -11,139 +11,180 @@ using System.Threading.Tasks;
 
 namespace DayCare.ViewModels.Members
 {
-    public class ListItemScreen<T> : Screen
-        where T : BaseItemUI
-    {
-        protected List<T> _items;
-        protected T _selectedItem;
+	public class ListItemScreen<T> : Screen
+			where T : BaseItemUI
+	{
+		protected List<T> _items;
+		protected T _selectedItem;
 
-        public T SelectedItem
-        {
-            get { return _selectedItem; }
-            set
-            {
-                _selectedItem = value; NotifyOfPropertyChange(() => SelectedItem);
-                NotifyOfPropertyChange(() => IsItemSelected);
-            }
-        }
+		public T SelectedItem
+		{
+			get { return _selectedItem; }
+			set
+			{
+				_selectedItem = value; NotifyOfPropertyChange(() => SelectedItem);
+				NotifyOfPropertyChange(() => IsItemSelected);
+			}
+		}
 
-        public bool IsItemSelected
-        {
-            get
-            {
-                return _selectedItem != null;
-            }
-        }
+		public bool IsItemSelected
+		{
+			get
+			{
+				return _selectedItem != null;
+			}
+		}
 
-        public List<T> Items
-        {
-            get { return _items; }
-            set { _items = value; NotifyOfPropertyChange(() => Items); }
-        }
+		public List<T> Items
+		{
+			get { return _items; }
+			set { _items = value; ItemsUpdated(); }
+		}
 
-        public ListItemScreen()
-        {
+		public virtual void ItemsUpdated()
+		{
+			NotifyOfPropertyChange(() => Items);
+		}
 
-        }
 
-        protected override void OnViewLoaded(object view)
-        {
-            LoadItems();
+		public ListItemScreen()
+		{
 
-            base.OnViewLoaded(view);
-        }
+		}
 
-        public void SelectItem(T item = null)
-        {
-            if (SelectedItem != null)
-            {
-                SelectedItem.Selected = false;
-            }
+		protected override void OnViewLoaded(object view)
+		{
+			LoadItems();
 
-            SelectedItem = item;
+			base.OnViewLoaded(view);
+		}
 
-            if (SelectedItem != null)
-            {
-                SelectedItem.Selected = true;
-            }
-        }
+		public void SelectItem(T item = null)
+		{
+			if (SelectedItem != null)
+			{
+				SelectedItem.Selected = false;
+			}
 
-        protected virtual void LoadItems()
-        { }
+			SelectedItem = item;
 
-        protected virtual void DeleteItem()
-        {
-            SelectItem();
-            LoadItems();
-        }
-    }
+			if (SelectedItem != null)
+			{
+				SelectedItem.Selected = true;
+			}
+		}
 
-    public class MemberUI : TaggedItemUI<Member>
-    {
+		protected virtual void LoadItems()
+		{ }
 
-    }
+		protected virtual void DeleteItem()
+		{
+			SelectItem();
+			LoadItems();
+		}
+	}
 
-    public class MembersMainViewModel : ListItemScreen<MemberUI>
-    {
-        private Account _account;
+	public class FilteredListItemScreen<T> : ListItemScreen<T>
+		where T : BaseItemUI
+	{
+		private string _filter;
 
-        public MembersMainViewModel(Account account)
-        {
-            this._account = account;
-        }
+		public string Filter
+		{
+			get { return _filter; }
+			set { _filter = value; NotifyOfPropertyChange(() => Filter); NotifyOfPropertyChange(() => FilteredItems); }
+		}
 
-        protected override void LoadItems()
-        {
-            var model = ServiceProvider.Instance.GetService<Petoeter>();
+		public List<T> FilteredItems
+		{
+			get 
+			{
+				if (_items == null)
+				{
+					return _items;					
+				}
 
-            Items = (from m in model.GetMember(m => m.Account_Id == _account.Id && m.Deleted == false)
-                     select new MemberUI
-                     {
-                         Name = string.Format("{0} {1}", m.FirstName, m.LastName),
-                         Tag = m
-                     }).ToList();
+				return (from i in _items
+								where i.IsValidFilter(_filter)
+								orderby i.OrderBy()
+								select i).ToList(); 
+			}
+		}
 
-            base.LoadItems();
-        }
+		public override void ItemsUpdated()
+		{
+			base.ItemsUpdated();
 
-        public void AddAction()
-        {
-            ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-                new Core.Events.ShowDialog
-                {
-                    Dialog = new AddMemberViewModel(_account)
-                });
-        }
+			NotifyOfPropertyChange(() => FilteredItems);
+		}
+	}
 
-        public void EditAction()
-        {
-            ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-                new Core.Events.ShowDialog
-                {
-                    Dialog = new EditMemberViewModel(_account, SelectedItem.Tag)
-                });
-        }
+	public class MemberUI : TaggedItemUI<Member>
+	{
 
-        public void DeleteAction()
-        {
-            ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-               new Events.ShowDialog
-               {
-                   Dialog = new YesNoDialogViewModel
-                   {
-                       Message = "Ben je zeker?",
-                       Yes = () => DeleteItem()
-                   }
-               });
-        }
+	}
 
-        protected override void DeleteItem()
-        {
-            var model = ServiceProvider.Instance.GetService<Petoeter>();
+	public class MembersMainViewModel : ListItemScreen<MemberUI>
+	{
+		private Account _account;
 
-            model.DeleteRecord(SelectedItem.Tag);
+		public MembersMainViewModel(Account account)
+		{
+			this._account = account;
+		}
 
-            base.DeleteItem();
-        }
-    }
+		protected override void LoadItems()
+		{
+			var model = ServiceProvider.Instance.GetService<Petoeter>();
+
+			Items = (from m in model.GetMember(m => m.Account_Id == _account.Id && m.Deleted == false)
+							 select new MemberUI
+							 {
+								 Name = string.Format("{0} {1}", m.FirstName, m.LastName),
+								 Tag = m
+							 }).ToList();
+
+			base.LoadItems();
+		}
+
+		public void AddAction()
+		{
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+					new Core.Events.ShowDialog
+					{
+						Dialog = new AddMemberViewModel(_account)
+					});
+		}
+
+		public void EditAction()
+		{
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+					new Core.Events.ShowDialog
+					{
+						Dialog = new EditMemberViewModel(_account, SelectedItem.Tag)
+					});
+		}
+
+		public void DeleteAction()
+		{
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				 new Events.ShowDialog
+				 {
+					 Dialog = new YesNoDialogViewModel
+					 {
+						 Message = "Ben je zeker?",
+						 Yes = () => DeleteItem()
+					 }
+				 });
+		}
+
+		protected override void DeleteItem()
+		{
+			var model = ServiceProvider.Instance.GetService<Petoeter>();
+
+			model.DeleteRecord(SelectedItem.Tag);
+
+			base.DeleteItem();
+		}
+	}
 }

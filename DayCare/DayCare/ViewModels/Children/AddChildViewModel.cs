@@ -10,46 +10,46 @@ using System.Threading.Tasks;
 
 namespace DayCare.ViewModels.Children
 {
-    public class AddChildViewModel : Screen
-    {
-        private Account _account;
+	public class AddChildViewModel : Screen
+	{
+		private Account _account;
 
-        public ChildDetailViewModel Detail { get; set; }
+		public ChildDetailViewModel Detail { get; set; }
 
 
-        public AddChildViewModel(Account account)
-        {
-            _account = account;
-            Detail = new ChildDetailViewModel();
-        }
+		public AddChildViewModel(Account account)
+		{
+			_account = account;
+			Detail = new ChildDetailViewModel() { ChildId = Guid.NewGuid() };
+		}
 
-        public void SaveAction()
-        {
-            ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-             new Events.ShowDialog());
+		public void SaveAction()
+		{
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				new Events.ShowDialog());
 
-            var child = new Child { Id = Guid.NewGuid(), Account_Id = _account.Id };
-            Detail.GetData(child);
+			var child = new Child { Account_Id = _account.Id };
+			Detail.GetData(child);
 
-            ServiceProvider.Instance.GetService<Petoeter>().SaveChild(child);
+			ServiceProvider.Instance.GetService<Petoeter>().SaveChild(child);
 
-            ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-                new Core.Events.SwitchTask
-                {
-                    Task = new EditAccountViewModel(_account)
-                });
-        }
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				new Core.Events.SwitchTask
+				{
+					Task = new EditAccountViewModel(_account)
+				});
+		}
 
-        public void CancelAction()
-        {
-            ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-                new Events.ShowDialog());
+		public void CancelAction()
+		{
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				new Events.ShowDialog());
 
-            ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-                new Core.Events.SwitchTask
-                {
-                    Task = new EditAccountViewModel(_account)
-                });
-        }
-    }
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				new Core.Events.SwitchTask
+				{
+					Task = new EditAccountViewModel(_account)
+				});
+		}
+	}
 }

@@ -46,6 +46,7 @@
 				<Button Content="1 week" x:Name="OneWeekAction" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyle}" Height="26" Width="80" Margin="5"/>
 				<Button Content="2 weken" x:Name="TwoWeekAction" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyle}" Height="26" Width="80" Margin="5"/>
 				<Button Content="3 weken" x:Name="ThreeWeekAction" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyle}" Height="26" Width="80" Margin="5"/>
+				<Button Content="4 weken" x:Name="FourWeekAction" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyle}" Height="26" Width="80" Margin="5"/>
 			</StackPanel>
 
 			<ItemsControl ItemsSource="{Binding Schedules}" Grid.Row="1" >

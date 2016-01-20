@@ -4,24 +4,48 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DayCare.Views.Children"
+             xmlns:vc="clr-namespace:DayCare.Converters"
              mc:Ignorable="d" >
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="20"/>
-            <ColumnDefinition Width="1*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<vc:BooleanVisibilityConverter x:Key="BooleanVisibilityConverter" />
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="20"/>
+			<ColumnDefinition Width="1*"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
 
-        <TextBlock Text="Voornaam" Style="{DynamicResource LabelStyle}" />
-        <TextBlock Grid.Row="1" Text="Achternaam" Style="{DynamicResource LabelStyle}" />
+		<TextBlock Text="Voornaam" Style="{DynamicResource LabelStyle}" />
+		<TextBlock Grid.Row="1" Text="Achternaam" Style="{DynamicResource LabelStyle}" />
+		<TextBlock Grid.Row="2" Text="Geboorte datum" Style="{DynamicResource LabelStyle}" />
+			<TextBlock Text="Foto" Grid.Row="3" Style="{DynamicResource LabelStyle}"  />
+		
 
-        <TextBox Text="{Binding FirstName}" Grid.Column="2" Style="{DynamicResource TextBoxStyle}" Margin="4" MinWidth="200"/>
-        <TextBox Text="{Binding LastName}" Grid.Column="2" Grid.Row="1" Style="{DynamicResource TextBoxStyle}" Margin="4" MinWidth="200"/>
+		<TextBox Text="{Binding FirstName}" Grid.Column="2" Style="{DynamicResource TextBoxStyle}" Margin="4" MinWidth="200"/>
+		<TextBox Text="{Binding LastName}" Grid.Column="2" Grid.Row="1" Style="{DynamicResource TextBoxStyle}" Margin="4" MinWidth="200"/>
+		<DatePicker SelectedDate="{Binding BirthDay}" Grid.Column="2" Grid.Row="2" VerticalAlignment="Center" FirstDayOfWeek="Monday" FontFamily="Calibri" FontSize="18" Margin="4,0"/>
+		
+		<StackPanel Grid.Row="3" Grid.Column="3" Orientation="Vertical" >
+			<Button x:Name="SelectImageAction" Content="Selecteer" Style="{DynamicResource ButtonStyle}" Height="24" Margin="2" 
+							Visibility="{Binding ShowSelect, Converter={StaticResource BooleanVisibilityConverter}}"/>
+			<Button x:Name="RemoveImageAction" Content="Verwijder" Style="{DynamicResource ButtonStyle}" Height="24" Margin="2" 
+							Visibility="{Binding ShowRemove, Converter={StaticResource BooleanVisibilityConverter}}"/>
 
-    </Grid>
+			<Border  BorderBrush="Black" Background="White" BorderThickness="2" CornerRadius="20"	Margin="2"
+								Visibility="{Binding ShowRemove, Converter={StaticResource BooleanVisibilityConverter}}" >
+				<Image Width="200" Height="240" Source="{Binding ImageData}"/>
+			</Border>		
+		
+		</StackPanel>
+
+	</Grid>
 </UserControl>

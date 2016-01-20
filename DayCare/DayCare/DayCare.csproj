@@ -86,15 +86,20 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Converters\BooleanVisibilityConverter .cs" />
+    <Compile Include="Core\DatePeriod.cs" />
     <Compile Include="Core\Events.cs" />
+    <Compile Include="Core\Extentions.cs" />
     <Compile Include="Core\ReactivatableScreen.cs" />
     <Compile Include="Core\Reports\ColumnId.cs" />
     <Compile Include="Core\Reports\CustomStyleSheet.cs" />
     <Compile Include="Core\Reports\DateCell.cs" />
     <Compile Include="Core\Reports\ExcelFile.cs" />
+    <Compile Include="Core\Reports\MonthListReport.cs" />
     <Compile Include="Core\Reports\TextCell.cs" />
+    <Compile Include="Core\Reports\WeekListReport.cs" />
     <Compile Include="Core\ServiceProvider.cs" />
     <Compile Include="Core\TaskManager.cs" />
+    <Compile Include="Core\XmlBaseConfig.cs" />
     <Compile Include="DayCareBootstrapper.cs" />
     <Compile Include="Model\Database\Account.cs" />
     <Compile Include="Model\Database\Child.cs" />
@@ -107,6 +112,8 @@
     <Compile Include="Model\Database\Presence.cs" />
     <Compile Include="Model\Database\QueryInfo.cs" />
     <Compile Include="Model\Database\Schedule.cs" />
+    <Compile Include="Model\Database\Synchronizer.cs" />
+    <Compile Include="Model\Database\SystemSetting.cs" />
     <Compile Include="Model\Tasks\AddAccountTask.cs" />
     <Compile Include="Model\Tasks\EditAccountTask.cs" />
     <Compile Include="Model\UI\BaseItemUI.cs" />
@@ -124,6 +131,7 @@
     <Compile Include="ViewModels\Children\ChildUI.cs" />
     <Compile Include="ViewModels\Children\EditChildViewModel.cs" />
     <Compile Include="ViewModels\Dashboard\DashBoardViewModel.cs" />
+    <Compile Include="ViewModels\Dialogs\DateDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\YesNoDialogViewModel.cs" />
     <Compile Include="ViewModels\Members\AddMemberViewModel.cs" />
     <Compile Include="ViewModels\Members\EditMemberViewModel.cs" />
@@ -132,6 +140,8 @@
     <Compile Include="ViewModels\Precense\EditPrecenseViewModel.cs" />
     <Compile Include="ViewModels\Precense\PresenceMainViewModel.cs" />
     <Compile Include="ViewModels\Reports\MainReportsViewModel.cs" />
+    <Compile Include="ViewModels\Reports\SelectMonthViewModel.cs" />
+    <Compile Include="ViewModels\Reports\WeekListViewModel.cs" />
     <Compile Include="ViewModels\Scheduler\AddScheduleViewModel.cs" />
     <Compile Include="ViewModels\Scheduler\EditChildScheduleViewModel.cs" />
     <Compile Include="ViewModels\Scheduler\SchedulerMainViewModel.cs" />
@@ -173,6 +183,9 @@
     <Compile Include="Views\Dashboard\DashBoardView.xaml.cs">
       <DependentUpon>DashBoardView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Dialogs\DateDialogView.xaml.cs">
+      <DependentUpon>DateDialogView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Dialogs\YesNoDialogView.xaml.cs">
       <DependentUpon>YesNoDialogView.xaml</DependentUpon>
     </Compile>
@@ -196,6 +209,9 @@
     </Compile>
     <Compile Include="Views\Reports\MainReportsView.xaml.cs">
       <DependentUpon>MainReportsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Reports\SelectMonthView.xaml.cs">
+      <DependentUpon>SelectMonthView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Scheduler\AddScheduleView.xaml.cs">
       <DependentUpon>AddScheduleView.xaml</DependentUpon>
@@ -298,6 +314,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Dialogs\DateDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Dialogs\YesNoDialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -327,6 +347,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Reports\MainReportsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Reports\SelectMonthView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
