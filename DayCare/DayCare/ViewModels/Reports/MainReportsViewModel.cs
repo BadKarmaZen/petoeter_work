@@ -38,5 +38,10 @@ namespace DayCare.ViewModels.Reports
 					 Dialog = dlg
 				 });
 		}
+
+		public void ParentPhoneAction()
+		{
+			PhoneListReport.Create();
+		}
 	}
 }

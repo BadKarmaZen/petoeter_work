@@ -67,6 +67,19 @@
                             Style="{DynamicResource ButtonStyle}" FontFamily="Comic Sans MS" FontSize="22" />
 				</Grid>
 			</Border>
+
+			<Border Width="150" Height="200" Margin="25">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="1*"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					<Image Source="/DayCare;component/Resources/expenses.png"/>
+					<Button Grid.Row="1" Content="Kosten" x:Name="ExpensesAction"
+                            Style="{DynamicResource ButtonStyle}" FontFamily="Comic Sans MS" FontSize="22" />
+				</Grid>
+			</Border>
+
 			
 			<Border Width="150" Height="200" Margin="25">
 				<Grid>

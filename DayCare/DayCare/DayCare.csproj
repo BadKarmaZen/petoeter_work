@@ -85,16 +85,20 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Behaviour\DoubleClickEvent.cs" />
     <Compile Include="Converters\BooleanVisibilityConverter .cs" />
     <Compile Include="Core\DatePeriod.cs" />
     <Compile Include="Core\Events.cs" />
     <Compile Include="Core\Extentions.cs" />
+    <Compile Include="Core\ICloseScreen.cs" />
+    <Compile Include="Core\ImageManager.cs" />
     <Compile Include="Core\ReactivatableScreen.cs" />
     <Compile Include="Core\Reports\ColumnId.cs" />
     <Compile Include="Core\Reports\CustomStyleSheet.cs" />
     <Compile Include="Core\Reports\DateCell.cs" />
     <Compile Include="Core\Reports\ExcelFile.cs" />
     <Compile Include="Core\Reports\MonthListReport.cs" />
+    <Compile Include="Core\Reports\PhoneListReport.cs" />
     <Compile Include="Core\Reports\TextCell.cs" />
     <Compile Include="Core\Reports\WeekListReport.cs" />
     <Compile Include="Core\ServiceProvider.cs" />
@@ -105,6 +109,7 @@
     <Compile Include="Model\Database\Child.cs" />
     <Compile Include="Model\Database\DatabaseIgnoreAttribute.cs" />
     <Compile Include="Model\Database\DatabaseRecord.cs" />
+    <Compile Include="Model\Database\Expense.cs" />
     <Compile Include="Model\Database\GroupSchedule.cs" />
     <Compile Include="Model\Database\Holiday.cs" />
     <Compile Include="Model\Database\Member.cs" />
@@ -114,6 +119,7 @@
     <Compile Include="Model\Database\Schedule.cs" />
     <Compile Include="Model\Database\Synchronizer.cs" />
     <Compile Include="Model\Database\SystemSetting.cs" />
+    <Compile Include="Model\Database\Updates\DatabaseUpdate.cs" />
     <Compile Include="Model\Tasks\AddAccountTask.cs" />
     <Compile Include="Model\Tasks\EditAccountTask.cs" />
     <Compile Include="Model\UI\BaseItemUI.cs" />
@@ -133,6 +139,8 @@
     <Compile Include="ViewModels\Dashboard\DashBoardViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\DateDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\YesNoDialogViewModel.cs" />
+    <Compile Include="ViewModels\Expenses\ExpenseDetailViewModel.cs" />
+    <Compile Include="ViewModels\Expenses\ExpenseMainViewModel.cs" />
     <Compile Include="ViewModels\Members\AddMemberViewModel.cs" />
     <Compile Include="ViewModels\Members\EditMemberViewModel.cs" />
     <Compile Include="ViewModels\Members\MembersMainViewModel.cs" />
@@ -188,6 +196,12 @@
     </Compile>
     <Compile Include="Views\Dialogs\YesNoDialogView.xaml.cs">
       <DependentUpon>YesNoDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Expenses\ExpenseDetailView.xaml.cs">
+      <DependentUpon>ExpenseDetailView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Expenses\ExpenseMainView.xaml.cs">
+      <DependentUpon>ExpenseMainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Members\AddMemberView.xaml.cs">
       <DependentUpon>AddMemberView.xaml</DependentUpon>
@@ -322,6 +336,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Expenses\ExpenseDetailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Expenses\ExpenseMainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Members\AddMemberView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -392,6 +414,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\report1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\expenses.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

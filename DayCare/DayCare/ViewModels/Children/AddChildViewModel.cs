@@ -20,7 +20,7 @@ namespace DayCare.ViewModels.Children
 		public AddChildViewModel(Account account)
 		{
 			_account = account;
-			Detail = new ChildDetailViewModel() { ChildId = Guid.NewGuid() };
+			Detail = new ChildDetailViewModel() { ChildId = Guid.NewGuid(), BirthDay = DateTime.Now };
 		}
 
 		public void SaveAction()

@@ -11,22 +11,23 @@ using System.Windows;
 
 namespace DayCare
 {
-    class DayCareBootstrapper : BootstrapperBase
-    {
-        public DayCareBootstrapper()
-        {
-            Initialize();
+	class DayCareBootstrapper : BootstrapperBase
+	{
+		public DayCareBootstrapper()
+		{
+			Initialize();
 
-            ServiceProvider.Instance.RegisterService(new EventAggregator());
-            ServiceProvider.Instance.RegisterService(new TaskManager());
-            ServiceProvider.Instance.RegisterService(new Petoeter());
-        }
+			ServiceProvider.Instance.RegisterService(new EventAggregator());
+			ServiceProvider.Instance.RegisterService(new TaskManager());
+			ServiceProvider.Instance.RegisterService(new Petoeter());
+			ServiceProvider.Instance.RegisterService(new ImageManager());
+		}
 
-        protected override void OnStartup(object sender, StartupEventArgs e)
-        {
-            //  base.OnStartup(sender, e);
+		protected override void OnStartup(object sender, StartupEventArgs e)
+		{
+			//  base.OnStartup(sender, e);
 
-            DisplayRootViewFor<ShellViewModel>();
-        }
-    }
+			DisplayRootViewFor<ShellViewModel>();
+		}
+	}
 }

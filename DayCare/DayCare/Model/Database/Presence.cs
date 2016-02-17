@@ -22,5 +22,6 @@ namespace DayCare.Model.Database
 		public DateTime DepartureTime { get; set; }
 
 		public Guid DepartureMember_Id { get; set; }
+		public int TimeCode { get; set; }
 	}
 }

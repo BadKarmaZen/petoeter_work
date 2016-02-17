@@ -25,34 +25,4 @@ namespace DayCare.Core
 			return date.Value;
 		}
 	}
-
-	public static class StringExtention
-	{
-		public static BitmapImage LoadBitmapImage(this string fileName)
-		{
-			if (string.IsNullOrEmpty(fileName) || File.Exists(fileName) == false)
-			{
-				return null;				
-			}
-
-			using (FileStream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
-			{
-				MemoryStream ms = new MemoryStream();
-				ms.SetLength(stream.Length);
-
-				stream.Read(ms.GetBuffer(), 0, (int)stream.Length);
-				ms.Flush();
-
-				BitmapImage src = new BitmapImage();
-
-				src.BeginInit();
-				src.StreamSource = ms;
-				src.EndInit();
-
-				src.Freeze();
-
-				return src;
-			}
-		}
-	}
 }

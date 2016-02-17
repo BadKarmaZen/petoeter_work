@@ -9,63 +9,72 @@ using System.Text;
 
 namespace DayCare.ViewModels.Members
 {
-    public class EditMemberViewModel : Screen
-    {
-        private Account _account;
-        private Member _member;
+	public class EditMemberViewModel : Screen
+	{
+		private Account _account;
+		private Member _member;
 
-        private string _firstName;
+		private string _firstName;
+		private string _lastName;
+		private string _phone;
 
-        public string FirstName
-        {
-            get { return _firstName; }
-            set { _firstName = value; NotifyOfPropertyChange(() => FirstName); }
-        }
-        private string _lastName;
+		public string Phone
+		{
+			get { return _phone; }
+			set { _phone = value; NotifyOfPropertyChange(() => Phone); }
+		}
 
-        public string LastName
-        {
-            get { return _lastName; }
-            set { _lastName = value; NotifyOfPropertyChange(() => LastName); }
-        }
+		public string FirstName
+		{
+			get { return _firstName; }
+			set { _firstName = value; NotifyOfPropertyChange(() => FirstName); }
+		}
 
-        public EditMemberViewModel(Account account, Member member)
-        {
-            // TODO: Complete member initialization
-            this._account = account;
-            this._member = member;
+		public string LastName
+		{
+			get { return _lastName; }
+			set { _lastName = value; NotifyOfPropertyChange(() => LastName); }
+		}
 
-            FirstName = _member.FirstName;
-            LastName = _member.LastName;
-        }
+		public EditMemberViewModel(Account account, Member member)
+		{
+			// TODO: Complete member initialization
+			this._account = account;
+			this._member = member;
 
-        public void SaveAction()
-        {
-            ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-             new Events.ShowDialog());
+			FirstName = _member.FirstName;
+			LastName = _member.LastName;
+			Phone = _member.Phone;
+		}
 
-            _member.FirstName = FirstName;
-            _member.LastName = LastName;
+		public void SaveAction()
+		{
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+			 new Events.ShowDialog());
 
-            ServiceProvider.Instance.GetService<Petoeter>().UpdateRecord(_member);
+			_member.FirstName = FirstName;
+			_member.LastName = LastName;
+			_member.Phone = Phone;
 
-            ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-                new Core.Events.SwitchTask
-                {
-                    Task = new EditAccountViewModel(_account)
-                });
-        }
+			ServiceProvider.Instance.GetService<Petoeter>().UpdateRecord(_member);
 
-        public void CancelAction()
-        {
-            ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-                new Events.ShowDialog());
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+					new Core.Events.SwitchTask
+					{
+						Task = new EditAccountViewModel(_account)
+					});
+		}
 
-            ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-                new Core.Events.SwitchTask
-                {
-                    Task = new EditAccountViewModel(_account)
-                });
-        }
-    }
+		public void CancelAction()
+		{
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+					new Events.ShowDialog());
+
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+					new Core.Events.SwitchTask
+					{
+						Task = new EditAccountViewModel(_account)
+					});
+		}
+	}
 }

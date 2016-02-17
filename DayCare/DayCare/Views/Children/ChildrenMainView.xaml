@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:vc="clr-namespace:DayCare.Converters"
+						 xmlns:bh="clr-namespace:DayCare.Behaviour"
              mc:Ignorable="d" 
              d:DesignHeight="300"  >
 	<UserControl.Resources>
@@ -36,7 +37,8 @@
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
 						<Border BorderBrush="Black" BorderThickness="2" CornerRadius="5" MinHeight="75" Margin="5,10"
-                                cal:Message.Attach="[Event MouseUp] = [Action SelectChild($this)]">
+										cal:Message.Attach="[Event MouseUp] = [Action SelectChild($this)]"
+										bh:DoubleClickEvent.AttachAction="OpenAction($this)" >
 							<Grid>
 								<Grid.ColumnDefinitions>
 									<ColumnDefinition />

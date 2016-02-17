@@ -11,29 +11,25 @@ using System.Windows.Media.Imaging;
 
 namespace DayCare.ViewModels.Children
 {
-    public class ChildUI : TaggedItemUI<Child>
-    {
-			public BitmapImage ImageData
+	public class ChildUI : TaggedItemUI<Child>
+	{
+		public BitmapImage ImageData
+		{
+			get
 			{
-				get
-				{
-					string image = FindImageFile();
-					return image.LoadBitmapImage();
-				}
-			}
+				var img = ServiceProvider.Instance.GetService<ImageManager>();
 
-			public bool ShowImage
-			{
-				get 
-				{
-					return !string.IsNullOrEmpty(FindImageFile());
-				}
+				return img.CreateBitmap(img.FindImage(Tag.Id.ToString()));
 			}
+		}
 
-			public string FindImageFile()
+		public bool ShowImage
+		{
+			get
 			{
-				var model = ServiceProvider.Instance.GetService<Petoeter>();
-				return Directory.EnumerateFiles(model.Settings.ImageFolder, string.Format("{0}*", Tag.Id.ToString())).FirstOrDefault();
+				var img = ServiceProvider.Instance.GetService<ImageManager>();
+				return !string.IsNullOrEmpty(img.FindImage(Tag.Id.ToString()));
 			}
-    }
+		}
+	}
 }

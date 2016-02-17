@@ -10,5 +10,6 @@ namespace DayCare.Model.Database
 	{
 		public Version DatabaseVersion { get; set; }
 		public string ImageFolder { get; set; }
+		public DateTime ExporTimeStamp { get; set; }
 	}
 }

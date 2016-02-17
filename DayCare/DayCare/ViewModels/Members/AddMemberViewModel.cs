@@ -9,63 +9,72 @@ using System.Text;
 
 namespace DayCare.ViewModels.Members
 {
-    public class AddMemberViewModel : Screen
-    {
-        private Account _account;
+	public class AddMemberViewModel : Screen
+	{
+		private Account _account;
 
-        private string _firstName;
+		private string _firstName;
+		private string _lastName;
+		private string _phone;
 
-        public string FirstName
-        {
-            get { return _firstName; }
-            set { _firstName = value; NotifyOfPropertyChange(() => FirstName); }
-        }
-        private string _lastName;
+		public string Phone
+		{
+			get { return _phone; }
+			set { _phone = value; NotifyOfPropertyChange(() => Phone); }
+		}
 
-        public string LastName
-        {
-            get { return _lastName; }
-            set { _lastName = value; NotifyOfPropertyChange(() => LastName); }
-        }
+		public string FirstName
+		{
+			get { return _firstName; }
+			set { _firstName = value; NotifyOfPropertyChange(() => FirstName); }
+		}
 
-        public AddMemberViewModel(Account account)
-        {
-            // TODO: Complete member initialization
-            this._account = account;
-        }
 
-        public void SaveAction()
-        {
-            ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-             new Events.ShowDialog());
+		public string LastName
+		{
+			get { return _lastName; }
+			set { _lastName = value; NotifyOfPropertyChange(() => LastName); }
+		}
 
-            var member = new Member 
-            {
-                Id = Guid.NewGuid(), 
-                Account_Id = _account.Id,
-                FirstName = this.FirstName,
-                LastName = this.LastName
-            };
+		public AddMemberViewModel(Account account)
+		{
+			// TODO: Complete member initialization
+			this._account = account;
+		}
 
-            ServiceProvider.Instance.GetService<Petoeter>().SaveMember(member);
+		public void SaveAction()
+		{
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+			 new Events.ShowDialog());
 
-            ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-                new Core.Events.SwitchTask
-                {
-                    Task = new EditAccountViewModel(_account)
-                });
-        }
+			var member = new Member
+			{
+				Id = Guid.NewGuid(),
+				Account_Id = _account.Id,
+				FirstName = this.FirstName,
+				LastName = this.LastName,
+				Phone = this.Phone
+			};
 
-        public void CancelAction()
-        {
-            ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-                new Events.ShowDialog());
+			ServiceProvider.Instance.GetService<Petoeter>().SaveMember(member);
 
-            ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-                new Core.Events.SwitchTask
-                {
-                    Task = new EditAccountViewModel(_account)
-                });
-        }
-    }
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+					new Core.Events.SwitchTask
+					{
+						Task = new EditAccountViewModel(_account)
+					});
+		}
+
+		public void CancelAction()
+		{
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+					new Events.ShowDialog());
+
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+					new Core.Events.SwitchTask
+					{
+						Task = new EditAccountViewModel(_account)
+					});
+		}
+	}
 }

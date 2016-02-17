@@ -32,14 +32,8 @@ namespace DayCare.ViewModels.Children
 			{ 
 				_image = value;
 
-				if (string.IsNullOrEmpty(_image) == false)
-				{
-					ImageData = _image.LoadBitmapImage();
-				}
-				else
-				{
-					ImageData = null;
-				}
+				var img = ServiceProvider.Instance.GetService<ImageManager>();
+				ImageData = img.CreateBitmap(_image);
 
 				NotifyOfPropertyChange(() => Image);
 				NotifyOfPropertyChange(() => ShowSelect);
@@ -95,7 +89,9 @@ namespace DayCare.ViewModels.Children
 				_birthDay = child.BirthDay;
 				ChildId = child.Id;
 
-				Image = FindImageFile();
+				var img = ServiceProvider.Instance.GetService<ImageManager>();
+
+				Image = img.FindImage(ChildId.ToString());
 			}
 		}
 
@@ -134,12 +130,6 @@ namespace DayCare.ViewModels.Children
 			{
 				File.Delete(name);
 			}
-		}
-
-		public string FindImageFile()
-		{
-			var model = ServiceProvider.Instance.GetService<Petoeter>();
-			return Directory.EnumerateFiles(model.Settings.ImageFolder, string.Format("{0}*", ChildId.ToString())).FirstOrDefault();
 		}
 	}
 }

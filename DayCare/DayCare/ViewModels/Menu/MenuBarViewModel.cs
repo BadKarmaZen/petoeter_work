@@ -38,6 +38,13 @@ namespace DayCare.ViewModels.Menu
 		{
 			if (message.Add)
 			{
+				var menu = _menuItems.Find(m => m.Id == message.Id);
+
+				if (menu != null)
+				{
+					_menuItems.RemoveAll(m => m.Id == message.Id);					
+				}
+
 				_menuItems.Add(new MenuItem
 				{
 					Caption = message.Caption,

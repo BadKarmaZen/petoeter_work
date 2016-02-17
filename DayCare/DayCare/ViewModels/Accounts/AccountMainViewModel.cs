@@ -10,133 +10,141 @@ using System.Threading.Tasks;
 
 namespace DayCare.ViewModels.Accounts
 {
-    public class AccountMainViewModel : Screen
-    {
-        private List<AccountUI> _accounts;  
-        private AccountUI _selectedAccount;
+	public class AccountMainViewModel : Screen
+	{
+		private List<AccountUI> _accounts;
+		private AccountUI _selectedAccount;
 
 
-        public AccountUI SelectedAccount
-        {
-            get { return _selectedAccount; }
-            set { _selectedAccount = value; 
-                NotifyOfPropertyChange(() => SelectedAccount);
-                NotifyOfPropertyChange(() => IsItemSelected);
-            }
-        }
+		public AccountUI SelectedAccount
+		{
+			get { return _selectedAccount; }
+			set
+			{
+				_selectedAccount = value;
+				NotifyOfPropertyChange(() => SelectedAccount);
+				NotifyOfPropertyChange(() => IsItemSelected);
+			}
+		}
 
-        public bool IsItemSelected
-        {
-            get 
-            {
-                return _selectedAccount != null;
-            }
-        }
+		public bool IsItemSelected
+		{
+			get
+			{
+				return _selectedAccount != null;
+			}
+		}
 
-              
-        private string _filter;        
-        
-        public List<AccountUI> Accounts
-        {
-            get { return _accounts; }
-            set { _accounts = value; NotifyOfPropertyChange(() => Accounts); NotifyOfPropertyChange(() => FilteredAccounts); }
-        }
 
-        public List<AccountUI> FilteredAccounts
-        {
-            get 
-            {
-                if (string.IsNullOrWhiteSpace(Filter))
-                {
-                    return (from a in _accounts
-														let name = a.Name.ToLowerInvariant()
-														orderby name
-														select a).ToList();
-                }
+		private string _filter;
 
-                var f = Filter.ToLowerInvariant();
-                return (from a in _accounts
-                        let name = a.Name.ToLowerInvariant()
-                        where name.Contains(f)
-												orderby name
-                        select a).ToList();
-            }
-        }
+		public List<AccountUI> Accounts
+		{
+			get { return _accounts; }
+			set { _accounts = value; NotifyOfPropertyChange(() => Accounts); NotifyOfPropertyChange(() => FilteredAccounts); }
+		}
 
-        public string Filter
-        {
-            get { return _filter; }
-            set { _filter = value; NotifyOfPropertyChange(() => Filter); NotifyOfPropertyChange(() => FilteredAccounts); }
-        }
+		public List<AccountUI> FilteredAccounts
+		{
+			get
+			{
+				if (string.IsNullOrWhiteSpace(Filter))
+				{
+					return (from a in _accounts
+									let name = a.Name.ToLowerInvariant()
+									orderby name
+									select a).ToList();
+				}
 
-        public AccountMainViewModel()
-        {
-            LoadData();
-        }
+				var f = Filter.ToLowerInvariant();
+				return (from a in _accounts
+								let name = a.Name.ToLowerInvariant()
+								where name.Contains(f)
+								orderby name
+								select a).ToList();
+			}
+		}
 
-        private void LoadData()
-        {
-            var model = ServiceProvider.Instance.GetService<Petoeter>();
+		public string Filter
+		{
+			get { return _filter; }
+			set { _filter = value; NotifyOfPropertyChange(() => Filter); NotifyOfPropertyChange(() => FilteredAccounts); }
+		}
 
-            Accounts = (from a in model.GetAccount(a => a.Deleted == false)
-                        select new AccountUI { Name = a.Name, Tag = a }).ToList();
-        }
+		public AccountMainViewModel()
+		{
+			LoadData();
+		}
 
-        public void AddAction ()
-        {
-            ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-                new Core.Events.ShowDialog
-                {
-                    Dialog = new AddAccountViewModel()
-                });
-        }
+		private void LoadData()
+		{
+			var model = ServiceProvider.Instance.GetService<Petoeter>();
 
-        public void EditAction()
-        {
+			Accounts = (from a in model.GetAccount(a => a.Deleted == false)
+									select new AccountUI { Name = a.Name, Tag = a }).ToList();
+		}
 
-            ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-                new Core.Events.SwitchTask
-                {
-                    Task = new EditAccountViewModel(SelectedAccount.Tag)
-                });
-        }
+		public void AddAction()
+		{
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+					new Core.Events.ShowDialog
+					{
+						Dialog = new AddAccountViewModel()
+					});
+		}
 
-        public void DeleteAction()
-        {
-            ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-                new Events.ShowDialog
-                {
-                    Dialog = new YesNoDialogViewModel
-                    {
-                        Message = "Ben je zeker?",
-                        Yes = () => DeleteAccount()
-                    }
-                });
-        }
+		public void EditAction()
+		{
 
-        public void DeleteAccount()
-        {
-            var model = ServiceProvider.Instance.GetService<Petoeter>();
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+					new Core.Events.SwitchTask
+					{
+						Task = new EditAccountViewModel(SelectedAccount.Tag)
+					});
+		}
 
-            model.DeleteAccount(SelectedAccount.Tag);
-            SelectAction(null);
+		public void OpenAction(AccountUI account)
+		{
+			SelectAction(account);
+			EditAction();
+		}
 
-            LoadData();
-        }
+		public void DeleteAction()
+		{
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+					new Events.ShowDialog
+					{
+						Dialog = new YesNoDialogViewModel
+						{
+							Message = "Ben je zeker?",
+							Yes = () => DeleteAccount()
+						}
+					});
+		}
 
-        public void SelectAction(AccountUI account)
-        {
-            if (SelectedAccount != null)
-            {
-                SelectedAccount.Selected = false;                
-            }
+		public void DeleteAccount()
+		{
+			var model = ServiceProvider.Instance.GetService<Petoeter>();
 
-            SelectedAccount = account;
+			model.DeleteAccount(SelectedAccount.Tag);
+			SelectAction(null);
 
-            if (SelectedAccount != null)
-            {
-                SelectedAccount.Selected = true;                
-            }
-        }
-    }
+			LoadData();
+		}
+
+		public void SelectAction(AccountUI account)
+		{
+			if (SelectedAccount != null)
+			{
+				SelectedAccount.Selected = false;
+			}
+
+			SelectedAccount = account;
+
+			if (SelectedAccount != null)
+			{
+				SelectedAccount.Selected = true;
+			}
+		}
+	}
 }

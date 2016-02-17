@@ -41,8 +41,8 @@
 							Visibility="{Binding ShowRemove, Converter={StaticResource BooleanVisibilityConverter}}"/>
 
 			<Border  BorderBrush="Black" Background="White" BorderThickness="2" CornerRadius="20"	Margin="2"
-								Visibility="{Binding ShowRemove, Converter={StaticResource BooleanVisibilityConverter}}" >
-				<Image Width="200" Height="240" Source="{Binding ImageData}"/>
+								Visibility="{Binding ShowRemove, Converter={StaticResource BooleanVisibilityConverter}}" ClipToBounds="True">
+				<Image Width="200" Height="240" Source="{Binding ImageData}" ClipToBounds="True"/>
 			</Border>		
 		
 		</StackPanel>

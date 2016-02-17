@@ -2,6 +2,7 @@
 using DayCare.Core;
 using DayCare.ViewModels.Accounts;
 using DayCare.ViewModels.Calendar;
+using DayCare.ViewModels.Expenses;
 using DayCare.ViewModels.Precense;
 using DayCare.ViewModels.Reports;
 using DayCare.ViewModels.Scheduler;
@@ -98,5 +99,16 @@ namespace DayCare.ViewModels.Dashboard
 					Task = new MainReportsViewModel()
 				});
 		}
+
+		public void ExpensesAction()
+		{
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				new Core.Events.SwitchTask
+				{
+					Task = new ExpenseMainViewModel()
+				});
+		}
+
 	}
 }

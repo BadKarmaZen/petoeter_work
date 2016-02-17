@@ -19,6 +19,7 @@ namespace DayCare.Model.Database
 			Convertion.Add(typeof(Guid), (data) => Guid.Parse(data.ToString()));
 			Convertion.Add(typeof(bool), (data) => Convert.ToBoolean(data));
 			Convertion.Add(typeof(DateTime), (data) => (data is System.DBNull) ? DateTime.MinValue : Convert.ToDateTime(data));
+			Convertion.Add(typeof(string), (data) => (data is System.DBNull) ? string.Empty : Convert.ToString(data));
 		}
 		#endregion
 

@@ -16,7 +16,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Button Content="{Binding Caption}" cal:Message.Attach="[Event Click] = [Action ExecuteAction($this)]"
-                            Height="32" Style="{DynamicResource ButtonStyle}" FontFamily="Comic Sans MS" FontSize="22" MinWidth="100"/>
+                            Height="32" Style="{DynamicResource ButtonStyle}" FontFamily="Comic Sans MS" FontSize="22" MinWidth="100" Margin="10,0"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

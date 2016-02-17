@@ -165,6 +165,13 @@ namespace DayCare.ViewModels.Members
 					});
 		}
 
+
+		public void OpenActon(MemberUI member)
+		{
+			SelectItem(member);
+			EditAction();
+		}
+
 		public void DeleteAction()
 		{
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(

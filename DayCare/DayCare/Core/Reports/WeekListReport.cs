@@ -108,15 +108,18 @@ namespace DayCare.Core.Reports
 				cname.Value = string.Format("{0} {1}", child.LastName, child.FirstName);
 				cname.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 				cname.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+				cname.Style.Alignment.WrapText = true;
 				Enbox(cname.Style);
 
 				cell = ws.Cell(rowIndex, "C");
 				cell.Value = "Aankomst";
 				Enbox(cell.Style);
+				ws.Row(rowIndex).Height = 27.0;
 
 				cell = ws.Cell(rowIndex + 1, "C");
 				cell.Value = "Vertrek";
 				Enbox(cell.Style);
+				ws.Row(rowIndex + 1).Height = 27.0;
 
 				colid = new ColumnId('D');
 				for (int index = 0; index < 15; index++)
@@ -127,31 +130,7 @@ namespace DayCare.Core.Reports
 					Enbox(cell.Style);
 
 					colid.Increment();
-				}
-				//foreach (var day in weekdays)
-				//{
-				//	/*var schedule = model.GetCurrentSchedule(child, day.Date);
-				//	var info = string.Empty;
-
-				//	if (schedule.ThisMorning(day.Date) && schedule.ThisAfternoon(day.Date))
-				//	{
-				//		info = "X";
-				//	}
-				//	else if (schedule.ThisMorning(day.Date))
-				//	{
-				//		info = "VM";
-				//	}
-				//	else if (schedule.ThisAfternoon(day.Date))
-				//	{
-				//		info = "NM";
-				//	}*/
-
-				//	cell = ws.Cell(rowIndex, colid.ToString());
-				//	cell.Value = string.Empty;
-				//	Enbox(cell.Style);
-
-				//	
-				//}
+				}				
 
 				childIndex++;
 				rowIndex += 2;
@@ -168,14 +147,16 @@ namespace DayCare.Core.Reports
 
 			//	styling
 			ws.Column(1).Width = 2.0;
-			ws.Column(2).Width = 18.15;
-			ws.Column(3).Width = 7.57;
+			ws.Column(2).Width = 13.0;
+			ws.Column(3).Width = 6.43;
+
+			ws.Column(3).Style.Font.FontSize = 8;
 
 			for (int day = 0; day < 5; day++)
 			{
-				ws.Column(4 + (day * 3)).Width = 5.5;
-				ws.Column((int)(4 + (day * 3) + 1)).Width = 10.43;
-				ws.Column((int)(4 + (day * 3) + 2)).Width = 5.5;				
+				ws.Column(4 + (day * 3)).Width = 5.43;
+				ws.Column((int)(4 + (day * 3) + 1)).Width = 10.14;
+				ws.Column((int)(4 + (day * 3) + 2)).Width = 5.43;				
 			}
 
 			/*for (int index = 3; index <= 3 + columns; index++)

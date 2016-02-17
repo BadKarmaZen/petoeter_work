@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using DayCare.Model.Database.Updates;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,7 +13,14 @@ namespace DayCare.Model.Database
 {
 	public class Petoeter
 	{
+		//public const string DatabaseName = "petoeter";
+		public const string DatabaseName = "petoeter_live";
 		#region Members
+
+
+		public static readonly Schedule EmptySchedule = new Schedule();
+
+
 		private Dictionary<Type, QueryInfo> Queries = new Dictionary<Type, QueryInfo>();
 
 		public string ConnectionString { get; set; }
@@ -24,6 +32,7 @@ namespace DayCare.Model.Database
 		private List<Member> _members = new List<Member>();
 		private List<Schedule> _schedules = new List<Schedule>();
 		private List<Holiday> _holydays = new List<Holiday>();
+		private List<Expense> _expenses = new List<Expense>();
 		#endregion
 
 		public SystemSetting Settings { get; set; }
@@ -38,6 +47,7 @@ namespace DayCare.Model.Database
 			CreateQueries(typeof(Schedule));
 			CreateQueries(typeof(Presence), "created = @param_date");
 			CreateQueries(typeof(Holiday));
+			CreateQueries(typeof(Expense), "date >= @from_date and date <= @to_date");
 
 			InitalizeDatabase();
 		}
@@ -45,22 +55,22 @@ namespace DayCare.Model.Database
 		private void InitalizeDatabase()
 		{
 			//ConnectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3};", "192.168.1.100", "petoeter", "admin", "666777");
-			ConnectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3};", "localhost", "petoeter", "admin", "666777");
+			ConnectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3};", "localhost", DatabaseName, "admin", "666777");
 			DataBase = new MySqlConnection(ConnectionString);
 
-			LoadSystemSettigns();
+			LoadSystemSettings();
+
+			var updater = new DatabaseUpdate(this);
+			updater.Upgrade();
 
 			LoadData(Queries[typeof(Account)], _accounts);
 			LoadData(Queries[typeof(Member)], _members);
 			LoadData(Queries[typeof(Child)], _children);
 			LoadData(Queries[typeof(Schedule)], _schedules);
 			LoadData(Queries[typeof(Holiday)], _holydays);
-
-
-			//Synchronizer.ExportFromMaster(@"E:\temp\export.xml");
 		}
 
-		private bool LoadSystemSettigns()
+		private bool LoadSystemSettings()
 		{
 			try
 			{
@@ -75,7 +85,41 @@ namespace DayCare.Model.Database
 				{
 					Settings = new SystemSetting();
 					Settings.ImageFolder = rdr["picture_folder"] as string;
+
+					string version = rdr["version"] as string;
+					Settings.DatabaseVersion = Version.Parse(version);
+
+					var timestamp = rdr["export_timestamp"];
+					Settings.ExporTimeStamp = (timestamp is System.DBNull) ? DateTime.MinValue : Convert.ToDateTime(timestamp);
 				}
+
+				return true;
+			}
+			catch (Exception ex)
+			{
+			}
+			finally
+			{
+				DataBase.Close();
+			}
+
+			return false;
+		}
+
+		public bool SaveSystemSettings()
+		{
+			try
+			{
+				DataBase.Open();
+
+				var cmd = DataBase.CreateCommand();
+				cmd.CommandText = "Update system set picture_folder = @picture_folder, export_timestamp = @export_timestamp, version = @version;";
+
+				cmd.Parameters.Add("@picture_folder", Settings.ImageFolder);
+				cmd.Parameters.Add("@export_timestamp", Settings.ExporTimeStamp);
+				cmd.Parameters.Add("@version", Settings.DatabaseVersion.ToString(3));
+
+				cmd.ExecuteNonQuery();
 
 				return true;
 			}
@@ -185,24 +229,35 @@ namespace DayCare.Model.Database
 
 			if (data.Count == 0)
 			{
-				data = (from c in GetChild(c => c.Deleted == false)
-								from s in GetSchedule(s => s.Child_Id == c.Id && s.ValidDate(today))
-								select new Presence
-								{
-									Id = Guid.NewGuid(),
-									Child_Id = c.Id,
-									Created = today,
-									FullName = c.FirstName,	// string.Format("{0})" c.ToString()
-								}).ToList();
+				var children = GetChild(c => c.Deleted == false);
+
+				foreach (var child in children)
+				{
+					var schedule = GetCurrentSchedule(child, today);
+
+					if (schedule != EmptySchedule)
+					{
+						var timeCode = schedule.GetAllowedTime(today);
+
+						if (timeCode != 0)
+						{
+							data.Add(new Presence
+							{
+								Id = Guid.NewGuid(),
+								Child_Id = child.Id,
+								Created = today,
+								FullName = child.FirstName,
+								TimeCode = timeCode
+							});
+						}
+					}
+				}
 
 				foreach (var p in data)
 				{
 					SavePresenceItem(p);
 				}
 			}
-
-			//Queries[typeof(Presence)];
-			//query.SelectQuery.
 
 			return data;
 		}
@@ -448,26 +503,27 @@ namespace DayCare.Model.Database
 				return groups[0].GetScheduleOn(day);
 			}
 
-			return new Schedule();
+			return EmptySchedule;
 		}
+
 
 		internal void DeleteAccount(Account account)
 		{
 			//	first delete child and family
 
 			var children = (from c in _children
-										 where c.Account_Id == account.Id
-										 select c).ToList();
+											where c.Account_Id == account.Id
+											select c).ToList();
 
 			foreach (var child in children)
 			{
 				child.Deleted = true;
-				DeleteChild(child);				
+				DeleteChild(child);
 			}
 
 			var members = (from m in _members
-											where m.Account_Id == account.Id
-											select m).ToList();
+										 where m.Account_Id == account.Id
+										 select m).ToList();
 
 			foreach (var member in members)
 			{
@@ -493,10 +549,29 @@ namespace DayCare.Model.Database
 			foreach (var schedule in _schedules)
 			{
 				schedule.Deleted = true;
-				DeleteRecord(schedule);				
+				DeleteRecord(schedule);
 			}
 
 			DeleteRecord(child);
+		}
+
+		internal void ExecuteCommand(string query)
+		{
+			try
+			{
+				DataBase.Open();
+
+				var cmd = DataBase.CreateCommand();
+				cmd.CommandText = query;
+				cmd.ExecuteNonQuery();
+			}
+			catch (Exception ex)
+			{
+			}
+			finally
+			{
+				DataBase.Close();
+			}
 		}
 	}
 }

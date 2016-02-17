@@ -13,21 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace DayCare.Views.Accounts
+namespace DayCare.Views.Expenses
 {
 	/// <summary>
-	/// Interaction logic for AddAccountView.xaml
+	/// Interaction logic for ExpenseDetailView.xaml
 	/// </summary>
-	public partial class AddAccountView : UserControl
+	public partial class ExpenseDetailView : UserControl
 	{
-		public AddAccountView()
+		public ExpenseDetailView()
 		{
 			InitializeComponent();
-		}
-
-		private void UserControl_Loaded(object sender, RoutedEventArgs e)
-		{
-			AccountName.Focus();
 		}
 	}
 }
