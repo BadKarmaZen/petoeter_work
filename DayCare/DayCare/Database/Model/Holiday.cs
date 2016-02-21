@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DayCare.Model.Database
+namespace DayCare.Database.Model
 {
-	public class Holiday : DatabaseRecord
+	class Holiday : DatabaseRecord
 	{
 		public DateTime Date { get; set; }
 
 		public Holiday()
 		{
+			//	Auto assign
 			Id = Guid.NewGuid();
 		}
 	}

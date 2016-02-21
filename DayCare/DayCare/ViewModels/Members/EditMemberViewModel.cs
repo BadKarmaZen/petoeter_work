@@ -1,6 +1,5 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
-using DayCare.Model.Database;
 using DayCare.ViewModels.Accounts;
 using System;
 using System.Collections.Generic;
@@ -9,7 +8,7 @@ using System.Text;
 
 namespace DayCare.ViewModels.Members
 {
-	public class EditMemberViewModel : Screen
+	/*public class EditMemberViewModel : Screen
 	{
 		private Account _account;
 		private Member _member;
@@ -76,5 +75,5 @@ namespace DayCare.ViewModels.Members
 						Task = new EditAccountViewModel(_account)
 					});
 		}
-	}
+	}*/
 }

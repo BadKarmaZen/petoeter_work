@@ -1,9 +1,10 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
-using DayCare.Model.Database;
+using DayCare.Model;
 using DayCare.Model.Tasks;
 using DayCare.ViewModels.Children;
 using DayCare.ViewModels.Members;
+using DayCare.ViewModels.UICore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,27 +13,22 @@ using System.Threading.Tasks;
 
 namespace DayCare.ViewModels.Accounts
 {
-	public class EditAccountViewModel : Screen
+	public class EditAccountViewModel : BackScreen<EditAccountViewModel>
 	{
-		private Events.RegisterMenu AddBackMenu { get; set; }
-		private Events.RegisterMenu RemoveBackMenu { get; set; }
-
 		private Account _account;
 		public AccountDetailViewModel Detail { get; set; }
-		public ChildrenMainViewModel ChildrenDetail { get; set; }
+		//public ChildrenMainViewModel ChildrenDetail { get; set; }
 
 		public MembersMainViewModel MembersDetail { get; set; }
-
-
 
 		public EditAccountViewModel(Account account)
 		{
 			_account = account;
 
 			Detail = new AccountDetailViewModel(_account);
-			ChildrenDetail = new ChildrenMainViewModel(_account);
+			//ChildrenDetail = new ChildrenMainViewModel(_account);
 			MembersDetail = new MembersMainViewModel(_account);
-
+			
 			ServiceProvider.Instance.GetService<TaskManager>().StartTask(new EditAccountTask
 			{
 				ReturnAction = () =>
@@ -42,25 +38,6 @@ namespace DayCare.ViewModels.Accounts
 									Task = new EditAccountViewModel(_account)
 								})
 			});
-
-			AddBackMenu = new Events.RegisterMenu
-			{
-				Caption = "Terug",
-				Id = "Menu.AccountView.Back",
-				Add = true,
-				Action = () =>
-				{
-					CancelAction();
-				}
-			};
-
-			RemoveBackMenu = new Events.RegisterMenu
-			{
-				Id = "Menu.AccountView.Back",
-				Add = false
-			};
-
-			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
 		}
 
 		//public void SaveAction()
@@ -80,15 +57,19 @@ namespace DayCare.ViewModels.Accounts
 
 		public void CancelAction()
 		{
-			ServiceProvider.Instance.GetService<TaskManager>().EndTask();
+			//ServiceProvider.Instance.GetService<TaskManager>().EndTask();
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Core.Events.SwitchTask
-					{
-						Task = new AccountMainViewModel()
-					});
+				new Core.Events.SwitchTask
+				{
+					Task = new AccountMainViewModel()
+				});
+		}
 
+		public override void BackAction()
+		{
+			CancelAction();
 
-			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(RemoveBackMenu);
+			base.BackAction();
 		}
 	}
 }

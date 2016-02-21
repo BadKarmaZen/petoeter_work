@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
-using DayCare.Model.Database;
+using DayCare.Model;
 using DayCare.ViewModels;
 using System;
 using System.Collections.Generic;

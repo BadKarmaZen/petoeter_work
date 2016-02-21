@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DayCare.Model.Database
+namespace DayCare.Database
 {
 	class QueryInfo
 	{
@@ -126,7 +126,7 @@ namespace DayCare.Model.Database
 
 			if (string.IsNullOrWhiteSpace(selectClause))
 			{
-				info.Select = string.Format("select * from {0};", table);				
+				info.Select = string.Format("select * from {0};", table);
 			}
 			else
 			{

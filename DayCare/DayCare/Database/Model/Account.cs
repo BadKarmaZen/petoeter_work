@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DayCare.Model.Database
+namespace DayCare.Database.Model
 {
-    public class DatabaseIgnoreAttribute : Attribute
-    {
-    }
+	public class Account : DatabaseRecord
+	{
+		public string Name { get; set; }
+	}
 }

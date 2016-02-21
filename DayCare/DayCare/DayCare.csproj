@@ -104,22 +104,30 @@
     <Compile Include="Core\ServiceProvider.cs" />
     <Compile Include="Core\TaskManager.cs" />
     <Compile Include="Core\XmlBaseConfig.cs" />
+    <Compile Include="Database\DatabaseEngine.Account.cs" />
+    <Compile Include="Database\DatabaseEngine.cs" />
+    <Compile Include="Database\DatabaseEngine.Member.cs" />
+    <Compile Include="Database\DatabaseIgnoreAttribute.cs" />
+    <Compile Include="Database\Model\Account.cs" />
+    <Compile Include="Database\Model\Child.cs" />
+    <Compile Include="Database\Model\DatabaseRecord.cs" />
+    <Compile Include="Database\Model\Holiday.cs" />
+    <Compile Include="Database\Model\Member.cs" />
+    <Compile Include="Database\QueryInfo.cs" />
     <Compile Include="DayCareBootstrapper.cs" />
-    <Compile Include="Model\Database\Account.cs" />
-    <Compile Include="Model\Database\Child.cs" />
-    <Compile Include="Model\Database\DatabaseIgnoreAttribute.cs" />
-    <Compile Include="Model\Database\DatabaseRecord.cs" />
+    <Compile Include="Model\Account.cs" />
+    <Compile Include="Model\Child.cs" />
     <Compile Include="Model\Database\Expense.cs" />
     <Compile Include="Model\Database\GroupSchedule.cs" />
-    <Compile Include="Model\Database\Holiday.cs" />
-    <Compile Include="Model\Database\Member.cs" />
     <Compile Include="Model\Database\Petoeter.cs" />
     <Compile Include="Model\Database\Presence.cs" />
-    <Compile Include="Model\Database\QueryInfo.cs" />
     <Compile Include="Model\Database\Schedule.cs" />
     <Compile Include="Model\Database\Synchronizer.cs" />
     <Compile Include="Model\Database\SystemSetting.cs" />
     <Compile Include="Model\Database\Updates\DatabaseUpdate.cs" />
+    <Compile Include="Model\DataObject.cs" />
+    <Compile Include="Model\Member.cs" />
+    <Compile Include="Model\Petoeter.cs" />
     <Compile Include="Model\Tasks\AddAccountTask.cs" />
     <Compile Include="Model\Tasks\EditAccountTask.cs" />
     <Compile Include="Model\UI\BaseItemUI.cs" />
@@ -136,6 +144,12 @@
     <Compile Include="ViewModels\Children\ChildrenMainViewModel.cs" />
     <Compile Include="ViewModels\Children\ChildUI.cs" />
     <Compile Include="ViewModels\Children\EditChildViewModel.cs" />
+    <Compile Include="ViewModels\Members\MemberUI.cs" />
+    <Compile Include="ViewModels\UICore\BackScreen.cs" />
+    <Compile Include="ViewModels\UICore\BaseScreen.cs" />
+    <Compile Include="ViewModels\UICore\FilteredListItemScreen.cs" />
+    <Compile Include="ViewModels\UICore\ListItemScreen.cs" />
+    <Compile Include="ViewModels\UICore\TaggedItem.cs" />
     <Compile Include="ViewModels\Dashboard\DashBoardViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\DateDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\YesNoDialogViewModel.cs" />
@@ -418,6 +432,7 @@
   <ItemGroup>
     <Resource Include="Resources\expenses.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

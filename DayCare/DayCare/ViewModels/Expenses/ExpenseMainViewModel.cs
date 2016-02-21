@@ -1,6 +1,5 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
-using DayCare.Model.Database;
 using DayCare.Model.UI;
 using System;
 using System.Collections.Generic;
@@ -11,7 +10,7 @@ using System.Windows.Media.Imaging;
 
 namespace DayCare.ViewModels.Expenses
 {
-	public class ExpenseUI :  TaggedItemUI<Child>
+	/*public class ExpenseUI :  TaggedItemUI<Child>
 	{
 		public BitmapImage ImageData
 		{
@@ -54,5 +53,5 @@ namespace DayCare.ViewModels.Expenses
 		public void CloseThisScreen()
 		{
 		}
-	}
+	}*/
 }

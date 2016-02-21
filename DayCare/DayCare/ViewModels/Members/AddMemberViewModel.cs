@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
-using DayCare.Model.Database;
+using DayCare.Model;
 using DayCare.ViewModels.Accounts;
 using System;
 using System.Collections.Generic;
@@ -50,19 +50,22 @@ namespace DayCare.ViewModels.Members
 			var member = new Member
 			{
 				Id = Guid.NewGuid(),
-				Account_Id = _account.Id,
+				Account = _account,
 				FirstName = this.FirstName,
 				LastName = this.LastName,
 				Phone = this.Phone
 			};
 
-			ServiceProvider.Instance.GetService<Petoeter>().SaveMember(member);
+			_account.Members.Add(member);
+
+			ServiceProvider.Instance.GetService<Petoeter>().AddMember(member);
+			ServiceProvider.Instance.GetService<Petoeter>().Save();
 
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Core.Events.SwitchTask
-					{
-						Task = new EditAccountViewModel(_account)
-					});
+				new Core.Events.SwitchTask
+				{
+					Task = new EditAccountViewModel(_account)
+				});
 		}
 
 		public void CancelAction()

@@ -1,8 +1,8 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
-using DayCare.Model.Database;
 using DayCare.ViewModels.Children;
 using DayCare.ViewModels.Members;
+using DayCare.ViewModels.UICore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DayCare.ViewModels.Scheduler
 {
-	public class SchedulerMainViewModel : FilteredListItemScreen<ChildUI>
+	/*public class SchedulerMainViewModel : FilteredListItemScreen<ChildUI>
 	{
 		protected override void LoadItems()
 		{
@@ -57,5 +57,5 @@ namespace DayCare.ViewModels.Scheduler
 		//           }
 		//       });
 		//}
-	}
+	}*/
 }

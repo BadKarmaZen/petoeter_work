@@ -1,5 +1,5 @@
 ﻿using DayCare.Core;
-using DayCare.Model.Database;
+using DayCare.Model;
 using DayCare.Model.UI;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ namespace DayCare.ViewModels.Children
 {
 	public class ChildUI : TaggedItemUI<Child>
 	{
-		public BitmapImage ImageData
+	/*	public BitmapImage ImageData
 		{
 			get
 			{
@@ -30,6 +30,6 @@ namespace DayCare.ViewModels.Children
 				var img = ServiceProvider.Instance.GetService<ImageManager>();
 				return !string.IsNullOrEmpty(img.FindImage(Tag.Id.ToString()));
 			}
-		}
+		}*/
 	}
 }

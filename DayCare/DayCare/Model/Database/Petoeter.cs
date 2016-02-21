@@ -1,5 +1,4 @@
-﻿using DayCare.Model.Database.Updates;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,11 +8,11 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DayCare.Model.Database
+namespace DayCare.Model//.Database
 {
-	public class Petoeter
+	public class Petoeterex
 	{
-		//public const string DatabaseName = "petoeter";
+	/*	//public const string DatabaseName = "petoeter";
 		public const string DatabaseName = "petoeter_live";
 		#region Members
 
@@ -23,8 +22,7 @@ namespace DayCare.Model.Database
 
 		private Dictionary<Type, QueryInfo> Queries = new Dictionary<Type, QueryInfo>();
 
-		public string ConnectionString { get; set; }
-		public MySqlConnection DataBase { get; set; }
+		
 
 
 		private List<Child> _children = new List<Child>();
@@ -39,9 +37,8 @@ namespace DayCare.Model.Database
 
 
 
-		public Petoeter()
+		public Petoeterex()
 		{
-			CreateQueries(typeof(Account));
 			CreateQueries(typeof(Member));
 			CreateQueries(typeof(Child));
 			CreateQueries(typeof(Schedule));
@@ -286,10 +283,7 @@ namespace DayCare.Model.Database
 		}
 
 		#region Database Helper
-		private void CreateQueries(Type type, string selectClause = null)
-		{
-			Queries.Add(type, QueryInfo.CreateType(type, selectClause));
-		}
+
 
 		//private void LoadData<T>(string cmdtext, List<T> list, Func<MySqlDataReader, object> create)
 		private void LoadData<T>(QueryInfo query, List<T> list, params Tuple<string, object>[] parameters)
@@ -555,23 +549,23 @@ namespace DayCare.Model.Database
 			DeleteRecord(child);
 		}
 
-		internal void ExecuteCommand(string query)
-		{
-			try
-			{
-				DataBase.Open();
+		//internal void ExecuteCommand(string query)
+		//{
+		//	try
+		//	{
+		//		DataBase.Open();
 
-				var cmd = DataBase.CreateCommand();
-				cmd.CommandText = query;
-				cmd.ExecuteNonQuery();
-			}
-			catch (Exception ex)
-			{
-			}
-			finally
-			{
-				DataBase.Close();
-			}
-		}
+		//		var cmd = DataBase.CreateCommand();
+		//		cmd.CommandText = query;
+		//		cmd.ExecuteNonQuery();
+		//	}
+		//	catch (Exception ex)
+		//	{
+		//	}
+		//	finally
+		//	{
+		//		DataBase.Close();
+		//	}
+		//}*/
 	}
 }

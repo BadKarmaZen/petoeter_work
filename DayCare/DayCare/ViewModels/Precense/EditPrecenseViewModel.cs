@@ -1,6 +1,5 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
-using DayCare.Model.Database;
 using DayCare.ViewModels.Members;
 using System;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DayCare.ViewModels.Precense
 {
-	public class EditPrecenseViewModel : Screen
+	/*public class EditPrecenseViewModel : Screen
 	{
 		enum State
 		{
@@ -239,5 +238,5 @@ namespace DayCare.ViewModels.Precense
 			_leaveTime = time;
 			NotifyOfPropertyChange(() => LeaveTime);
 		}
-	}
+	}*/
 }

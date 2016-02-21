@@ -1,4 +1,5 @@
-﻿using DayCare.Model.Database;
+﻿
+using DayCare.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,7 +23,7 @@ namespace DayCare.Core
 
 			if (model != null)
 			{
-				ImageFolder = model.Settings.ImageFolder;
+				//ImageFolder = model.Settings.ImageFolder;
 			}
 
 			_cache = new Dictionary<string, BitmapImage>();

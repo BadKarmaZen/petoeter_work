@@ -1,6 +1,5 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
-using DayCare.Model.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DayCare.ViewModels.Scheduler
 {
-	class AddScheduleViewModel : Screen
+	/*class AddScheduleViewModel : Screen
 	{
 		private Child _child;
 		private GroupSchedule _grpSchedule;
@@ -228,5 +227,5 @@ namespace DayCare.ViewModels.Scheduler
 				return right;
 			}
 		}
-	}
+	}*/
 }

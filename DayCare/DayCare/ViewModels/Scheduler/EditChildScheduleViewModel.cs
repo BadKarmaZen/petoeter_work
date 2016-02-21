@@ -1,6 +1,5 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
-using DayCare.Model.Database;
 using DayCare.Model.UI;
 using DayCare.ViewModels.Dialogs;
 using DayCare.ViewModels.Members;
@@ -12,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DayCare.ViewModels.Scheduler
 {
-	public class ScheduleUI : TaggedItemUI<GroupSchedule>
+	/*public class ScheduleUI : TaggedItemUI<GroupSchedule>
 	{ }
 
 	public class EditChildScheduleViewModel : ListItemScreen<ScheduleUI>
@@ -97,5 +96,5 @@ namespace DayCare.ViewModels.Scheduler
 			
 			base.DeleteItem();
 		}
-	}
+	}*/
 }

@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
-using DayCare.Model.Database;
+using DayCare.Model;
 using DayCare.Model.Tasks;
 using DayCare.ViewModels.Children;
 using System;
@@ -28,11 +28,12 @@ namespace DayCare.ViewModels.Accounts
 			var account = new Account
 			{
 				Id = Guid.NewGuid(),
-				Name = _name
+				Name = _name,
+				Members = new List<Member>()
 			};
-
-			ServiceProvider.Instance.GetService<Petoeter>().SaveAccount(account);
-
+			
+			//	default create members
+			//
 			var names = _name.Split(new char[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
 			var space = new char [] { ' ' };
 			foreach (var name in names)
@@ -52,16 +53,23 @@ namespace DayCare.ViewModels.Accounts
 					lastname = foo[0];
 				}
 
-				var member = new Member { Account_Id = account.Id, FirstName = firstname, LastName = lastname, Id = Guid.NewGuid() };
-				ServiceProvider.Instance.GetService<Petoeter>().SaveMember(member);
+				account.Members.Add(new Member 
+				{
+					Id = Guid.NewGuid(),
+					FirstName = firstname,
+					LastName = lastname,
+					Account = account
+				});
 			}
+
+			ServiceProvider.Instance.GetService<Petoeter>().AddAccount(account);
 
 
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Core.Events.SwitchTask
-					{
-						Task = new EditAccountViewModel(account)
-					});
+				new Core.Events.SwitchTask
+				{
+					Task = new EditAccountViewModel(account)
+				});
 		}
 
 		public void CancelAction()
@@ -75,8 +83,6 @@ namespace DayCare.ViewModels.Accounts
 						Task = new AccountMainViewModel()
 					});
 		}
-
-
 	}
 	//public class AddAccountViewModel : ReactivatableScreen
 	//{

@@ -1,5 +1,5 @@
 ﻿using Caliburn.Micro;
-using DayCare.Model.Database;
+using DayCare.Model;
 using DayCare.Model.UI;
 using System;
 using System.Collections.Generic;

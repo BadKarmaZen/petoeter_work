@@ -4,45 +4,45 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DayCare.Model.Database
+namespace DayCare.Model//.Database
 {
-	public class GroupSchedule
-	{
-		public Guid ChildId { get; set; }
-		public List<Schedule> Schedules { get; set; }
+	//public class GroupSchedule
+	//{
+	//	public Guid ChildId { get; set; }
+	//	public List<Schedule> Schedules { get; set; }
 
-		public Schedule CurrentSchedule { get { return GetScheduleOn(DateTime.Today); } }
+	//	public Schedule CurrentSchedule { get { return GetScheduleOn(DateTime.Today); } }
 
-		public int ScheduleCount { get{ return Schedules.Count; } }
+	//	public int ScheduleCount { get{ return Schedules.Count; } }
 
-		public GroupSchedule(IEnumerable<Schedule> schedules)
-		{
-			Schedules = new List<Schedule>(schedules);
-			ChildId = Schedules[0].Child_Id;
+	//	public GroupSchedule(IEnumerable<Schedule> schedules)
+	//	{
+	//		Schedules = new List<Schedule>(schedules);
+	//		ChildId = Schedules[0].Child_Id;
 
-			//	first
-			var start = Schedules[0].StartDate;
-			while (start.DayOfWeek != DayOfWeek.Monday)
-				start = start.AddDays(-1);
+	//		//	first
+	//		var start = Schedules[0].StartDate;
+	//		while (start.DayOfWeek != DayOfWeek.Monday)
+	//			start = start.AddDays(-1);
 
-			StartDate = start;
+	//		StartDate = start;
 
-			var end = Schedules[0].EndDate;
-			while (end.DayOfWeek != DayOfWeek.Friday)
-				end = end.AddDays(1);
+	//		var end = Schedules[0].EndDate;
+	//		while (end.DayOfWeek != DayOfWeek.Friday)
+	//			end = end.AddDays(1);
 
-			EndDate = end;
-		}
+	//		EndDate = end;
+	//	}
 
-		public DateTime StartDate { get; set; }
+	//	public DateTime StartDate { get; set; }
 
-		public DateTime EndDate { get; set; }
+	//	public DateTime EndDate { get; set; }
 
-		public Schedule GetScheduleOn(DateTime date)
-		{
-			var index = ((date - StartDate).Days / 7) % ScheduleCount;
+	//	public Schedule GetScheduleOn(DateTime date)
+	//	{
+	//		var index = ((date - StartDate).Days / 7) % ScheduleCount;
 
-			return Schedules[index];
-		}
-	}
+	//		return Schedules[index];
+	//	}
+	//}
 }

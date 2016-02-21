@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
-using DayCare.Model.Database;
+using DayCare.Model;
+using DayCare.ViewModels.UICore;
 using DayCare.ViewModels.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -10,13 +11,13 @@ using System.Threading.Tasks;
 
 namespace DayCare.ViewModels.Accounts
 {
-	public class AccountMainViewModel : Screen
+	public class AccountMainViewModel : FilteredListItemScreen<AccountUI>
 	{
-		private List<AccountUI> _accounts;
-		private AccountUI _selectedAccount;
+		//private List<AccountUI> _accounts;
+		//private AccountUI _selectedAccount;
 
 
-		public AccountUI SelectedAccount
+		/*public AccountUI SelectedAccount
 		{
 			get { return _selectedAccount; }
 			set
@@ -25,26 +26,26 @@ namespace DayCare.ViewModels.Accounts
 				NotifyOfPropertyChange(() => SelectedAccount);
 				NotifyOfPropertyChange(() => IsItemSelected);
 			}
-		}
+		}*/
 
-		public bool IsItemSelected
+		/*public bool IsItemSelected
 		{
 			get
 			{
 				return _selectedAccount != null;
 			}
-		}
+		}*/
 
 
-		private string _filter;
+		/*private string _filter;
 
 		public List<AccountUI> Accounts
 		{
 			get { return _accounts; }
 			set { _accounts = value; NotifyOfPropertyChange(() => Accounts); NotifyOfPropertyChange(() => FilteredAccounts); }
 		}
-
-		public List<AccountUI> FilteredAccounts
+		*/
+		/*public List<AccountUI> FilteredAccounts
 		{
 			get
 			{
@@ -70,19 +71,25 @@ namespace DayCare.ViewModels.Accounts
 			get { return _filter; }
 			set { _filter = value; NotifyOfPropertyChange(() => Filter); NotifyOfPropertyChange(() => FilteredAccounts); }
 		}
+		*/
+		//public AccountMainViewModel()
+		//{
+		//	LoadData();
+		//}
 
-		public AccountMainViewModel()
+		protected override void LoadItems()
 		{
-			LoadData();
+			var data = from a in ServiceProvider.Instance.GetService<Petoeter>().GetAccounts()
+								 select new AccountUI 
+								 {
+ 									 Name = a.Name,
+									 Tag = a
+								 };
+
+			Items = data.ToList();
+			base.LoadItems();
 		}
 
-		private void LoadData()
-		{
-			var model = ServiceProvider.Instance.GetService<Petoeter>();
-
-			Accounts = (from a in model.GetAccount(a => a.Deleted == false)
-									select new AccountUI { Name = a.Name, Tag = a }).ToList();
-		}
 
 		public void AddAction()
 		{
@@ -95,17 +102,16 @@ namespace DayCare.ViewModels.Accounts
 
 		public void EditAction()
 		{
-
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 					new Core.Events.SwitchTask
 					{
-						Task = new EditAccountViewModel(SelectedAccount.Tag)
+						Task = new EditAccountViewModel(SelectedItem.Tag)
 					});
 		}
 
 		public void OpenAction(AccountUI account)
 		{
-			SelectAction(account);
+			SelectItem(account);
 			EditAction();
 		}
 
@@ -126,25 +132,10 @@ namespace DayCare.ViewModels.Accounts
 		{
 			var model = ServiceProvider.Instance.GetService<Petoeter>();
 
-			model.DeleteAccount(SelectedAccount.Tag);
-			SelectAction(null);
+			model.DeleteAccount(SelectedItem.Tag);
+			SelectItem(null);
 
-			LoadData();
-		}
-
-		public void SelectAction(AccountUI account)
-		{
-			if (SelectedAccount != null)
-			{
-				SelectedAccount.Selected = false;
-			}
-
-			SelectedAccount = account;
-
-			if (SelectedAccount != null)
-			{
-				SelectedAccount.Selected = true;
-			}
+			LoadItems();
 		}
 	}
 }

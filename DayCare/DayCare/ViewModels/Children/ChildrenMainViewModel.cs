@@ -1,6 +1,5 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
-using DayCare.Model.Database;
 using DayCare.ViewModels.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DayCare.ViewModels.Children
 {
-	public class ChildrenMainViewModel : ReactivatableScreen
+	/*public class ChildrenMainViewModel : ReactivatableScreen
 	{
 		private Account _account;
 		private List<ChildUI> _children;
@@ -142,5 +141,5 @@ namespace DayCare.ViewModels.Children
 
 
 
-	}
+	}*/
 }

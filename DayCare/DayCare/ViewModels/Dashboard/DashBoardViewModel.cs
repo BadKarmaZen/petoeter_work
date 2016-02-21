@@ -62,22 +62,24 @@ namespace DayCare.ViewModels.Dashboard
 
 		public void ManageSchedulesAction()
 		{
-			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
+			/*
+			 * ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Core.Events.SwitchTask
 				{
 					Task = new SchedulerMainViewModel()
 				});
+			 * */
 		}
 
 		public void StartPrecenseAction()
 		{
-			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
-			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-				new Core.Events.SwitchTask
-				{
-					Task = new PresenceMainViewModel()
-				});
+			//ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
+			//ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+			//	new Core.Events.SwitchTask
+			//	{
+			//		Task = new PresenceMainViewModel()
+			//	});
 		}
 
 		public void CalendarOverviewAction()
@@ -102,12 +104,12 @@ namespace DayCare.ViewModels.Dashboard
 
 		public void ExpensesAction()
 		{
-			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
-			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-				new Core.Events.SwitchTask
-				{
-					Task = new ExpenseMainViewModel()
-				});
+			//ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
+			//ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+			//	new Core.Events.SwitchTask
+			//	{
+			//		Task = new ExpenseMainViewModel()
+			//	});
 		}
 
 	}

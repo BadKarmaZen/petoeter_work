@@ -1,6 +1,5 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
-using DayCare.Model.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DayCare.ViewModels.Expenses
 {
-	class ExpenseDetailViewModel : Screen
+	/*class ExpenseDetailViewModel : Screen
 	{
 		public ExpenseDetailViewModel(Child child)
 		{
@@ -21,5 +20,5 @@ namespace DayCare.ViewModels.Expenses
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 			 new Events.ShowDialog());
 		}
-	}
+	}*/
 }

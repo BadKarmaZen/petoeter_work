@@ -1,6 +1,5 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
-using DayCare.Model.Database;
 using DayCare.Model.UI;
 using DayCare.ViewModels.Children;
 using System;
@@ -15,7 +14,7 @@ using System.Windows.Threading;
 
 namespace DayCare.ViewModels.Precense
 {
-	public class PresenceUI : TaggedItemUI<Presence>
+	/*public class PresenceUI : TaggedItemUI<Presence>
 	{
 		#region members
 		private bool _toLate;
@@ -170,5 +169,5 @@ namespace DayCare.ViewModels.Precense
 		{
 			_timer.Stop();
 		}
-	}
+	}*/
 }
