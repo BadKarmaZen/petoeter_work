@@ -1,6 +1,8 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
+using DayCare.Model;
 using DayCare.ViewModels.Dialogs;
+using DayCare.ViewModels.UICore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +11,13 @@ using System.Threading.Tasks;
 
 namespace DayCare.ViewModels.Children
 {
-	/*public class ChildrenMainViewModel : ReactivatableScreen
+	public class ChildrenMainViewModel : ListItemScreen<ChildUI>//ReactivatableScreen
 	{
 		private Account _account;
-		private List<ChildUI> _children;
-		private ChildUI _selectedChild;
+		//private List<ChildUI> _children;
+		//private ChildUI _selectedChild;
 
-		public ChildUI SelectedChild
+		/*public ChildUI SelectedChild
 		{
 			get { return _selectedChild; }
 			set
@@ -38,81 +40,59 @@ namespace DayCare.ViewModels.Children
 			get { return _children; }
 			set { _children = value; NotifyOfPropertyChange(() => Children); }
 		}
+		*/
 
-
-		public ChildrenMainViewModel(Model.Database.Account account)
+		public ChildrenMainViewModel(Account account)
 		{
 			this._account = account;
-			var model = ServiceProvider.Instance.GetService<Petoeter>();
+			//var model = ServiceProvider.Instance.GetService<Petoeter>();
 
-			//Children = (from c in model.GetChild(c => c.Account_Id == _account.Id)
-			//            select new ChildUI
-			//            { 
-			//                Name = string.Format("{0} {1}", c.FirstName, c.LastName),
-			//                Tag = c
-			//            }).ToList();
-			LoadData();
+			////Children = (from c in model.GetChild(c => c.Account_Id == _account.Id)
+			////            select new ChildUI
+			////            { 
+			////                Name = string.Format("{0} {1}", c.FirstName, c.LastName),
+			////                Tag = c
+			////            }).ToList();
+			//LoadData();
+
+			base.LoadItems();
 		}
 
-		private void LoadData()
+
+		protected override void LoadItems()
 		{
-			var model = ServiceProvider.Instance.GetService<Petoeter>();
+			Items = (from c in _account.Children
+							 where c.Deleted == false
+							 select new ChildUI
+							 {
+								 Name = string.Format("{0} {1}", c.FirstName, c.LastName),
+								 Tag = c
+							 }).ToList();
 
-			Children = (from c in model.GetChild(c => c.Account_Id == _account.Id && c.Deleted == false)
-									select new ChildUI
-									{
-										Name = string.Format("{0} {1}", c.FirstName, c.LastName),
-										Tag = c
-									}).ToList();
-		}
-
-		//public override void Reactivate()
-		//{
-		//    Children = (from c in _account.Children
-		//                select new ChildUI
-		//                {
-		//                    Name = string.Format("{0} {1}", c.FirstName, c.LastName),
-		//                    Tag = c
-		//                }).ToList();
-		//}
-
-
-		public void SelectChild(ChildUI child)
-		{
-			if (SelectedChild != null)
-			{
-				SelectedChild.Selected = false;
-			}
-
-			SelectedChild = child;
-
-			if (SelectedChild != null)
-			{
-				SelectedChild.Selected = true;
-			}
+			base.LoadItems();
 		}
 
 		public void AddAction()
 		{
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Core.Events.ShowDialog
-					{
-						Dialog = new AddChildViewModel(_account)
-					});
+				new Core.Events.ShowDialog
+				{
+					Dialog = new AddChildViewModel(_account)
+				});
 		}
 
 		public void EditAction()
 		{
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Core.Events.ShowDialog
-					{
-						Dialog = new EditChildViewModel(_account, SelectedChild.Tag)
-					});
+				new Core.Events.ShowDialog
+				{
+					Dialog = new EditChildViewModel(_account, SelectedItem.Tag)
+				});
 		}
 
 		public void OpenAction(ChildUI child)
 		{
-			SelectChild(child);
+			SelectItem(child);
 			EditAction();
 		}
 
@@ -133,13 +113,15 @@ namespace DayCare.ViewModels.Children
 		{
 			var model = ServiceProvider.Instance.GetService<Petoeter>();
 
-			model.DeleteRecord(SelectedChild.Tag);
-			SelectChild(null);
+			model.DeleteChild(SelectedItem.Tag);
+			model.Save();
 
-			LoadData();
+			SelectItem(null);
+
+			LoadItems();
 		}
 
 
 
-	}*/
+	}
 }

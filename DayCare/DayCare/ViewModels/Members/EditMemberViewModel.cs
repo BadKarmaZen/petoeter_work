@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
+using DayCare.Model;
 using DayCare.ViewModels.Accounts;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Text;
 
 namespace DayCare.ViewModels.Members
 {
-	/*public class EditMemberViewModel : Screen
+	public class EditMemberViewModel : Screen
 	{
 		private Account _account;
 		private Member _member;
@@ -55,25 +56,31 @@ namespace DayCare.ViewModels.Members
 			_member.LastName = LastName;
 			_member.Phone = Phone;
 
-			ServiceProvider.Instance.GetService<Petoeter>().UpdateRecord(_member);
+			_member.Updated = true;
+
+			ServiceProvider.Instance.GetService<Petoeter>().Save();
+
+			/*var newAccount = (from a in ServiceProvider.Instance.GetService<Petoeter>().GetAccounts()
+												where a.Id == _account.Id
+												select a).FirstOrDefault();*/
 
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Core.Events.SwitchTask
-					{
-						Task = new EditAccountViewModel(_account)
-					});
+				new Core.Events.SwitchTask
+				{
+					Task = new EditAccountViewModel(_account)
+				});
 		}
 
 		public void CancelAction()
 		{
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Events.ShowDialog());
+				new Events.ShowDialog());
 
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Core.Events.SwitchTask
-					{
-						Task = new EditAccountViewModel(_account)
-					});
+				new Core.Events.SwitchTask
+				{
+					Task = new EditAccountViewModel(_account)
+				});
 		}
-	}*/
+	}
 }

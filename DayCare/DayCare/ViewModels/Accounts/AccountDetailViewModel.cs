@@ -29,10 +29,10 @@ namespace DayCare.ViewModels.Accounts
 		public void RenameAction()
 		{
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Core.Events.ShowDialog
-					{
-						Dialog = new RenameAccountViewModel(_account)
-					});
+				new Core.Events.ShowDialog
+				{
+					Dialog = new RenameAccountViewModel(_account)
+				});
 		}
 	}
 }

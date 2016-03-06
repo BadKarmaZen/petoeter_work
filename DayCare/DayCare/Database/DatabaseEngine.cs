@@ -21,6 +21,8 @@ namespace DayCare.Database
 		private List<Child> _children = new List<Child>();
 		private List<Account> _accounts = new List<Account>();
 		private List<Member> _members = new List<Member>();
+		private List<Schedule> _schedules = new List<Schedule>();
+		private List<ScheduleDetail> _scheduleDetails = new List<ScheduleDetail>();
 		private List<Holiday> _holydays = new List<Holiday>();
 		#endregion
 
@@ -37,7 +39,9 @@ namespace DayCare.Database
 			CreateQueries(typeof(Account));
 			CreateQueries(typeof(Member));
 			CreateQueries(typeof(Child));
-			CreateQueries(typeof(Holiday));		
+			CreateQueries(typeof(Schedule));
+			CreateQueries(typeof(ScheduleDetail));
+			CreateQueries(typeof(Holiday));
 
 			InitalizeDatabase();
 		}
@@ -56,7 +60,8 @@ namespace DayCare.Database
 			LoadData(Queries[typeof(Account)], _accounts);
 			LoadData(Queries[typeof(Member)], _members);
 			LoadData(Queries[typeof(Child)], _children);
-			//LoadData(Queries[typeof(Schedule)], _schedules);
+			LoadData(Queries[typeof(Schedule)], _schedules);
+			LoadData(Queries[typeof(ScheduleDetail)], _scheduleDetails);
 			LoadData(Queries[typeof(Holiday)], _holydays);
 		}
 

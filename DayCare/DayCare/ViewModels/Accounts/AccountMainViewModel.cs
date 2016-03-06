@@ -13,73 +13,33 @@ namespace DayCare.ViewModels.Accounts
 {
 	public class AccountMainViewModel : FilteredListItemScreen<AccountUI>
 	{
-		//private List<AccountUI> _accounts;
-		//private AccountUI _selectedAccount;
+		private bool _showDeleted;
 
-
-		/*public AccountUI SelectedAccount
+		public bool ShowDeleted
 		{
-			get { return _selectedAccount; }
-			set
+			get { return _showDeleted; }
+			set 
 			{
-				_selectedAccount = value;
-				NotifyOfPropertyChange(() => SelectedAccount);
-				NotifyOfPropertyChange(() => IsItemSelected);
-			}
-		}*/
-
-		/*public bool IsItemSelected
-		{
-			get
-			{
-				return _selectedAccount != null;
-			}
-		}*/
-
-
-		/*private string _filter;
-
-		public List<AccountUI> Accounts
-		{
-			get { return _accounts; }
-			set { _accounts = value; NotifyOfPropertyChange(() => Accounts); NotifyOfPropertyChange(() => FilteredAccounts); }
-		}
-		*/
-		/*public List<AccountUI> FilteredAccounts
-		{
-			get
-			{
-				if (string.IsNullOrWhiteSpace(Filter))
-				{
-					return (from a in _accounts
-									let name = a.Name.ToLowerInvariant()
-									orderby name
-									select a).ToList();
-				}
-
-				var f = Filter.ToLowerInvariant();
-				return (from a in _accounts
-								let name = a.Name.ToLowerInvariant()
-								where name.Contains(f)
-								orderby name
-								select a).ToList();
+				_showDeleted = value;
+				NotifyOfPropertyChange(() => ShowDeleted);
+				NotifyOfPropertyChange(() => DeletedLabel);
+				NotifyOfPropertyChange(() => ShowReactivate);
 			}
 		}
 
-		public string Filter
+		public string DeletedLabel
 		{
-			get { return _filter; }
-			set { _filter = value; NotifyOfPropertyChange(() => Filter); NotifyOfPropertyChange(() => FilteredAccounts); }
+			get { return _showDeleted ? "Verberg gewiste" : "Toon gewiste"; }
 		}
-		*/
-		//public AccountMainViewModel()
-		//{
-		//	LoadData();
-		//}
+
+		private bool ShowReactivate
+		{
+			get { return _showDeleted && this.IsItemSelected; }
+		}
 
 		protected override void LoadItems()
 		{
-			var data = from a in ServiceProvider.Instance.GetService<Petoeter>().GetAccounts()
+			var data = from a in ServiceProvider.Instance.GetService<Petoeter>().GetAccounts(_showDeleted)
 								 select new AccountUI 
 								 {
  									 Name = a.Name,
@@ -136,6 +96,18 @@ namespace DayCare.ViewModels.Accounts
 			SelectItem(null);
 
 			LoadItems();
+		}
+
+		public void ToggleDeletedAction()
+		{
+			ShowDeleted = !ShowDeleted;
+			SelectItem(null);
+			
+			LoadItems();
+		}
+
+		public void ReactivateAction()
+		{ 
 		}
 	}
 }

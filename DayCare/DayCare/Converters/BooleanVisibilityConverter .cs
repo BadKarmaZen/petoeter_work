@@ -9,33 +9,63 @@ using System.Windows.Data;
 
 namespace DayCare.Converters
 {
-    public class BooleanVisibilityConverter : IValueConverter
-    {
-        #region IValueConverter Implementation
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            bool? boolValue = (bool?)value;
+	public class BooleanVisibilityConverter : IValueConverter
+	{
+		#region IValueConverter Implementation
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			bool? boolValue = (bool?)value;
 
-            switch (boolValue)
-            {
-                case null:
-                    return Visibility.Collapsed;
+			switch (boolValue)
+			{
+				case null:
+					return Visibility.Collapsed;
 
-                case true:
-                    return Visibility.Visible;
+				case true:
+					return Visibility.Visible;
 
-                case false:
-                    return Visibility.Collapsed;
+				case false:
+					return Visibility.Collapsed;
 
-                default:
-                    return value;
-            }
-        }
+				default:
+					return value;
+			}
+		}
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return value;
-        }
-        #endregion
-    }
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			return value;
+		}
+		#endregion
+	}
+
+	public class InverseBooleanVisibilityConverter : IValueConverter
+	{
+		#region IValueConverter Implementation
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			bool? boolValue = (bool?)value;
+
+			switch (!boolValue)
+			{
+				case null:
+					return Visibility.Collapsed;
+
+				case true:
+					return Visibility.Visible;
+
+				case false:
+					return Visibility.Collapsed;
+
+				default:
+					return value;
+			}
+		}
+
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			return value;
+		}
+		#endregion
+	}
 }

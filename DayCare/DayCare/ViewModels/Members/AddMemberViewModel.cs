@@ -61,6 +61,10 @@ namespace DayCare.ViewModels.Members
 			ServiceProvider.Instance.GetService<Petoeter>().AddMember(member);
 			ServiceProvider.Instance.GetService<Petoeter>().Save();
 
+			/*var newAccount = (from a in ServiceProvider.Instance.GetService<Petoeter>().GetAccounts()
+												where a.Id == _account.Id
+												select a).FirstOrDefault();*/
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Core.Events.SwitchTask
 				{

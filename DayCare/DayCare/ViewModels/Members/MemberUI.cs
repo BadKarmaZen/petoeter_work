@@ -10,5 +10,15 @@ namespace DayCare.ViewModels.Members
 {
 	public class MemberUI : TaggedItemUI<Member>
 	{
+		public string Details 
+		{
+			get
+			{
+				if (string.IsNullOrWhiteSpace(Tag.Phone))
+					return Name;
+				else
+					return string.Format("{0} ({1})", Name, Tag.Phone);
+			}
+		}
 	}
 }

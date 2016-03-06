@@ -23,7 +23,7 @@ namespace DayCare.Core
 
 			if (model != null)
 			{
-				//ImageFolder = model.Settings.ImageFolder;
+				ImageFolder = model.Settings.ImageFolder;
 			}
 
 			_cache = new Dictionary<string, BitmapImage>();

@@ -56,14 +56,14 @@ namespace DayCare.ViewModels.Members
 		public void EditAction()
 		{
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Core.Events.ShowDialog
-					{
-					//	Dialog = new EditMemberViewModel(_account, SelectedItem.Tag)
-					});
+				new Core.Events.ShowDialog
+				{
+				Dialog = new EditMemberViewModel(_account, SelectedItem.Tag)
+				});
 		}
 
 
-		public void OpenActon(MemberUI member)
+		public void OpenAction(MemberUI member)
 		{
 			SelectItem(member);
 			EditAction();
@@ -72,14 +72,14 @@ namespace DayCare.ViewModels.Members
 		public void DeleteAction()
 		{
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-				 new Events.ShowDialog
-				 {
-					 Dialog = new YesNoDialogViewModel
-					 {
-						 Message = "Ben je zeker?",
-						 Yes = () => DeleteItem()
-					 }
-				 });
+				new Events.ShowDialog
+				{
+					Dialog = new YesNoDialogViewModel
+					{
+						Message = "Ben je zeker?",
+						Yes = () => DeleteItem()
+					}
+				});
 		}
 
 		protected override void DeleteItem()
@@ -87,6 +87,7 @@ namespace DayCare.ViewModels.Members
 			var model = ServiceProvider.Instance.GetService<Petoeter>();
 
 			model.DeleteMember(SelectedItem.Tag);
+			model.Save();
 
 			base.DeleteItem();
 		}

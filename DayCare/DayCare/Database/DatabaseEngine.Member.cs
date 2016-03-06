@@ -19,6 +19,7 @@ namespace DayCare.Database
 
 		internal void AddMember(Member member)
 		{
+			_members.Add(member);
 			AddRecord(member);
 		}
 

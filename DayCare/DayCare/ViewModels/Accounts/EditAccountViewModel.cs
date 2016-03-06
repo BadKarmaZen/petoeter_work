@@ -13,20 +13,22 @@ using System.Threading.Tasks;
 
 namespace DayCare.ViewModels.Accounts
 {
-	public class EditAccountViewModel : BackScreen<EditAccountViewModel>
+	public class EditAccountViewModel : BaseScreen
 	{
 		private Account _account;
 		public AccountDetailViewModel Detail { get; set; }
-		//public ChildrenMainViewModel ChildrenDetail { get; set; }
+		public ChildrenMainViewModel ChildrenDetail { get; set; }
 
 		public MembersMainViewModel MembersDetail { get; set; }
 
 		public EditAccountViewModel(Account account)
 		{
+			Menu = new BackMenu(Menu, "d75c9da9-10a3-427e-b9fe-517033674336", CancelAction);
+		
 			_account = account;
 
 			Detail = new AccountDetailViewModel(_account);
-			//ChildrenDetail = new ChildrenMainViewModel(_account);
+			ChildrenDetail = new ChildrenMainViewModel(_account);
 			MembersDetail = new MembersMainViewModel(_account);
 			
 			ServiceProvider.Instance.GetService<TaskManager>().StartTask(new EditAccountTask
@@ -65,11 +67,11 @@ namespace DayCare.ViewModels.Accounts
 				});
 		}
 
-		public override void BackAction()
-		{
-			CancelAction();
+		//public override void BackAction()
+		//{
+		//	CancelAction();
 
-			base.BackAction();
-		}
+		//	base.BackAction();
+		//}
 	}
 }

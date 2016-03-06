@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using DayCare.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace DayCare.ViewModels.Scheduler
 {
-	/*public class WeekScheduleViewModel : Screen
+	public class WeekScheduleViewModel : Screen
 	{
-		private Schedule _schedule;
+		private ScheduleDetail _schedule;
 
-		public Schedule Schedule
+		public ScheduleDetail Schedule
 		{
 			get { return _schedule; }
 			set { _schedule = value; }
@@ -78,9 +79,9 @@ namespace DayCare.ViewModels.Scheduler
 
 		#endregion
 
-		public WeekScheduleViewModel(Schedule schedule)
+		public WeekScheduleViewModel(ScheduleDetail schedule)
 		{
 			_schedule = schedule;
 		}
-	}*/
+	}
 }

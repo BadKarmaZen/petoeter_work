@@ -10,12 +10,6 @@ namespace DayCare.Core.Reports
 {
 	public class MonthListReport
 	{
-		//public class DayInfo
-		//{
-		//	public DateTime Date { get; set; }
-		//	public bool Valid { get; set; }
-		//}
-
 		//public static string GetTempFilePathWithExtension(string extension)
 		//{
 		//	var path = Path.GetTempPath();

@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
+using DayCare.Model;
 using DayCare.ViewModels.Accounts;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DayCare.ViewModels.Children
 {
-	/*public class AddChildViewModel : Screen
+	public class AddChildViewModel : Screen
 	{
 		private Account _account;
 
@@ -19,7 +20,11 @@ namespace DayCare.ViewModels.Children
 		public AddChildViewModel(Account account)
 		{
 			_account = account;
-			Detail = new ChildDetailViewModel() { ChildId = Guid.NewGuid(), BirthDay = DateTime.Now };
+			Detail = new ChildDetailViewModel() 
+			{ 
+				ChildId = Guid.NewGuid(), 
+				BirthDay = DateTime.Now 
+			};
 		}
 
 		public void SaveAction()
@@ -27,10 +32,13 @@ namespace DayCare.ViewModels.Children
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Events.ShowDialog());
 
-			var child = new Child { Account_Id = _account.Id };
+			var child = new Child { Account = _account };
+			
+			_account.Children.Add(child);
 			Detail.GetData(child);
 
-			ServiceProvider.Instance.GetService<Petoeter>().SaveChild(child);
+			ServiceProvider.Instance.GetService<Petoeter>().AddChild(child);
+			ServiceProvider.Instance.GetService<Petoeter>().Save();
 
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Core.Events.SwitchTask
@@ -50,5 +58,5 @@ namespace DayCare.ViewModels.Children
 					Task = new EditAccountViewModel(_account)
 				});
 		}
-	}*/
+	}
 }

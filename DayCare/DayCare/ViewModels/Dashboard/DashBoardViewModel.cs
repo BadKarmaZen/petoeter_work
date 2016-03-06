@@ -62,14 +62,13 @@ namespace DayCare.ViewModels.Dashboard
 
 		public void ManageSchedulesAction()
 		{
-			/*
-			 * ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Core.Events.SwitchTask
 				{
 					Task = new SchedulerMainViewModel()
 				});
-			 * */
+
 		}
 
 		public void StartPrecenseAction()

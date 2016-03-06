@@ -28,14 +28,14 @@ namespace DayCare.ViewModels.Reports
 
 		public void WeekListAction()
 		{
-			//var dlg = new DateDialogViewModel() { Date = Date.NextMonday()};
-			//dlg.Yes = () => WeekListReport.Create(dlg.Date);
+			var dlg = new DateDialogViewModel() { Date = Date.NextMonday() };
+			dlg.Yes = () => WeekListReport.Create(dlg.Date);
 
-			//ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-			//	new Events.ShowDialog
-			//	 {
-			//		 Dialog = dlg
-			//	 });
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				new Events.ShowDialog
+				 {
+					 Dialog = dlg
+				 });
 		}
 
 		public void ParentPhoneAction()

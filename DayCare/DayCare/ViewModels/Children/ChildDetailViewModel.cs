@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
+using DayCare.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +11,7 @@ using System.Windows.Media.Imaging;
 
 namespace DayCare.ViewModels.Children
 {
-	/*public class ChildDetailViewModel : Screen
+	public class ChildDetailViewModel : Screen
 	{
 		private string _firstName;
 		private string _lastName;
@@ -130,5 +131,5 @@ namespace DayCare.ViewModels.Children
 				File.Delete(name);
 			}
 		}
-	}*/
+	}
 }

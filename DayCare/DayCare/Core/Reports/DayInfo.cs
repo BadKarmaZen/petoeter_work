@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DayCare.Core
+namespace DayCare.Core.Reports
 {
-	public interface ICloseScreen
+	public class DayInfo
 	{
-		void CloseThisScreen();
+		public DateTime Date { get; set; }
+		public bool Valid { get; set; }
 	}
 }
