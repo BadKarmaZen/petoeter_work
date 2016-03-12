@@ -101,6 +101,7 @@ namespace DayCare.Model
 														select new ScheduleDetail 
 														{
 															Id = d.Id,
+															Index = d.Schedule_Index,
 															MondayMorning = ScheduleDetail.IsMorning(d.Monday),
 															MondayAfternoon = ScheduleDetail.IsAfternoon(d.Monday),
 															TuesdayMorning = ScheduleDetail.IsMorning(d.Tuesday),
@@ -128,6 +129,7 @@ namespace DayCare.Model
 				SaveAccounts();
 				SaveChildren();
 				SaveMembers();
+				SaveSchedules();
 			}
 			catch (Exception ex)
 			{
@@ -321,7 +323,67 @@ namespace DayCare.Model
 		}
 
 		public void SaveSchedules()
-		{ }
+		{
+			foreach (var schedule in from s in Schedules where s.Updated select s)
+			{
+				if (schedule.Deleted)
+				{
+					Database.DeleteSchedule(schedule.Id);
+				}
+				else if (schedule.Added)
+				{
+					Database.AddSchedule(new Database.Model.Schedule
+					{
+						Id = schedule.Id,
+						Child_Id = schedule.Child.Id,
+						StartDate = schedule.StartDate,
+						EndDate = schedule.EndDate
+					});
+
+					foreach (var detail in schedule.Details)
+					{
+						Database.AddScheduleDetail(new Database.Model.ScheduleDetail
+						{
+							Id = detail.Id,
+							Schedule_Id = schedule.Id,
+							Schedule_Index = detail.Index,
+							Monday = ScheduleDetail.DayState(detail.MondayMorning, detail.MondayAfternoon),
+							Tuesday = ScheduleDetail.DayState(detail.TuesdayMorning, detail.TuesdayAfternoon),
+							Wednesday = ScheduleDetail.DayState(detail.WednesdayMorning, detail.WednesdayAfternoon),
+							Thursday = ScheduleDetail.DayState(detail.ThursdayMorning, detail.ThursdayAfternoon),
+							Friday = ScheduleDetail.DayState(detail.FridayMorning, detail.FridayAfternoon)
+						});						
+					}
+				}
+				else
+				{
+					Database.UpdateSchedule(new Database.Model.Schedule
+					{
+						Id = schedule.Id,
+						Child_Id = schedule.Child.Id,
+						StartDate = schedule.StartDate,
+						EndDate = schedule.EndDate
+					});
+
+					Database.DeleteScheduleDetails(schedule.Id);
+
+					foreach (var detail in schedule.Details)
+					{
+						Database.AddScheduleDetail(new Database.Model.ScheduleDetail
+						{
+							Id = detail.Id,
+							Schedule_Id = schedule.Id,
+							Schedule_Index = detail.Index,
+							Monday = ScheduleDetail.DayState(detail.MondayMorning, detail.MondayAfternoon),
+							Tuesday = ScheduleDetail.DayState(detail.TuesdayMorning, detail.TuesdayAfternoon),
+							Wednesday = ScheduleDetail.DayState(detail.WednesdayMorning, detail.WednesdayAfternoon),
+							Thursday = ScheduleDetail.DayState(detail.ThursdayMorning, detail.ThursdayAfternoon),
+							Friday = ScheduleDetail.DayState(detail.FridayMorning, detail.FridayAfternoon)
+						});
+					}						
+				}
+			}
+		}
 		#endregion
 
 		public void MarkForAdd(DataObject data)

@@ -109,6 +109,7 @@
     <Compile Include="Database\DatabaseEngine.Child.cs" />
     <Compile Include="Database\DatabaseEngine.cs" />
     <Compile Include="Database\DatabaseEngine.Member.cs" />
+    <Compile Include="Database\DatabaseEngine.Schedule.cs" />
     <Compile Include="Database\DatabaseIgnoreAttribute.cs" />
     <Compile Include="Database\Model\Account.cs" />
     <Compile Include="Database\Model\Child.cs" />

@@ -62,7 +62,7 @@ namespace DayCare.ViewModels.Scheduler
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Core.Events.ShowDialog
 				{
-				//	Dialog = new AddScheduleViewModel(_child)
+					Dialog = new AddScheduleViewModel(_child)
 				});
 		}
 
@@ -97,16 +97,30 @@ namespace DayCare.ViewModels.Scheduler
 				 });
 		}
 
+		public void ExceptionAction()
+		{
+ 			//	Make a copy
+			var copy = SelectedItem.Tag.MakeCopy();
+
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				new Core.Events.ShowDialog
+				{
+					Dialog = new AddScheduleViewModel(_child, copy, SelectedItem.Tag)
+				});
+		}
+
 		protected override void DeleteItem()
 		{
 			var model = ServiceProvider.Instance.GetService<Petoeter>();
 
-			/*foreach (var schedule in SelectedItem.Tag.Schedules)
-			{
-				model.DeleteRecord(schedule);				
-			}*/
+			_child.Schedules.RemoveAll(s => s.Id == SelectedItem.Tag.Id);
 
+			model.DeleteSchedule(SelectedItem.Tag);
+			model.Save();
 
+			SelectItem(null);
+
+			LoadItems();
 			
 			base.DeleteItem();
 		}

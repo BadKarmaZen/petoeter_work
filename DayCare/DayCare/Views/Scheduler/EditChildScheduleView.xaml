@@ -52,6 +52,8 @@
                         Visibility="{Binding IsItemSelected, Converter={StaticResource BooleanVisibilityConverter}}"/>
 				<Button x:Name="DeleteAction" Content="Verwijderen" Margin="5,0" MinWidth="150" Height="30" Style="{DynamicResource ButtonStyle}"
                          Visibility="{Binding IsItemSelected, Converter={StaticResource BooleanVisibilityConverter}}"/>
+				<Button x:Name="ExceptionAction" Content="Uitzondering" Margin="5,0" MinWidth="150" Height="30" Style="{DynamicResource ButtonStyle}"
+                         Visibility="{Binding IsItemSelected, Converter={StaticResource BooleanVisibilityConverter}}"/>
 			</StackPanel>
 
 			<ScrollViewer Grid.Row="2" Margin="2">

@@ -11,28 +11,33 @@ namespace DayCare.ViewModels.Scheduler
 {
 	class AddScheduleViewModel : Screen
 	{
+		#region Members
+
 		private Child _child;
 		private Schedule _schedule;
+		private Schedule _original;
 
 		private DateTime _startdate;
 		private DateTime _enddate;
 		private bool _showWeekSelection;
 
+		private List<WeekScheduleViewModel> _details;
+		private DateTime _minStartdate;
+		private DateTime _maxStartdate;
+		private DateTime _minEnddate;
+		private DateTime _maxEnddate;
+
+		#endregion
+
+		#region Properties
+		
 		public bool ShowWeekSelection
 		{
 			get { return _showWeekSelection; }
 			set { _showWeekSelection = value; NotifyOfPropertyChange(() => ShowWeekSelection); }
 		}
-
-		private List<WeekScheduleViewModel> _details;
-
+		
 		public bool Edit { get; set; }
-
-
-		private DateTime _minStartdate;
-		private DateTime _maxStartdate;
-		private DateTime _minEnddate;
-		private DateTime _maxEnddate;
 
 		public DateTime MinStartdate
 		{
@@ -67,7 +72,17 @@ namespace DayCare.ViewModels.Scheduler
 		public DateTime? StartDate
 		{
 			get { return _startdate; }
-			set { _startdate = value.Value; NotifyOfPropertyChange(() => StartDate); }
+			set 
+			{
+				var newDate = value.Value;
+				if (newDate > MinStartdate)
+				{
+					_startdate = newDate; 
+					NotifyOfPropertyChange(() => StartDate);
+
+					EndDate = _startdate.AddDays(5);
+				}				
+			}
 		}
 
 		public List<WeekScheduleViewModel> Details
@@ -75,6 +90,8 @@ namespace DayCare.ViewModels.Scheduler
 			get { return _details; }
 			set { _details = value; NotifyOfPropertyChange(() => Details); }
 		}
+
+		#endregion
 
 		public AddScheduleViewModel(Child child)
 		{
@@ -88,7 +105,7 @@ namespace DayCare.ViewModels.Scheduler
 				new WeekScheduleViewModel(new ScheduleDetail() 
 					{ 
 						Id = Guid.NewGuid(),
-						Index = 1
+						Index = 0
 					})
 				{
 					Header = "Week 1"
@@ -97,13 +114,32 @@ namespace DayCare.ViewModels.Scheduler
 			ShowWeekSelection = true;
 		}
 
-		public AddScheduleViewModel(Child child, Schedule schedule)
+		public AddScheduleViewModel(Child child, Schedule schedule, Schedule exception = null)
 		{
 			this._child = child;
 			this._schedule = schedule;
+			this._original = exception;
 
-			this.StartDate = schedule.StartDate;
-			this.EndDate = schedule.EndDate;
+			if (this._original != null)
+			{
+				var today = DateTime.Now.Date;
+				if (today.DayOfWeek != DayOfWeek.Monday)
+					today = today.PreviousMonday();
+
+				if (today < _original.StartDate)
+				{
+					today = _original.StartDate;
+				}
+
+				this.StartDate = today;
+				this.MinStartdate = today;
+				this.MaxEnddate = schedule.EndDate;
+			}
+			else
+			{
+				this.StartDate = schedule.StartDate;
+				this.EndDate = schedule.EndDate;
+			}
 
 			var query = from d in schedule.Details
 									orderby d.Index
@@ -115,25 +151,6 @@ namespace DayCare.ViewModels.Scheduler
 
 			Edit = true;
 			ShowWeekSelection = false;
-
-			/*
-			this.MinStartdate = Min(DateTime.Now.Date, grpSchedule.StartDate);
-			this.MaxStartdate = grpSchedule.EndDate;
-
-			this.MinEnddate = grpSchedule.StartDate;
-
-			var query = from s in grpSchedule.Schedules
-									where s.StartDate > _schedule.EndDate
-									orderby s.StartDate
-									select s.StartDate;
-
-			this.MaxEnddate = Max(DateTime.MaxValue, query.FirstOrDefault());
-			Schedules = (from s in grpSchedule.Schedules
-									 orderby s.Group_Index
-									 select new WeekScheduleViewModel(s) { Header = string.Format("Week {0}", s.Group_Index + 1) }).ToList();
-
-			Edit = true;
-			ShowWeekSelection = false;*/
 		}
 
 		public void SaveAction()
@@ -143,33 +160,124 @@ namespace DayCare.ViewModels.Scheduler
 			
 			var model = ServiceProvider.Instance.GetService<Petoeter>();
 
-			if (Edit == false)
+			if (_original != null)
 			{
-				var schedule = new Schedule
-				{
-					Id = Guid.NewGuid(),
-					StartDate = _startdate,
-					EndDate = _enddate,
-					Details = (from d in Details
-										 select d.Schedule).ToList()
-				};
+				//	4 exceptions possible
+				//
+				//	1.	[===========]
+				//		      [+++]
+				//		  [==][+++][==]		org.Left exc org.Right
+				//
+				//	2.	[===========]
+				//			[+++]	
+				//	    [+++][======]		exc org.Right
+				//
+				//	3.	[===========]
+				//			        [+++]	
+				//			[======][+++]		org.left exc
+				//	
+				//	4.  [===========]
+				//			[+++++++++++]
+				//			[+++++++++++]		update org
+				//
 
-				model.AddSchedule(schedule);
+				if (_startdate == _original.StartDate)
+				{
+					//	2 or 4
+					//
+					if (_enddate == _original.EndDate)
+					{
+						//	4
+						_original.Updated = true;
+						_original.Details = (from d in Details
+																 select d.Schedule).ToList();						
+					}
+					else
+					{
+						//	2
+						_schedule.StartDate = _startdate;
+						_schedule.EndDate = _enddate;
+						_schedule.Details = (from d in Details
+																 select d.Schedule).ToList();
+
+						_child.Schedules.Add(_schedule);
+						model.AddSchedule(_schedule);
+
+						_original.StartDate = _schedule.EndDate.NextMonday();
+						_original.Updated = true;
+					}					
+				}
+				else
+				{
+					//	1 or 3
+					if (_enddate == _original.EndDate)
+					{
+						//	3
+						_schedule.StartDate = _startdate;
+						_schedule.EndDate = _enddate;
+						_schedule.Details = (from d in Details
+																 select d.Schedule).ToList();
+
+						_child.Schedules.Add(_schedule);
+						model.AddSchedule(_schedule);
+
+						_original.EndDate = _schedule.StartDate.PreviousFriday();
+						_original.Updated = true;
+					}
+					else
+					{
+ 						//	1
+						_schedule.StartDate = _startdate;
+						_schedule.EndDate = _enddate;
+						_schedule.Details = (from d in Details
+																 select d.Schedule).ToList();
+						
+						_child.Schedules.Add(_schedule);
+						model.AddSchedule(_schedule);
+
+						var right = _original.MakeCopy();
+						right.StartDate = _schedule.EndDate.NextMonday();
+
+						_child.Schedules.Add(right);
+						model.AddSchedule(right);
+						
+						_original.EndDate = _schedule.StartDate.PreviousFriday();
+						_original.Updated = true;
+					}
+				}
 			}
 			else
 			{
-				_schedule.Updated = true;
 
-				_schedule.StartDate = _startdate;
-				_schedule.EndDate = _enddate;
-
-				foreach (var detail in Details)
+				if (Edit == false)
 				{
-					detail.Schedule.Deleted = true;
+					var schedule = new Schedule
+					{
+						Id = Guid.NewGuid(),
+						Child = _child,
+						StartDate = _startdate,
+						EndDate = _enddate,
+						Details = (from d in Details
+											 select d.Schedule).ToList()
+					};
+
+					_child.Schedules.Add(schedule);
+					model.AddSchedule(schedule);
 				}
+				else
+				{
+					_schedule.Updated = true;
 
-			//	_schedule.Details = (from d in Details select d.Schedule).ToList()
+					_schedule.StartDate = _startdate;
+					_schedule.EndDate = _enddate;
+					_schedule.Details = (from d in Details
+															 select d.Schedule).ToList();
 
+					//foreach (var detail in Details)
+					//{
+					//	detail.Schedule.Deleted = true;
+					//}
+				}
 			}
 		
 			model.SaveSchedules();
@@ -195,43 +303,43 @@ namespace DayCare.ViewModels.Scheduler
 
 		public void OneWeekAction()
 		{
-			//Schedules = new List<WeekScheduleViewModel>(Schedules.Take(1));
+			Details = new List<WeekScheduleViewModel>(Details.Take(1));
 		}
 
 		public void TwoWeekAction()
 		{
-			//var schedules = new List<WeekScheduleViewModel>(Schedules.Take(2));
+			var details = new List<WeekScheduleViewModel>(Details.Take(2));
 
-			//for (int index = Schedules.Count; index < 2; index++)
-			//{
-			//	schedules.Add(new WeekScheduleViewModel(new Schedule() { Group_Index = index }) { Header = string.Format("Week {0}", index + 1) });
-			//}				
+			for (int index = Details.Count; index < 2; index++)
+			{
+				details.Add(new WeekScheduleViewModel(new ScheduleDetail() { Id = Guid.NewGuid(), Index = index }) { Header = string.Format("Week {0}", index + 1) });
+			}
 
-			//Schedules = schedules;
+			Details = details;
 		}
 
 		public void ThreeWeekAction()
 		{
-			//var schedules = new List<WeekScheduleViewModel>(Schedules.Take(2));
-		
-			//for (int index = Schedules.Count; index < 3; index++)
-			//{
-			//	schedules.Add(new WeekScheduleViewModel(new Schedule() { Group_Index = index }) { Header = string.Format("Week {0}", index + 1) });
-			//}	
+			var details = new List<WeekScheduleViewModel>(Details.Take(2));
 
-			//Schedules = schedules;
+			for (int index = Details.Count; index < 3; index++)
+			{
+				details.Add(new WeekScheduleViewModel(new ScheduleDetail() { Id = Guid.NewGuid(),  Index = index }) { Header = string.Format("Week {0}", index + 1) });
+			}
+
+			Details = details;
 		}
 
 		public void FourWeekAction()
 		{
-			//var schedules = new List<WeekScheduleViewModel>(Schedules.Take(2));
+			var details = new List<WeekScheduleViewModel>(Details.Take(2));
 
-			//for (int index = Schedules.Count; index < 4; index++)
-			//{
-			//	schedules.Add(new WeekScheduleViewModel(new Schedule() { Group_Index = index }) { Header = string.Format("Week {0}", index + 1) });
-			//}
+			for (int index = Details.Count; index < 4; index++)
+			{
+				details.Add(new WeekScheduleViewModel(new ScheduleDetail() { Id = Guid.NewGuid(),  Index = index }) { Header = string.Format("Week {0}", index + 1) });
+			}
 
-			//Schedules = schedules;
+			Details = details;
 		}
 
 

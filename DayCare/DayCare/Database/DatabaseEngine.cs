@@ -131,6 +131,31 @@ namespace DayCare.Database
 			}
 		}
 
+		private void ObliterateRecord(DatabaseRecord record)
+		{
+			if (record == null)
+			{
+				return;
+			}
+
+			//	record.Deleted = true;
+
+			try
+			{
+				DataBase.Open();
+
+				var command = Queries[record.GetType()].ObliterateQuery(DataBase, record);
+				int result = command.ExecuteNonQuery();
+			}
+			catch (Exception ex)
+			{
+			}
+			finally
+			{
+				DataBase.Close();
+			}
+		}
+
 		private void AddRecord(DatabaseRecord record)
 		{
 			try

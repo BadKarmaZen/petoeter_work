@@ -49,7 +49,7 @@
 				<Button Content="4 weken" x:Name="FourWeekAction" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyle}" Height="26" Width="80" Margin="5"/>
 			</StackPanel>
 
-			<ItemsControl ItemsSource="{Binding Schedules}" Grid.Row="1" >
+			<ItemsControl ItemsSource="{Binding Details}" Grid.Row="1" >
 				<ItemsControl.ItemsPanel>
 					<ItemsPanelTemplate>
 						<StackPanel />
