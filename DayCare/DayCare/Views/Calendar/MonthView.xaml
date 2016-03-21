@@ -47,44 +47,68 @@
 			</ItemsControl.ItemsPanel>
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Width="100" Height="100"
-									cal:Message.Attach="[Event MouseUp] = [Action ToggleHolidayAction($this)]">
+					<Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Width="100" Height="100" >
 						<Grid>
 							<Grid.RowDefinitions>
 								<RowDefinition Height="Auto"/>
 								<RowDefinition Height="1*"/>
-								<RowDefinition Height="1*"/>								
+								<RowDefinition Height="1*"/>
 							</Grid.RowDefinitions>
 							
-							<TextBlock Text="{Binding Day}" FontFamily="Comic Sans MS" FontSize="18" HorizontalAlignment="Center"/>
-							
-							<Border VerticalAlignment="Top" HorizontalAlignment="Right" Width="32" Height="32" Grid.RowSpan="2"
-											Visibility="{Binding Holiday, Converter={StaticResource BooleanVisibilityConverter}}">
-								<Image Source="/DayCare;component/Resources/umbrella.png" />
+							<Border cal:Message.Attach="[Event MouseUp] = [Action ToggleHolidayAction($this)]">
+								<TextBlock Text="{Binding Day}" FontFamily="Comic Sans MS" FontSize="18" HorizontalAlignment="Center" />
+								<Border.Style>
+									<Style TargetType="Border">
+										<Setter Property="Background" Value="Transparent" />
+										<Style.Triggers>
+											<Trigger Property="IsMouseOver" Value="True">
+												<Setter Property="Background" Value="#25000000" />
+											</Trigger>
+										</Style.Triggers>
+									</Style>
+								</Border.Style>
 							</Border>
 							
-							<Border CornerRadius="5" Grid.Row="1" Margin="2" Background="#FFFBAF63"
+							<Border CornerRadius="5" Grid.Row="1" Margin="2"
+											cal:Message.Attach="[Event MouseUp] = [Action ToggleMorningHolidayAction($this)]"
 											Visibility="{Binding Weekday, Converter={StaticResource  BooleanVisibilityConverter}}">
 								<TextBlock Text="{Binding MorningCount}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+								<Border.Style>
+									<Style TargetType="Border">
+										<Setter Property="Background" Value="#FFFBAF63" />
+										<Style.Triggers>
+											<DataTrigger Binding="{Binding MorningHoliday}" Value="True">
+												<Setter Property="Background" Value="#FFA4F036" />
+											</DataTrigger>
+										</Style.Triggers>
+									</Style>
+								</Border.Style>
 							</Border>
 
-							<Border CornerRadius="5" Grid.Row="2" Margin="2" Background="#FFFBAF63"
-											Visibility="{Binding Weekday, Converter={StaticResource  BooleanVisibilityConverter}}">
+							<Border CornerRadius="5" Grid.Row="2" Margin="2" Visibility="{Binding Weekday, Converter={StaticResource  BooleanVisibilityConverter}}"
+											cal:Message.Attach="[Event MouseUp] = [Action ToggleAfternoonHolidayAction($this)]" >
 								<TextBlock Text="{Binding AfternoonCount}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+								<Border.Style>
+									<Style TargetType="Border">
+										<Setter Property="Background" Value="#FFFBAF63" />
+										<Style.Triggers>
+											<DataTrigger Binding="{Binding AfternoonHoliday}" Value="True">
+												<Setter Property="Background" Value="#FFA4F036" />
+											</DataTrigger>
+										</Style.Triggers>
+									</Style>
+								</Border.Style>
 							</Border>
 						</Grid>
 						<Border.Style>
 							<Style TargetType="Border">
-								<Setter Property="Background" Value="WhiteSmoke" />
+								<Setter Property="Background" Value="NavajoWhite" />
 								<Style.Triggers>
 									<DataTrigger Binding="{Binding NotInMonth}" Value="True">
 										<Setter Property="Background" Value="Gray" />
 									</DataTrigger>
 									<DataTrigger Binding="{Binding Weekday}" Value="False">
 										<Setter Property="Background" Value="Gray" />
-									</DataTrigger>
-									<DataTrigger Binding="{Binding Holiday}" Value="True">
-										<Setter Property="Background" Value="#FFA4F036" />
 									</DataTrigger>
 								</Style.Triggers>
 							</Style>

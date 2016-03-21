@@ -16,7 +16,10 @@ namespace DayCare.Model
 		public List<Member> Members { get; set; }
 		public List<Schedule> Schedules { get; set; }
 		public List<ScheduleDetail> ScheduleDetails { get; set; }
+
+		public List<Holiday> Holidays { get; set; }
 		public SystemSetting Settings { get; set; }
+
 		
 		#endregion
 
@@ -114,8 +117,17 @@ namespace DayCare.Model
 															FridayAfternoon = ScheduleDetail.IsAfternoon(d.Friday),
 														}).ToList();
 
-				ScheduleDetails.AddRange(schedule.Details);				
+				ScheduleDetails.AddRange(schedule.Details);
 			}
+
+			Holidays = (from h in Database.GetData<Database.Model.Holiday>(h => h.Deleted == false && h.Date > DateTime.Today.AddYears(-1))
+									select new Holiday 
+									{
+										Id = h.Id,
+										Date = h.Date,
+										Morning = Holiday.IsMorning(h.Mask),
+										Afternoon = Holiday.IsAfternoon(h.Mask)
+									}).ToList();
 
 			Settings = new SystemSetting { ImageFolder = @"E:\[Petoeter]\Images" };
 
@@ -130,6 +142,7 @@ namespace DayCare.Model
 				SaveChildren();
 				SaveMembers();
 				SaveSchedules();
+				SaveHolidays();
 			}
 			catch (Exception ex)
 			{
@@ -138,6 +151,7 @@ namespace DayCare.Model
 
 			return true;
 		}
+
 
 
 		#region Account
@@ -386,6 +400,12 @@ namespace DayCare.Model
 		}
 		#endregion
 
+		public IEnumerable<Holiday> GetHolidays(bool deleted = false)
+		{
+			return Holidays.AsEnumerable().Where(h => h.Deleted == deleted);
+		}
+
+
 		public void MarkForAdd(DataObject data)
 		{
 			data.Added = true;
@@ -398,5 +418,63 @@ namespace DayCare.Model
 			data.Updated = true;
 		}
 
+
+		public void SetHoliday(DateTime day, bool morning, bool afternoon)
+		{
+			var holiday = Holidays.FirstOrDefault(h => h.Date == day);
+
+			if (holiday == null)
+			{
+				holiday = new Holiday
+				{
+					Date = day,
+					Morning = morning,
+					Afternoon = afternoon,
+					Updated = true,
+					Added = true,
+					Id = Guid.NewGuid()
+				};
+				Holidays.Add(holiday);
+			}
+			else
+			{
+				holiday.Morning = morning;
+				holiday.Afternoon = afternoon;
+				holiday.Updated = true;
+			}
+
+			SaveHolidays();
+
+		}
+		
+		private void SaveHolidays()
+		{
+			foreach (var holiday in from h in Holidays where h.Updated select h)
+			{
+				if (holiday.Added)
+				{
+					Database.AddHoliday(new Database.Model.Holiday
+					{
+						Id = holiday.Id,
+						Date = holiday.Date,
+						Mask = holiday.Mask
+					});
+
+					holiday.Added = false;
+					holiday.Updated = false;
+				}
+				else
+				{
+					Database.UpdateHoliday(new Database.Model.Holiday
+					{
+						Id = holiday.Id,
+						Date = holiday.Date,
+						Mask = holiday.Mask
+					});
+
+					holiday.Updated = false;
+				}
+			}
+		}
 	}
 }

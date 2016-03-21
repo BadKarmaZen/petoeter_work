@@ -44,6 +44,19 @@ namespace DayCare.Model
 
 			return copy;
 		}
+
+		public ScheduleDetail GetActiveSchedule(DateTime date)
+		{
+			var weeks = (date - StartDate).Days / 7;
+			var index = weeks % Details.Count;
+
+			return Details[index];
+		}
+
+		public bool IsVoid()
+		{
+			return Details.All(d => d.IsVoid());
+		}
 	}
 
 	public class ScheduleDetail : DataObject
@@ -78,9 +91,58 @@ namespace DayCare.Model
 
 		public static int DayState(bool morning, bool afternoon)
 		{
-			return	(morning ? Morning : 0) |
+			return (morning ? Morning : 0) |
 							(afternoon ? Afternoon : 0);
 		}
 
+
+		internal bool ThisMorning(DateTime date)
+		{
+			switch (date.DayOfWeek)
+			{
+				case DayOfWeek.Friday:
+					return FridayMorning;
+				case DayOfWeek.Monday:
+					return MondayMorning;
+				case DayOfWeek.Saturday:
+					return false;
+				case DayOfWeek.Sunday:
+					return false;
+				case DayOfWeek.Thursday:
+					return ThursdayMorning;
+				case DayOfWeek.Tuesday:
+					return TuesdayMorning;
+				case DayOfWeek.Wednesday:
+					return WednesdayMorning;
+			}
+			return false;
+		}
+
+		internal bool ThisAfternoon(DateTime date)
+		{
+			switch (date.DayOfWeek)
+			{
+				case DayOfWeek.Friday:
+					return FridayAfternoon;
+				case DayOfWeek.Monday:
+					return MondayAfternoon;
+				case DayOfWeek.Saturday:
+					return false;
+				case DayOfWeek.Sunday:
+					return false;
+				case DayOfWeek.Thursday:
+					return ThursdayAfternoon;
+				case DayOfWeek.Tuesday:
+					return TuesdayAfternoon;
+				case DayOfWeek.Wednesday:
+					return WednesdayAfternoon;
+			}
+			return false;
+		}
+
+		public bool IsVoid()
+		{
+			return !(MondayMorning || MondayAfternoon || TuesdayMorning || TuesdayAfternoon || WednesdayMorning || WednesdayAfternoon || ThursdayMorning || ThursdayAfternoon || FridayMorning || FridayAfternoon);
+		}
 	}
 }

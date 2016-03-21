@@ -16,14 +16,14 @@ namespace DayCare.ViewModels.Reports
 	{
 		public void MonthListAction()
 		{
-			//var dlg = new SelectMonthViewModel();
-			//dlg.Yes = () => MonthListReport.Create(dlg.Month + 1, dlg.Year);
+			var dlg = new SelectMonthViewModel();
+			dlg.Yes = () => MonthListReport.Create(dlg.Month + 1, dlg.Year);
 
-			//ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-			//	new Events.ShowDialog
-			//	 {
-			//		 Dialog = dlg
-			//	 });
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				new Events.ShowDialog
+				 {
+					 Dialog = dlg
+				 });
 		}
 
 		public void WeekListAction()

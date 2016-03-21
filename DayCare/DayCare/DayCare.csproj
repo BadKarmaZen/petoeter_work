@@ -36,6 +36,9 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>olaf2.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Caliburn.Micro, Version=2.0.2.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
       <HintPath>..\packages\Caliburn.Micro.Core.3.0.0-beta1\lib\net45\Caliburn.Micro.dll</HintPath>
@@ -130,6 +133,7 @@
     <Compile Include="Model\Databasee\Synchronizer.cs" />
     <Compile Include="Model\Databasee\Updates\DatabaseUpdate.cs" />
     <Compile Include="Model\DataObject.cs" />
+    <Compile Include="Model\Holiday.cs" />
     <Compile Include="Model\Member.cs" />
     <Compile Include="Model\Petoeter.cs" />
     <Compile Include="Model\Schedule.cs" />
@@ -151,6 +155,7 @@
     <Compile Include="ViewModels\Children\ChildUI.cs" />
     <Compile Include="ViewModels\Children\EditChildViewModel.cs" />
     <Compile Include="ViewModels\Members\MemberUI.cs" />
+    <Compile Include="ViewModels\Scheduler\ScheduleExceptionViewModel.cs" />
     <Compile Include="ViewModels\UICore\BackMenu.cs" />
     <Compile Include="ViewModels\UICore\BaseScreen.cs" />
     <Compile Include="ViewModels\UICore\FilteredListItemScreen.cs" />
@@ -253,6 +258,9 @@
     </Compile>
     <Compile Include="Views\Scheduler\EditChildScheduleView.xaml.cs">
       <DependentUpon>EditChildScheduleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Scheduler\ScheduleExceptionView.xaml.cs">
+      <DependentUpon>ScheduleExceptionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Scheduler\SchedulerMainView.xaml.cs">
       <DependentUpon>SchedulerMainView.xaml</DependentUpon>
@@ -405,6 +413,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Scheduler\ScheduleExceptionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Scheduler\SchedulerMainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -439,7 +451,9 @@
   <ItemGroup>
     <Resource Include="Resources\expenses.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="olaf2.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

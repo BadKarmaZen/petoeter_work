@@ -20,7 +20,7 @@ namespace DayCare.ViewModels.Scheduler
 
 			Items = (from c in model.GetChildren()
 							 where c.Deleted == false
-							 orderby c.FirstName
+							 orderby c.BirthDay
 							 select new ChildUI
 							 {
 								 Name = string.Format("{0} {1}", c.FirstName, c.LastName),
@@ -29,16 +29,7 @@ namespace DayCare.ViewModels.Scheduler
 
 			base.LoadItems();
 		}
-
-		//public void AddAction()
-		//{
-		//    ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-		//        new Core.Events.ShowDialog
-		//        {
-		//            Dialog = new Edi(_account)
-		//        });
-		//}
-
+		
 		public void EditAction()
 		{
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
@@ -53,18 +44,5 @@ namespace DayCare.ViewModels.Scheduler
 			SelectItem(child);
 			EditAction();
 		}
-
-		//public void DeleteAction()
-		//{
-		//    ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-		//       new Events.ShowDialog
-		//       {
-		//           Dialog = new YesNoDialogViewModel
-		//           {
-		//               Message = "Ben je zeker?",
-		//               Yes = () => DeleteItem()
-		//           }
-		//       });
-		//}
 	}
 }

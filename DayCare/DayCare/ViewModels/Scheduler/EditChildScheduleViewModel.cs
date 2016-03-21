@@ -32,19 +32,6 @@ namespace DayCare.ViewModels.Scheduler
 
 		protected override void LoadItems()
 		{
-			/*var model = ServiceProvider.Instance.GetService<Petoeter>();
-			var groups = from s in model.GetSchedule(s => s.Child_Id == _child.Id && s.Deleted == false)
-									 select s.Group_Id;
-
-			Items = (from id in groups.Distinct()
-							 let g = model.GetGroupSchedule(id)
-							 orderby g.StartDate
-							 select new ScheduleUI
-							 {
-								 Name = string.Format("{0} - {1}", g.StartDate.ToShortDateString(), g.EndDate.ToShortDateString()),
-								 Tag = g
-							 }).ToList();*/
-
 			Items = (from s in _child.Schedules
 							 where s.Deleted == false
 							 orderby s.StartDate
@@ -99,13 +86,10 @@ namespace DayCare.ViewModels.Scheduler
 
 		public void ExceptionAction()
 		{
- 			//	Make a copy
-			var copy = SelectedItem.Tag.MakeCopy();
-
-			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+ 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Core.Events.ShowDialog
 				{
-					Dialog = new AddScheduleViewModel(_child, copy, SelectedItem.Tag)
+					Dialog = new ScheduleExceptionViewModel(_child, SelectedItem.Tag)
 				});
 		}
 

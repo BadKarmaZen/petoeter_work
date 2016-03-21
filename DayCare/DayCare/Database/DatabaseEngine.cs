@@ -23,7 +23,7 @@ namespace DayCare.Database
 		private List<Member> _members = new List<Member>();
 		private List<Schedule> _schedules = new List<Schedule>();
 		private List<ScheduleDetail> _scheduleDetails = new List<ScheduleDetail>();
-		private List<Holiday> _holydays = new List<Holiday>();
+		private List<Holiday> _holidays = new List<Holiday>();
 		#endregion
 
 		#region Properties
@@ -62,7 +62,7 @@ namespace DayCare.Database
 			LoadData(Queries[typeof(Child)], _children);
 			LoadData(Queries[typeof(Schedule)], _schedules);
 			LoadData(Queries[typeof(ScheduleDetail)], _scheduleDetails);
-			LoadData(Queries[typeof(Holiday)], _holydays);
+			LoadData(Queries[typeof(Holiday)], _holidays);
 		}
 
 
@@ -236,6 +236,31 @@ namespace DayCare.Database
 
 			return new List<T>();
 		}
+
+
+
+		public void AddHoliday(Holiday holiday)
+		{
+			_holidays.Add(holiday);
+			AddRecord(holiday);
+		}
+
+		public void UpdateHoliday(Holiday holiday)
+		{
+			var old = GetData<Holiday>(h => h.Id == holiday.Id).FirstOrDefault();
+
+			if (old == null)
+			{
+				AddRecord(holiday);
+			}
+			else
+			{
+				_holidays.Remove(old);
+				_holidays.Add(holiday);
+				UpdateRecord(holiday);
+			}
+		}
+
 
 		//private bool LoadSystemSettings()
 		//{

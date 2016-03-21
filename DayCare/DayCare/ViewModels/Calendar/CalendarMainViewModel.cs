@@ -9,7 +9,7 @@ namespace DayCare.ViewModels.Calendar
 {
 	public class CalendarMainViewModel : Screen
 	{
-		/*private MonthViewModel _month;
+		private MonthViewModel _month;
 		private DateTime _selectedDate;
 
 		public DateTime SelectedDate
@@ -48,6 +48,6 @@ namespace DayCare.ViewModels.Calendar
 		{
 			SelectedDate = SelectedDate.AddMonths(-1);
 			Month = new MonthViewModel(SelectedDate);
-		}*/
+		}
 	}
 }

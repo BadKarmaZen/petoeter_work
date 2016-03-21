@@ -26,5 +26,26 @@ namespace DayCare.Model
 						 where s.StartDate <= dayInPeriod && s.EndDate >= dayInPeriod
 						 select s).FirstOrDefault();
 		}
+
+		/// <summary>
+		/// Checks if any schedule is active for this period
+		/// </summary>
+		/// <param name="period"></param>
+		/// <returns></returns>
+		internal bool Active(Core.DatePeriod period)
+		{
+			/*		------[                 ]-------
+			 *		
+			 *	[===]																	No			schedule.End < period.Start
+			 *  [===============]											Yes
+			 *  [=============================]				Yes
+			 *             [==========]								Yes
+			 *             [==================]				Yes
+			 *                              [===]			No			schedule.Start > period.end
+			 *                              
+			 * */
+			var bad = Schedules.Count(s => s.EndDate < period.Start || s.StartDate > period.End);
+			return bad != Schedules.Count;
+		}
 	}
 }

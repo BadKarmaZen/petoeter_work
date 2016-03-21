@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace DayCare.Database.Model
 {
-	class Holiday : DatabaseRecord
+	public class Holiday : DatabaseRecord
 	{
 		public DateTime Date { get; set; }
+		public int Mask { get; set; }
 
 		public Holiday()
 		{

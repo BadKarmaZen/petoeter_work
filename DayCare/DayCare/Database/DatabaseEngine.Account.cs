@@ -39,5 +39,6 @@ namespace DayCare.Database
 				UpdateRecord(account);
 			}
 		}
+
 	}
 }

@@ -33,7 +33,7 @@ namespace DayCare.ViewModels.UICore
 
 				return (from i in _items
 								where i.IsValidFilter(_filter)
-								orderby i.OrderBy()
+								//orderby i.OrderBy()
 								select i).ToList();
 			}
 		}

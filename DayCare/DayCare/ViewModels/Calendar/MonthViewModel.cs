@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
+using DayCare.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,14 +9,21 @@ using System.Threading.Tasks;
 
 namespace DayCare.ViewModels.Calendar
 {
-	/*public class DayUI : Screen
+	public class DayUI : Screen
 	{
-		private bool _holiday;
+		private bool _morningHoliday;
+		private bool _afternoonHoliday;
 
-		public bool Holiday
+		public bool MorningHoliday
 		{
-			get { return _holiday; }
-			set { _holiday = value; NotifyOfPropertyChange(() => Holiday); }
+			get { return _morningHoliday; }
+			set { _morningHoliday = value; NotifyOfPropertyChange(() => MorningHoliday); }
+		}
+
+		public bool AfternoonHoliday
+		{
+			get { return _afternoonHoliday; }
+			set { _afternoonHoliday = value; NotifyOfPropertyChange(() => AfternoonHoliday); }
 		}
 
 		public int Day { get { return Date.Day; } }
@@ -52,33 +60,49 @@ namespace DayCare.ViewModels.Calendar
 			_start = new DateTime(date.Year, date.Month, 1);
 			_end = _start.AddMonths(1).AddDays(-1);
 
-			_startView = _start;
-			_endView = _end;
+			_startView = _start.PreviousMonday();
+			_endView = _end.NextFriday();
 
-			while (_startView.DayOfWeek != DayOfWeek.Monday)
+			var model = ServiceProvider.Instance.GetService<DayCare.Model.Petoeter>();
+
+			var weekdays = (from d in GetViewableDays()
+ 											select new DayUI
+											{
+												Date = d,
+												NotInMonth = d.Month != date.Month,
+												MorningHoliday = model.GetHolidays().Where(h => h.Date == d && h.Morning).Count() == 1,
+												AfternoonHoliday = model.GetHolidays().Where(h => h.Date == d && h.Afternoon).Count() == 1,
+												Weekday = d.DayOfWeek != DayOfWeek.Saturday && d.DayOfWeek != DayOfWeek.Sunday
+											}).ToList();
+
+			var period = DatePeriod.MakePeriod(date.Month, date.Year);
+
+			foreach (var child in from c in model.GetChildren()
+														where c.Active(period)
+														orderby c.BirthDay
+														select c)
 			{
-				_startView = _startView.AddDays(-1);				
+				foreach (var weekday in weekdays)
+				{
+					var schedule = child.FindSchedule(weekday.Date);
+					if (schedule != null)
+					{
+						var detail = schedule.GetActiveSchedule(weekday.Date);
+						
+						if (detail.ThisMorning(weekday.Date))
+						{
+							weekday.MorningCount++;
+						}
+						
+						if (detail.ThisAfternoon(weekday.Date))
+						{
+							weekday.AfternoonCount++;
+						}
+					}
+				}
 			}
 
-			while (_endView.DayOfWeek != DayOfWeek.Sunday)
-			{
-				_endView = _endView.AddDays(1);
-			}
-
-			var model = ServiceProvider.Instance.GetService<Petoeter>();
-
-			Days = (from d in GetViewableDays()
-							let grp = model.GetValidGroupSchedules(d)
-							select new DayUI
-							{
-								Date = d,
-								MorningCount = grp.Count(g => g.GetScheduleOn(d).ThisMorning(d)),
-								AfternoonCount = grp.Count(g => g.GetScheduleOn(d).ThisAfternoon(d)),
-								NotInMonth = d.Month != date.Month,
-								Holiday = model.GetHoliday(h => h.Date == d).Count() == 1,
-								Weekday = d.DayOfWeek != DayOfWeek.Saturday && d.DayOfWeek != DayOfWeek.Sunday
-							}).ToList();
-
+			Days = weekdays; 
 		}
 
 		public IEnumerable<DateTime> GetViewableDays()
@@ -92,26 +116,44 @@ namespace DayCare.ViewModels.Calendar
 			yield return day;
 		}
 
+		public void ToggleMorningHolidayAction(DayUI ui)
+		{
+			if (ui.Weekday == false)
+			{
+				return;
+			}
+
+			ui.MorningHoliday = !ui.MorningHoliday;
+
+			var model = ServiceProvider.Instance.GetService<Petoeter>();
+			model.SetHoliday(ui.Date, ui.MorningHoliday, ui.AfternoonHoliday);
+		}
+
+		public void ToggleAfternoonHolidayAction(DayUI ui)
+		{
+			if (ui.Weekday == false)
+			{
+				return;
+			}
+
+			ui.AfternoonHoliday = !ui.AfternoonHoliday;
+
+			var model = ServiceProvider.Instance.GetService<Petoeter>();
+			model.SetHoliday(ui.Date, ui.MorningHoliday, ui.AfternoonHoliday);
+		}
+
 		public void ToggleHolidayAction(DayUI ui)
 		{
 			if (ui.Weekday == false)
 			{
-				return;				
+				return;
 			}
 
-			ui.Holiday = !ui.Holiday;
+			ui.MorningHoliday = !ui.MorningHoliday;
+			ui.AfternoonHoliday = !ui.AfternoonHoliday;
 
 			var model = ServiceProvider.Instance.GetService<Petoeter>();
-
-			if (ui.Holiday)
-			{
-				ui.Tag = new Holiday { Date = ui.Date };
-				model.SaveHoliday(ui.Tag);
-			}
-			else
-			{
-				model.ObliterateRecord(ui.Tag);
-			}
+			model.SetHoliday(ui.Date, ui.MorningHoliday, ui.AfternoonHoliday);
 		}
-	}*/
+	}
 }
