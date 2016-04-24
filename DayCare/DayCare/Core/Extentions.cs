@@ -14,7 +14,7 @@ namespace DayCare.Core
 		{
 			if (!date.HasValue)
 			{
-				date = DateTime.Now;				
+				date = DateTimeProvider.Now();
 			}
 
 			return date.Value.NextMonday();
@@ -34,7 +34,7 @@ namespace DayCare.Core
 		{
 			if (!date.HasValue)
 			{
-				date = DateTime.Now;
+				date = DateTimeProvider.Now();
 			}
 
 			return date.Value.NextFriday();
@@ -55,7 +55,7 @@ namespace DayCare.Core
 		{
 			if (!date.HasValue)
 			{
-				date = DateTime.Now;
+				date = DateTimeProvider.Now();
 			}
 
 			return date.Value.PreviousMonday();
@@ -75,7 +75,7 @@ namespace DayCare.Core
 		{
 			if (!date.HasValue)
 			{
-				date = DateTime.Now;
+				date = DateTimeProvider.Now();
 			}
 
 			return date.Value.PreviousFriday();

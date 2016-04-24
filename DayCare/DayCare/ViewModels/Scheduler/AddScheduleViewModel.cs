@@ -94,8 +94,8 @@ namespace DayCare.ViewModels.Scheduler
 		{
 			this._child = child;
 
-			this.StartDate = DateTime.Now;
-			this.EndDate = DateTime.Now;
+			this.StartDate = DateTimeProvider.Now();
+			this.EndDate = DateTimeProvider.Now();
 
 			Details = new List<WeekScheduleViewModel> 
 			{ 

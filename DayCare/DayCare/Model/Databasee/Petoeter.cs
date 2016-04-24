@@ -220,7 +220,7 @@ namespace DayCare.Model//.Database
 
 		public IEnumerable<Presence> GetPresenceData()
 		{
-			var today = DateTime.Now.Date;
+			var today = DateTimeProvider.Now().Date;
 			var data = new List<Presence>();
 			LoadData(Queries[typeof(Presence)], data, Param("@param_date", today));
 
@@ -331,7 +331,7 @@ namespace DayCare.Model//.Database
 			{
 				DataBase.Open();
 
-				record.Updated = DateTime.Now;
+				record.Updated = DateTimeProvider.Now();
 
 				var command = Queries[record.GetType()].UpdateQuery(DataBase, record);
 				int result = command.ExecuteNonQuery();
@@ -389,7 +389,7 @@ namespace DayCare.Model//.Database
 			{
 				DataBase.Open();
 
-				record.Updated = DateTime.Now;
+				record.Updated = DateTimeProvider.Now();
 
 				var command = Queries[record.GetType()].InsertQuery(DataBase, record);
 				int result = command.ExecuteNonQuery();

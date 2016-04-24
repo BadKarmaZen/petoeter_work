@@ -63,6 +63,7 @@
     <Reference Include="MySql.Data, Version=6.9.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Caliburn.Micro.3.0.0-beta1\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -91,6 +92,7 @@
     <Compile Include="Behaviour\DoubleClickEvent.cs" />
     <Compile Include="Converters\BooleanVisibilityConverter .cs" />
     <Compile Include="Core\DatePeriod.cs" />
+    <Compile Include="Core\DateTimeProvider.cs" />
     <Compile Include="Core\Events.cs" />
     <Compile Include="Core\Extentions.cs" />
     <Compile Include="Core\ICloseScreen.cs" />
@@ -114,21 +116,24 @@
     <Compile Include="Database\DatabaseEngine.Member.cs" />
     <Compile Include="Database\DatabaseEngine.Schedule.cs" />
     <Compile Include="Database\DatabaseIgnoreAttribute.cs" />
+    <Compile Include="Database\ExportData.cs" />
     <Compile Include="Database\Model\Account.cs" />
     <Compile Include="Database\Model\Child.cs" />
     <Compile Include="Database\Model\DatabaseRecord.cs" />
     <Compile Include="Database\Model\Holiday.cs" />
     <Compile Include="Database\Model\Member.cs" />
+    <Compile Include="Database\Model\Presence.cs" />
     <Compile Include="Database\Model\Schedule.cs" />
     <Compile Include="Database\Model\ScheduleDetail.cs" />
     <Compile Include="Database\QueryInfo.cs" />
+    <Compile Include="Database\SystemSetting.cs" />
     <Compile Include="DayCareBootstrapper.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Model\Account.cs" />
     <Compile Include="Model\Child.cs" />
     <Compile Include="Model\Databasee\Expense.cs" />
     <Compile Include="Model\Databasee\GroupSchedule.cs" />
     <Compile Include="Model\Databasee\Petoeter.cs" />
-    <Compile Include="Model\Databasee\Presence.cs" />
     <Compile Include="Model\Databasee\Schedule.cs" />
     <Compile Include="Model\Databasee\Synchronizer.cs" />
     <Compile Include="Model\Databasee\Updates\DatabaseUpdate.cs" />
@@ -136,6 +141,7 @@
     <Compile Include="Model\Holiday.cs" />
     <Compile Include="Model\Member.cs" />
     <Compile Include="Model\Petoeter.cs" />
+    <Compile Include="Model\Presence.cs" />
     <Compile Include="Model\Schedule.cs" />
     <Compile Include="Model\SystemSettings.cs" />
     <Compile Include="Model\Tasks\AddAccountTask.cs" />
@@ -154,6 +160,7 @@
     <Compile Include="ViewModels\Children\ChildrenMainViewModel.cs" />
     <Compile Include="ViewModels\Children\ChildUI.cs" />
     <Compile Include="ViewModels\Children\EditChildViewModel.cs" />
+    <Compile Include="ViewModels\Database\DatabaseViewModel.cs" />
     <Compile Include="ViewModels\Members\MemberUI.cs" />
     <Compile Include="ViewModels\Scheduler\ScheduleExceptionViewModel.cs" />
     <Compile Include="ViewModels\UICore\BackMenu.cs" />
@@ -216,6 +223,9 @@
     </Compile>
     <Compile Include="Views\Dashboard\DashBoardView.xaml.cs">
       <DependentUpon>DashBoardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Database\DatabaseView.xaml.cs">
+      <DependentUpon>DatabaseView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Dialogs\DateDialogView.xaml.cs">
       <DependentUpon>DateDialogView.xaml</DependentUpon>
@@ -357,6 +367,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Database\DatabaseView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Dialogs\DateDialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -454,6 +468,12 @@
   <ItemGroup>
     <Resource Include="olaf2.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Database.png" />
+    <Resource Include="Resources\database_export.png" />
+    <Resource Include="Resources\database_import.png" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

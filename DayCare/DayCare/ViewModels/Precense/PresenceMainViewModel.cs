@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
+using DayCare.Model;
 using DayCare.Model.UI;
 using DayCare.ViewModels.Children;
 using System;
@@ -14,7 +15,7 @@ using System.Windows.Threading;
 
 namespace DayCare.ViewModels.Precense
 {
-	/*public class PresenceUI : TaggedItemUI<Presence>
+	public class PresenceUI : TaggedItemUI<Presence>
 	{
 		#region members
 		private bool _toLate;
@@ -30,7 +31,7 @@ namespace DayCare.ViewModels.Precense
 			get
 			{
 				var img = ServiceProvider.Instance.GetService<ImageManager>();
-				return img.CreateBitmap(img.FindImage(Tag.Child_Id.ToString()));
+				return img.CreateBitmap(img.FindImage(Tag.Child.Id.ToString()));
 			}
 		}
 
@@ -53,18 +54,18 @@ namespace DayCare.ViewModels.Precense
 		{
 			get
 			{
-				if (Tag.ArrivalTime == DateTime.MinValue)
+				if (Tag.ArrivingTime == DateTime.MinValue)
 				{
 					return Brushes.White;
 				}
 				else
 				{
-					var time = DateTime.Now;
+					var time = DateTimeProvider.Now();
 
-					if (Tag.DepartureTime != DateTime.MinValue)
-						time = Tag.DepartureTime;
+					if (Tag.LeavingTime != DateTime.MinValue)
+						time = Tag.LeavingTime;
 
-					var delta = time - Tag.ArrivalTime;
+					var delta = time - Tag.ArrivingTime;
 
 					return delta > MaxTime ? Brushes.Salmon : Brushes.LightGreen;
 				}
@@ -75,35 +76,35 @@ namespace DayCare.ViewModels.Precense
 
 		public void Update()
 		{
-			if (Tag.ArrivalTime == DateTime.MinValue)
+			if (Tag.ArrivingTime == DateTime.MinValue)
 			{
 				ToLate = false;
 			}
 			else
 			{
-				var time = DateTime.Now;
+				var time = DateTimeProvider.Now();
 
-				if (Tag.DepartureTime != DateTime.MinValue)
-					time = Tag.DepartureTime;
+				if (Tag.LeavingTime != DateTime.MinValue)
+					time = Tag.LeavingTime;
 
-				var delta = time - Tag.ArrivalTime;
+				var delta = time - Tag.ArrivingTime;
 
 				ToLate = delta > MaxTime;
 			}
 		}
 
-		public string FindImageFile()
-		{
-			var model = ServiceProvider.Instance.GetService<Petoeter>();
-			var child = model.GetChild(c => c.Id == Tag.Child_Id).FirstOrDefault();
+		//public string FindImageFile()
+		//{
+		//	var model = ServiceProvider.Instance.GetService<Petoeter>();
+		//	var child = model.GetChildren(c => c.Id == Tag.Child_Id).FirstOrDefault();
 
-			if (child != null)
-			{
-				return Directory.EnumerateFiles(model.Settings.ImageFolder, string.Format("{0}*", child.Id.ToString())).FirstOrDefault();
-			}
+		//	if (child != null)
+		//	{
+		//		return Directory.EnumerateFiles(model.Settings.ImageFolder, string.Format("{0}*", child.Id.ToString())).FirstOrDefault();
+		//	}
 
-			return string.Empty;
-		}
+		//	return string.Empty;
+		//}
 	}
 
 	public class PresenceMainViewModel : Screen, ICloseScreen
@@ -120,20 +121,19 @@ namespace DayCare.ViewModels.Precense
 
 		public PresenceMainViewModel()
 		{
-			var today = DateTime.Now;
+			var today = DateTimeProvider.Now();
 			var model = ServiceProvider.Instance.GetService<Petoeter>();
-			var data = model.GetPresenceData();
+			var data = model.Presences;
 
 			var lst = new List<PresenceUI>();
 
-			foreach (var item in from d in data orderby d.FullName select d)
+			foreach (var item in from d in data 
+													 orderby d.Child.FirstName 
+													 select d)
 			{
-				//var child = model.GetChild(c => c.Id == item.Child_Id).FirstOrDefault();
-				//var currentSchedule = model.GetCurrentSchedule(child, today);
-
 				var ui = new PresenceUI
 				{
-					Name = item.FullName,
+					Name = string.Format("{0} {1}", item.Child.FirstName, item.Child.LastName),
 					Tag = item,
 					MaxTime = new TimeSpan(item.TimeCode, 0, 0)
 				};
@@ -169,5 +169,5 @@ namespace DayCare.ViewModels.Precense
 		{
 			_timer.Stop();
 		}
-	}*/
+	}
 }

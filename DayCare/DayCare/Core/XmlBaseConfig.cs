@@ -53,5 +53,23 @@ namespace DayCare.Core
 				fileWriter.Close();
 			}
 		}
+
+		public void SaveToFile(string fileName)
+		{
+			StreamWriter fileWriter = new StreamWriter(fileName);
+			try
+			{
+				XmlSerializer xmlWriter = new XmlSerializer(typeof(ClassType));
+				xmlWriter.Serialize(fileWriter, this);
+			}
+			catch (Exception error)
+			{
+				throw new InvalidCastException("Unable to create xml file from object", error);
+			}
+			finally
+			{
+				fileWriter.Close();
+			}
+		}
 	}
 }

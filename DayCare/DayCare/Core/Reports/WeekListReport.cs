@@ -92,10 +92,7 @@ namespace DayCare.Core.Reports
 										 orderby c.BirthDay
 										 select c;
 
-			//var data = from c in model.GetChild(c => c.Deleted == false)
-			//var child_ids = (from gs in model.GetGroupSchedules()
-			//								 where period.Collision(new DatePeriod { Start = gs.StartDate, End = gs.EndDate })
-			//								 select gs.ChildId).Distinct();
+			var rowSize = children.Count() > 30 ? 24.75 : 27.0;
 
 			foreach (var child in children)
 			{
@@ -116,12 +113,12 @@ namespace DayCare.Core.Reports
 				cell = ws.Cell(rowIndex, "C");
 				cell.Value = "Aankomst";
 				Enbox(cell.Style);
-				ws.Row(rowIndex).Height = 27.0;
+				ws.Row(rowIndex).Height = rowSize;
 
 				cell = ws.Cell(rowIndex + 1, "C");
 				cell.Value = "Vertrek";
 				Enbox(cell.Style);
-				ws.Row(rowIndex + 1).Height = 27.0;
+				ws.Row(rowIndex + 1).Height = rowSize;
 
 				colid = new ColumnId('D');
 				for (int index = 0; index < 15; index++)

@@ -32,14 +32,20 @@ namespace DayCare.ViewModels.Scheduler
 
 		protected override void LoadItems()
 		{
-			Items = (from s in _child.Schedules
-							 where s.Deleted == false
-							 orderby s.StartDate
-							 select new ScheduleUI 
-							 {
-								 Name = string.Format("{0} - {1}", s.StartDate.ToShortDateString(), s.EndDate.ToShortDateString()),
-								 Tag = s
-							 }).ToList();
+			try
+			{
+				Items = (from s in _child.Schedules
+								 where s.Deleted == false
+								 orderby s.StartDate
+								 select new ScheduleUI
+								 {
+									 Name = string.Format("{0} - {1}", s.StartDate.ToShortDateString(), s.EndDate.ToShortDateString()),
+									 Tag = s
+								 }).ToList();
+			}
+			catch(Exception e)
+			{
+			}
 
 			base.LoadItems();
 		}

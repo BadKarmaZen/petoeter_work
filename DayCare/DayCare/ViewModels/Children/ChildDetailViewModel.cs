@@ -63,7 +63,6 @@ namespace DayCare.ViewModels.Children
 			set { _birthDay = value; NotifyOfPropertyChange(() => BirthDay); }
 		}
 
-
 		#region Properties
 		public string FirstName
 		{

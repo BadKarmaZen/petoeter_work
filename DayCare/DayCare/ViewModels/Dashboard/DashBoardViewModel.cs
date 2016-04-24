@@ -73,12 +73,12 @@ namespace DayCare.ViewModels.Dashboard
 
 		public void StartPrecenseAction()
 		{
-			//ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
-			//ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-			//	new Core.Events.SwitchTask
-			//	{
-			//		Task = new PresenceMainViewModel()
-			//	});
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				new Core.Events.SwitchTask
+				{
+					Task = new PresenceMainViewModel()
+				});
 		}
 
 		public void CalendarOverviewAction()
@@ -98,6 +98,16 @@ namespace DayCare.ViewModels.Dashboard
 				new Core.Events.SwitchTask
 				{
 					Task = new MainReportsViewModel()
+				});
+		}
+
+		public void DatabaseAction()
+		{
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				new Core.Events.SwitchTask
+				{
+					Task = new DayCare.ViewModels.Database.DatabaseViewModel()
 				});
 		}
 

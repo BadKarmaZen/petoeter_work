@@ -139,8 +139,6 @@ namespace DayCare.Database
 			CreateObliterateQuery(info, table);
 			CreateObjectCreator(info, type);
 
-
-
 			return info;
 		}
 

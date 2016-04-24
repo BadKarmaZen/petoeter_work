@@ -40,5 +40,15 @@ namespace DayCare.Database
 			}
 		}
 
+
+		internal void AddPresence(Presence presence)
+		{
+			throw new NotImplementedException();
+		}
+
+		internal void UpdatePresence(Presence presence)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

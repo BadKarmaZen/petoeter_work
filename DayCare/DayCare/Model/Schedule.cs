@@ -144,5 +144,14 @@ namespace DayCare.Model
 		{
 			return !(MondayMorning || MondayAfternoon || TuesdayMorning || TuesdayAfternoon || WednesdayMorning || WednesdayAfternoon || ThursdayMorning || ThursdayAfternoon || FridayMorning || FridayAfternoon);
 		}
+
+		public int GetTimeCode(DateTime today)
+		{
+			var fullDay = 9;
+			var halfDay = 6;
+
+			return ThisAfternoon(today) && ThisMorning(today) ? fullDay :
+				ThisAfternoon(today) || ThisMorning(today) ? halfDay : 0;
+		}
 	}
 }

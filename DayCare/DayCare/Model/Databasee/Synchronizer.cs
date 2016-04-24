@@ -146,7 +146,7 @@ namespace DayCare.Model//.Database
 	//		var export = new MasterExport();
 
 	//		DateTime lastExport = model.Settings.ExporTimeStamp;
-	//		model.Settings.ExporTimeStamp = DateTime.Now;
+		//		model.Settings.ExporTimeStamp = DateTimeProvider.Now();
 
 	//		export.Accounts.AddRange(model.GetAccount(a => a.Updated >= lastExport));
 	//		export.Children.AddRange(model.GetChild(c => c.Updated >= lastExport));
@@ -163,9 +163,9 @@ namespace DayCare.Model//.Database
 	//	{
 	//		var data = new List<Presence> 
 	//		{
-	//			new Presence { Id = Guid.NewGuid(), Child_Id = Guid.NewGuid(), ArrivalTime = DateTime.Now},
-	//			new Presence { Id = Guid.NewGuid(), Child_Id = Guid.NewGuid(), ArrivalTime = DateTime.Now},
-	//			new Presence { Id = Guid.NewGuid(), Child_Id = Guid.NewGuid(), ArrivalTime = DateTime.Now}
+		//			new Presence { Id = Guid.NewGuid(), Child_Id = Guid.NewGuid(), ArrivalTime = DateTimeProvider.Now()},
+		//			new Presence { Id = Guid.NewGuid(), Child_Id = Guid.NewGuid(), ArrivalTime = DateTimeProvider.Now()},
+		//			new Presence { Id = Guid.NewGuid(), Child_Id = Guid.NewGuid(), ArrivalTime = DateTimeProvider.Now()}
 	//		};
 
 	//		//XmlBaseConfig<List<Presence>>.SaveToFile(fileName, data);

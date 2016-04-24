@@ -12,7 +12,6 @@ namespace DayCare.Core
 {
 	class ImageManager
 	{
-		//private Dictionary<string, WeakReference<BitmapImage>> _cache;
 		private Dictionary<string, BitmapImage> _cache;
 
 		public string ImageFolder { get; set; }
@@ -37,7 +36,6 @@ namespace DayCare.Core
 			return Directory.EnumerateFiles(ImageFolder, string.Format("{0}*", id)).FirstOrDefault();
 		}
 
-		//public BitmapImage CreateBitmap(string fileName)
 		public BitmapImage CreateBitmap(string fileName)
 		{
 			if (string.IsNullOrEmpty(fileName))
@@ -49,16 +47,7 @@ namespace DayCare.Core
 
 			if (_cache.TryGetValue(fileName, out  image))
 			{
-				//BitmapImage resource;
-
-				//if (image.TryGetTarget(out resource))
-				//{
-					return image;					
-				//}
-				//else
-				//{
-				//	_cache.Remove(fileName);
-				//}	
+				return image;						
 			}
 			
 			if (File.Exists(fileName) == false)
@@ -82,7 +71,6 @@ namespace DayCare.Core
 
 				src.Freeze();
 
-				//image = new WeakReference<BitmapImage>(src);
 				_cache.Add(fileName, src);
 
 				return src;

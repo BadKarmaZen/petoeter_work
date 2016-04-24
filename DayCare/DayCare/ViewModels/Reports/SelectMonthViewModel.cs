@@ -41,7 +41,7 @@ namespace DayCare.ViewModels.Reports
 		}
 		public SelectMonthViewModel ()
 		{
-			var date = DateTime.Now.Date.AddMonths(1);
+			var date = DateTimeProvider.Now().Date.AddMonths(1);
 
 			Years = Enumerable.Range(date.Year - 2, 22).ToList();
 			Year = date.Year;

@@ -61,7 +61,7 @@ namespace DayCare.Core.Reports
 
 				doc.WorkbookPart.Workbook = workbook;
 				doc.WorkbookPart.Workbook.Save();
-				doc.Close();
+				//doc.Close();
 			}
 		}
 

@@ -23,7 +23,7 @@ namespace DayCare.ViewModels.Children
 			Detail = new ChildDetailViewModel() 
 			{ 
 				ChildId = Guid.NewGuid(), 
-				BirthDay = DateTime.Now 
+				BirthDay = DateTimeProvider.Now()
 			};
 		}
 

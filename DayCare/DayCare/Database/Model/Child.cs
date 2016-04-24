@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DayCare.Database.Model
 {
-	class Child : DatabaseRecord
+	public class Child : DatabaseRecord
 	{
 		public string FirstName { get; set; }
 		public string LastName { get; set; }

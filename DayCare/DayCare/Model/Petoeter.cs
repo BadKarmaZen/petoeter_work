@@ -6,9 +6,16 @@ using System.Threading.Tasks;
 
 namespace DayCare.Model
 {
-	class Petoeter
+	public class Petoeter
 	{
-		public DayCare.Database.DatabaseEngine	Database { get; set; }
+		public enum ApplicationMode
+		{
+			Configuration,
+			Presence
+		}
+
+		public DayCare.Database.DatabaseEngine Database { get; set; }
+		public ApplicationMode Mode { get; set; }
 
 		#region Properties
 		public List<Account> Accounts { get; set; }
@@ -18,32 +25,36 @@ namespace DayCare.Model
 		public List<ScheduleDetail> ScheduleDetails { get; set; }
 
 		public List<Holiday> Holidays { get; set; }
+
+		public List<Presence> Presences { get; set; }
+
 		public SystemSetting Settings { get; set; }
 
-		
 		#endregion
 
 
 		public Petoeter()
 		{
-			Database = new DayCare.Database.DatabaseEngine();
+			Mode = ApplicationMode.Configuration;
+
+			Database = new DayCare.Database.DatabaseEngine(Mode);
 
 			LoadData();
 		}
-		
+
 		public bool LoadData()
 		{
 			var children = Database.GetData<Database.Model.Child>(/*c => c.Deleted == false*/);
 			var members = Database.GetData<Database.Model.Member>(/*m => m.Deleted == false*/);
 			var schedules = Database.GetData<Database.Model.Schedule>(s => s.Deleted == false);
 			var scheduledetails = Database.GetData<Database.Model.ScheduleDetail>(d => d.Deleted == false);
-										 
+
 			Accounts = (from a in Database.GetData<DayCare.Database.Model.Account>(/*a => a.Deleted == false*/)
 									select new Account
 									{
-										 Id = a.Id,
-										 Name = a.Name,
-										 Deleted = a.Deleted
+										Id = a.Id,
+										Name = a.Name,
+										Deleted = a.Deleted
 									}).ToList();
 
 			Children = new List<Child>();
@@ -55,9 +66,9 @@ namespace DayCare.Model
 			{
 				a.Children = (from c in children
 											where c.Account_Id == a.Id
-											select new Child 
+											select new Child
 											{
- 												Id = c.Id,
+												Id = c.Id,
 												FirstName = c.FirstName,
 												LastName = c.LastName,
 												BirthDay = c.BirthDay,
@@ -67,9 +78,9 @@ namespace DayCare.Model
 
 				a.Members = (from m in members
 										 where m.Account_Id == a.Id
-										 select new Member 
+										 select new Member
 										 {
- 											 Id = m.Id,
+											 Id = m.Id,
 											 FirstName = m.FirstName,
 											 LastName = m.LastName,
 											 Phone = m.Phone,
@@ -85,15 +96,15 @@ namespace DayCare.Model
 			{
 				child.Schedules = (from s in schedules
 													 where s.Child_Id == child.Id
-													 select new Schedule 
-													 { 
+													 select new Schedule
+													 {
 														 Id = s.Id,
 														 StartDate = s.StartDate,
 														 EndDate = s.EndDate,
 														 Child = child
 													 }).ToList();
 
-				Schedules.AddRange(child.Schedules);				
+				Schedules.AddRange(child.Schedules);
 			}
 
 			foreach (var schedule in Schedules)
@@ -101,7 +112,7 @@ namespace DayCare.Model
 				schedule.Details = (from d in scheduledetails
 														where d.Schedule_Id == schedule.Id
 														orderby d.Schedule_Index
-														select new ScheduleDetail 
+														select new ScheduleDetail
 														{
 															Id = d.Id,
 															Index = d.Schedule_Index,
@@ -121,7 +132,7 @@ namespace DayCare.Model
 			}
 
 			Holidays = (from h in Database.GetData<Database.Model.Holiday>(h => h.Deleted == false && h.Date > DateTime.Today.AddYears(-1))
-									select new Holiday 
+									select new Holiday
 									{
 										Id = h.Id,
 										Date = h.Date,
@@ -129,7 +140,43 @@ namespace DayCare.Model
 										Afternoon = Holiday.IsAfternoon(h.Mask)
 									}).ToList();
 
-			Settings = new SystemSetting { ImageFolder = @"E:\[Petoeter]\Images" };
+
+			Presences = (from p in Database.GetData<Database.Model.Presence>()
+									 select new Presence
+									 {
+										 Id = p.Id,
+										 Child = Children.Where(c => c.Id == p.Child_Id).FirstOrDefault(),
+										 Arriving = Members.Where(m => m.Id == p.ArrivalMember_Id).FirstOrDefault(),
+										 ArrivingTime = p.ArrivalTime,
+										 Leaving = Members.Where(m => m.Id == p.DepartureMember_Id).FirstOrDefault(),
+										 LeavingTime = p.DepartureTime,
+										 TimeCode = p.TimeCode
+									 }).ToList();
+
+			if (Presences == null || Presences.Count == 0)
+			{
+				var today = DateTime.Today.Date;
+				var query = from c in Children
+										let schedule = c.FindSchedule(today)
+										where schedule != null
+										let week = schedule.GetActiveSchedule(today)
+										where week != null
+										let time = week.GetTimeCode(today)
+										where c.HasValidPeriod(today) && time != 0
+										select new Presence
+										{
+											Id = Guid.NewGuid(),
+											Child = c,
+											TimeCode = time,
+											Added = true
+										};
+				Presences = query.ToList();
+			}
+
+			Settings = new SystemSetting
+			{
+				ImageFolder = Database.SystemSettings.PictureFolder
+			};
 
 			return true;
 		}
@@ -143,6 +190,7 @@ namespace DayCare.Model
 				SaveMembers();
 				SaveSchedules();
 				SaveHolidays();
+				SavePresence();
 			}
 			catch (Exception ex)
 			{
@@ -159,7 +207,7 @@ namespace DayCare.Model
 		{
 			return Accounts.AsEnumerable().Where(a => a.Deleted == deleted);
 		}
-	
+
 		public void AddAccount(Account account)
 		{
 			MarkForAdd(account);
@@ -170,7 +218,7 @@ namespace DayCare.Model
 				AddMember(member);
 			}
 		}
-		
+
 		public void DeleteAccount(Account account)
 		{
 			account.Updated = true;
@@ -178,27 +226,27 @@ namespace DayCare.Model
 
 			foreach (var child in account.Children)
 			{
-				DeleteChild(child);				
+				DeleteChild(child);
 			}
 
 			foreach (var member in account.Members)
 			{
-				DeleteMember(member);				
+				DeleteMember(member);
 			}
 
 		}
-		
+
 		public void SaveAccounts()
 		{
 			foreach (var account in from a in Accounts where a.Updated select a)
 			{
 				if (account.Deleted)
 				{
-					Database.DeleteAccount(account.Id);					
+					Database.DeleteAccount(account.Id);
 				}
-				else if(account.Added)
+				else if (account.Added)
 				{
-					Database.AddAccount(new Database.Model.Account 
+					Database.AddAccount(new Database.Model.Account
 					{
 						Id = account.Id,
 						Name = account.Name
@@ -234,7 +282,7 @@ namespace DayCare.Model
 			child.Updated = true;
 			child.Deleted = true;
 		}
-		
+
 		private void SaveChildren()
 		{
 			foreach (var child in from c in Children where c.Updated select c)
@@ -366,7 +414,7 @@ namespace DayCare.Model
 							Wednesday = ScheduleDetail.DayState(detail.WednesdayMorning, detail.WednesdayAfternoon),
 							Thursday = ScheduleDetail.DayState(detail.ThursdayMorning, detail.ThursdayAfternoon),
 							Friday = ScheduleDetail.DayState(detail.FridayMorning, detail.FridayAfternoon)
-						});						
+						});
 					}
 				}
 				else
@@ -394,7 +442,7 @@ namespace DayCare.Model
 							Thursday = ScheduleDetail.DayState(detail.ThursdayMorning, detail.ThursdayAfternoon),
 							Friday = ScheduleDetail.DayState(detail.FridayMorning, detail.FridayAfternoon)
 						});
-					}						
+					}
 				}
 			}
 		}
@@ -446,7 +494,7 @@ namespace DayCare.Model
 			SaveHolidays();
 
 		}
-		
+
 		private void SaveHolidays()
 		{
 			foreach (var holiday in from h in Holidays where h.Updated select h)
@@ -475,6 +523,60 @@ namespace DayCare.Model
 					holiday.Updated = false;
 				}
 			}
+		}
+
+		private void SavePresence()
+		{
+			foreach (var presence in from p in Presences where p.Updated select p)
+			{
+				if (presence.Added)
+				{
+					Database.AddPresence(new Database.Model.Presence
+					{
+						
+						//Id = presence.Id,
+						//Child_Id = presence.Child.Id,
+						//FullName = string.Format("{0} {1}", presence.Child.FirstName, presence.Child.LastName),
+						//Created  = presence.,
+
+						//ArrivalMember_Id = presence.Arriving.Id,
+						//ArrivalTime = presence.ArrivingTime,
+						//DepartureMember_Id = pre,
+						//DepartureTime,
+						//TimeCode,
+					});
+				}
+				else
+				{
+					Database.UpdatePresence(new Database.Model.Presence { });
+				}
+			}
+		}
+
+		public void Export(string path)
+		{
+			if (Mode == Petoeter.ApplicationMode.Configuration)
+			{
+				Database.ExportConfigurationData(path);
+			}
+			else
+			{
+				Database.ExportPresenceData(path);
+			}
+		}
+
+		public void Import(string path)
+		{
+			if (Mode == Petoeter.ApplicationMode.Configuration)
+			{
+				Database.ImportPresenceData(path);
+			}
+			else
+			{
+				Database.ImportConfigurationData(path);
+			}
+
+			LoadData();
 		}
 	}
 }

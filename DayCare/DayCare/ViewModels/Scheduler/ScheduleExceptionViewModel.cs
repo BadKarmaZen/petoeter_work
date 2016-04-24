@@ -109,7 +109,7 @@ namespace DayCare.ViewModels.Scheduler
 			_autoUpdateEnddate = true;
 			_updatedDetails = _schedule.Details.ToList();
 
-			var today = DateTime.Now.Date;
+			var today = DateTimeProvider.Now().Date;
 			if (today.DayOfWeek != DayOfWeek.Monday)
 			{
 				today = today.PreviousMonday();
