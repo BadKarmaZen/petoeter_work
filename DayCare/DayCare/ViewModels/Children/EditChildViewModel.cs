@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
-using DayCare.Model;
+using DayCare.Model.Lite;
 using DayCare.ViewModels.Accounts;
 using System;
 using System.Collections.Generic;
@@ -23,7 +23,8 @@ namespace DayCare.ViewModels.Children
 
 			this._child = child;
 
-			Detail = new ChildDetailViewModel(_child);
+			//	TODO
+			//Detail = new ChildDetailViewModel(_child);
 		}
 
 		public void SaveAction()
@@ -31,16 +32,17 @@ namespace DayCare.ViewModels.Children
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 			 new Events.ShowDialog());
 
-			Detail.GetData(_child);
+			//	TODO
+			//Detail.GetData(_child);
 			
-			_child.Updated = true;
-			ServiceProvider.Instance.GetService<Petoeter>().Save();
+			//_child.Updated = true;
+			//ServiceProvider.Instance.GetService<Petoeter>().Save();
 
-			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Core.Events.SwitchTask
-					{
-						Task = new EditAccountViewModel(_account)
-					});
+			//ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+			//		new Core.Events.SwitchTask
+			//		{
+			//			Task = new EditAccountViewModel(_account)
+			//		});
 		}
 
 		public void CancelAction()

@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
-using DayCare.Model;
+using DayCare.Model.Lite;
 using DayCare.Model.Tasks;
 using DayCare.ViewModels.Children;
 using System;
@@ -25,51 +25,55 @@ namespace DayCare.ViewModels.Accounts
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Events.ShowDialog());
 
-			var account = new Account
+			using (var db = new PetoeterDb(@"E:\petoeter_lite.ldb"))
 			{
-				Id = Guid.NewGuid(),
-				Name = _name,
-				Members = new List<Member>()
-			};
-			
-			//	default create members
-			//
-			var names = _name.Split(new char[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
-			var space = new char [] { ' ' };
-			foreach (var name in names)
-			{
-				var foo = name.Split(space, StringSplitOptions.RemoveEmptyEntries);
-
-				string firstname = string.Empty;
-				string lastname = string.Empty;
-
-				if (foo.Length >= 2)
+				var account = new Account
 				{
-					firstname = foo[foo.Length - 1];
-					lastname = string.Join(" ", foo.Take(foo.Length - 1));
+					Name = _name,
+					Members = new List<Member>()
+				};
+				
+				//	default create members
+				//
+				var names = _name.Split(new char[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+				var space = new char [] { ' ' };
+				foreach (var name in names)
+				{
+					var foo = name.Split(space, StringSplitOptions.RemoveEmptyEntries);
+
+					string firstname = string.Empty;
+					string lastname = string.Empty;
+
+					if (foo.Length >= 2)
+					{
+						firstname = foo[foo.Length - 1];
+						lastname = string.Join(" ", foo.Take(foo.Length - 1));
+					}
+					else
+					{
+						lastname = foo[0];
+					}
+
+					//	Add members
+					var member = new Member
+					{
+						FirstName = firstname,
+						LastName = lastname
+					};
+
+					account.Members.Add(member);
+					db.Members.Insert(member);
 				}
-				else
-				{
-					lastname = foo[0];
-				}
 
-				account.Members.Add(new Member 
-				{
-					Id = Guid.NewGuid(),
-					FirstName = firstname,
-					LastName = lastname,
-					Account = account
-				});
+				db.Accounts.Insert(account);
+
+				ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+					new Core.Events.SwitchTask
+					{
+						Task = new EditAccountViewModel(account)
+					});
 			}
 
-			ServiceProvider.Instance.GetService<Petoeter>().AddAccount(account);
-
-
-			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-				new Core.Events.SwitchTask
-				{
-					Task = new EditAccountViewModel(account)
-				});
 		}
 
 		public void CancelAction()
@@ -78,10 +82,10 @@ namespace DayCare.ViewModels.Accounts
 				new Events.ShowDialog());
 
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Core.Events.SwitchTask
-					{
-						Task = new AccountMainViewModel()
-					});
+				new Core.Events.SwitchTask
+				{
+					Task = new AccountMainViewModel()
+				});
 		}
 	}
 	//public class AddAccountViewModel : ReactivatableScreen

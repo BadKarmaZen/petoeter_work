@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
-using DayCare.Model;
+using DayCare.Model.Lite;
 using DayCare.ViewModels.Accounts;
 using System;
 using System.Collections.Generic;
@@ -11,12 +11,16 @@ namespace DayCare.ViewModels.Members
 {
 	public class AddMemberViewModel : Screen
 	{
+		#region Member
 		private Account _account;
 
 		private string _firstName;
 		private string _lastName;
 		private string _phone;
+		
+		#endregion
 
+		#region Properties
 		public string Phone
 		{
 			get { return _phone; }
@@ -28,18 +32,18 @@ namespace DayCare.ViewModels.Members
 			get { return _firstName; }
 			set { _firstName = value; NotifyOfPropertyChange(() => FirstName); }
 		}
-
-
 		public string LastName
 		{
 			get { return _lastName; }
 			set { _lastName = value; NotifyOfPropertyChange(() => LastName); }
 		}
+		
+		#endregion
 
+		
 		public AddMemberViewModel(Account account)
 		{
-			// TODO: Complete member initialization
-			this._account = account;
+			_account = account;
 		}
 
 		public void SaveAction()
@@ -47,24 +51,21 @@ namespace DayCare.ViewModels.Members
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 			 new Events.ShowDialog());
 
-			var member = new Member
+			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
-				Id = Guid.NewGuid(),
-				Account = _account,
-				FirstName = this.FirstName,
-				LastName = this.LastName,
-				Phone = this.Phone
-			};
+				var member = new Member
+				{
+					FirstName = this.FirstName,
+					LastName = this.LastName,
+					Phone = this.Phone
+				};
 
-			_account.Members.Add(member);
+				db.Members.Insert(member);
+				_account.Members.Add(member);
 
-			ServiceProvider.Instance.GetService<Petoeter>().AddMember(member);
-			ServiceProvider.Instance.GetService<Petoeter>().Save();
-
-			/*var newAccount = (from a in ServiceProvider.Instance.GetService<Petoeter>().GetAccounts()
-												where a.Id == _account.Id
-												select a).FirstOrDefault();*/
-
+				db.Accounts.Update(_account);
+			}
+		
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Core.Events.SwitchTask
 				{
@@ -75,13 +76,13 @@ namespace DayCare.ViewModels.Members
 		public void CancelAction()
 		{
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Events.ShowDialog());
+				new Events.ShowDialog());
 
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Core.Events.SwitchTask
-					{
-						Task = new EditAccountViewModel(_account)
-					});
+				new Core.Events.SwitchTask
+				{
+					Task = new EditAccountViewModel(_account)
+				});
 		}
 	}
 }

@@ -87,53 +87,53 @@ namespace DayCare.Core.Reports
 
 			//var thisWeek = DatePeriod.MakePeriod(month, year);
 
-			var children = from c in model.GetChildren()
-										 where c.Deleted == false && c.HasValidPeriod(date)
-										 orderby c.BirthDay
-										 select c;
+			//var children = from c in model.GetChildren()
+			//							 where c.Deleted == false && c.HasValidPeriod(date)
+			//							 orderby c.BirthDay
+			//							 select c;
 
-			var rowSize = children.Count() > 30 ? 24.75 : 27.0;
+			//var rowSize = children.Count() > 30 ? 24.75 : 27.0;
 
-			foreach (var child in children)
-			{
-				var nr = ws.Range(rowIndex, 1, rowIndex + 1, 1).Merge();
-				nr.Value = string.Format("{0}.", childIndex);
-				nr.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-				nr.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-				Enbox(nr.Style);
+			//foreach (var child in children)
+			//{
+			//	var nr = ws.Range(rowIndex, 1, rowIndex + 1, 1).Merge();
+			//	nr.Value = string.Format("{0}.", childIndex);
+			//	nr.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+			//	nr.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+			//	Enbox(nr.Style);
 
 
-				var cname = ws.Range(rowIndex, 2, rowIndex + 1, 2).Merge();
-				cname.Value = string.Format("{0} {1}", child.LastName, child.FirstName);
-				cname.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-				cname.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-				cname.Style.Alignment.WrapText = true;
-				Enbox(cname.Style);
+			//	var cname = ws.Range(rowIndex, 2, rowIndex + 1, 2).Merge();
+			//	cname.Value = string.Format("{0} {1}", child.LastName, child.FirstName);
+			//	cname.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+			//	cname.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+			//	cname.Style.Alignment.WrapText = true;
+			//	Enbox(cname.Style);
 
-				cell = ws.Cell(rowIndex, "C");
-				cell.Value = "Aankomst";
-				Enbox(cell.Style);
-				ws.Row(rowIndex).Height = rowSize;
+			//	cell = ws.Cell(rowIndex, "C");
+			//	cell.Value = "Aankomst";
+			//	Enbox(cell.Style);
+			//	ws.Row(rowIndex).Height = rowSize;
 
-				cell = ws.Cell(rowIndex + 1, "C");
-				cell.Value = "Vertrek";
-				Enbox(cell.Style);
-				ws.Row(rowIndex + 1).Height = rowSize;
+			//	cell = ws.Cell(rowIndex + 1, "C");
+			//	cell.Value = "Vertrek";
+			//	Enbox(cell.Style);
+			//	ws.Row(rowIndex + 1).Height = rowSize;
 
-				colid = new ColumnId('D');
-				for (int index = 0; index < 15; index++)
-				{
-					cell = ws.Cell(rowIndex, colid.ToString());
-					Enbox(cell.Style);
-					cell = ws.Cell(rowIndex + 1, colid.ToString());
-					Enbox(cell.Style);
+			//	colid = new ColumnId('D');
+			//	for (int index = 0; index < 15; index++)
+			//	{
+			//		cell = ws.Cell(rowIndex, colid.ToString());
+			//		Enbox(cell.Style);
+			//		cell = ws.Cell(rowIndex + 1, colid.ToString());
+			//		Enbox(cell.Style);
 
-					colid.Increment();
-				}
+			//		colid.Increment();
+			//	}
 
-				childIndex++;
-				rowIndex += 2;
-			}
+			//	childIndex++;
+			//	rowIndex += 2;
+			//}
 
 			var mergedcell = ws.Range(2, 1, 3, 3).Merge();
 			mergedcell.Value = "Naam";

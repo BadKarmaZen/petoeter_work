@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
-using DayCare.Model;
+using DayCare.Model.Lite;
 using DayCare.ViewModels.Accounts;
 using System;
 using System.Collections.Generic;
@@ -38,9 +38,8 @@ namespace DayCare.ViewModels.Members
 
 		public EditMemberViewModel(Account account, Member member)
 		{
-			// TODO: Complete member initialization
-			this._account = account;
-			this._member = member;
+			_account = account;
+			_member = member;
 
 			FirstName = _member.FirstName;
 			LastName = _member.LastName;
@@ -52,17 +51,14 @@ namespace DayCare.ViewModels.Members
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 			 new Events.ShowDialog());
 
-			_member.FirstName = FirstName;
-			_member.LastName = LastName;
-			_member.Phone = Phone;
+			using (var db = new PetoeterDb(PetoeterDb.FileName))
+			{
+				_member.FirstName = FirstName;
+				_member.LastName = LastName;
+				_member.Phone = Phone;
 
-			_member.Updated = true;
-
-			ServiceProvider.Instance.GetService<Petoeter>().Save();
-
-			/*var newAccount = (from a in ServiceProvider.Instance.GetService<Petoeter>().GetAccounts()
-												where a.Id == _account.Id
-												select a).FirstOrDefault();*/
+				db.Members.Update(_member);
+			}
 
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Core.Events.SwitchTask

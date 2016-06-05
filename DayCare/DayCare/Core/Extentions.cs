@@ -48,7 +48,6 @@ namespace DayCare.Core
 			}
 
 			return date;
-
 		}
 
 		public static DateTime PreviousMonday(DateTime? date = null)

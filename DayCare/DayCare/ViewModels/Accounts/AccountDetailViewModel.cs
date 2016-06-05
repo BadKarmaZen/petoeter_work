@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
-using DayCare.Model;
+using DayCare.Model.Lite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +11,12 @@ namespace DayCare.ViewModels.Accounts
 {
 	public class AccountDetailViewModel : Screen
 	{
+		#region Member
 		private Account _account;
-		private string _name;
+		private string _name;		
+		#endregion
 
+		#region Properties
 		public string Name
 		{
 			get { return _name; }
@@ -24,7 +27,8 @@ namespace DayCare.ViewModels.Accounts
 		{
 			_name = account.Name;
 			_account = account;
-		}
+		}		
+		#endregion
 
 		public void RenameAction()
 		{

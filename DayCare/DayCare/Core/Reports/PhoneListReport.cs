@@ -38,40 +38,40 @@ namespace DayCare.Core.Reports
 
 				int row = 3;
 				int maxcolumn = 3;
-				foreach (var account in from m in model.GetAccounts()
-																where m.Deleted == false
-																orderby m.Name ascending
-																select m)
-				{
-					foreach (var child in from c in account.Children
-																where c.Deleted == false
-																orderby c.FirstName
-																select c)
-					{
-						var cell = ws.Cell(row, 1);
-						cell.Value = string.Format("{0} {1}", child.LastName, child.FirstName);
+				//foreach (var account in from m in model.GetAccounts()
+				//												where m.Deleted == false
+				//												orderby m.Name ascending
+				//												select m)
+				//{
+				//	foreach (var child in from c in account.Children
+				//												where c.Deleted == false
+				//												orderby c.FirstName
+				//												select c)
+				//	{
+				//		var cell = ws.Cell(row, 1);
+				//		cell.Value = string.Format("{0} {1}", child.LastName, child.FirstName);
 
-						cell = ws.Cell(row, 2);
-						cell.Value = child.BirthDay;
+				//		cell = ws.Cell(row, 2);
+				//		cell.Value = child.BirthDay;
 						
-						int column = 3;
-						var members = from m in account.Members
-													where m.Deleted == false && !string.IsNullOrWhiteSpace(m.Phone)
-													select m;
+				//		int column = 3;
+				//		var members = from m in account.Members
+				//									where m.Deleted == false && !string.IsNullOrWhiteSpace(m.Phone)
+				//									select m;
 
-						foreach (var member in members.Take(2))
-						{
-							cell = ws.Cell(row, column++);
-							cell.Value = string.Format("{0} {1}", member.FirstName, member.LastName);
+				//		foreach (var member in members.Take(2))
+				//		{
+				//			cell = ws.Cell(row, column++);
+				//			cell.Value = string.Format("{0} {1}", member.FirstName, member.LastName);
 
-							cell = ws.Cell(row, column++);
-							cell.Value = member.Phone;
-							cell.SetDataType(XLCellValues.Text);
-						}
+				//			cell = ws.Cell(row, column++);
+				//			cell.Value = member.Phone;
+				//			cell.SetDataType(XLCellValues.Text);
+				//		}
 
-						row++;
-					}
-				}
+				//		row++;
+				//	}
+				//}
 
 				//	style
 				ws.Column(1).Width = 20.0;

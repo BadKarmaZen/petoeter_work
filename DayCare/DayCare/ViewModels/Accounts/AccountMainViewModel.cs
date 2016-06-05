@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DayCare.Model.Lite;
 
 namespace DayCare.ViewModels.Accounts
 {
@@ -39,14 +40,18 @@ namespace DayCare.ViewModels.Accounts
 
 		protected override void LoadItems()
 		{
-			var data = from a in ServiceProvider.Instance.GetService<Petoeter>().GetAccounts(_showDeleted)
-								 select new AccountUI 
-								 {
- 									 Name = a.Name,
-									 Tag = a
-								 };
+			using (var db = new PetoeterDb(@"E:\petoeter_lite.ldb"))
+			{
+				var query = from a in db.Accounts.FindAll()
+										select new AccountUI
+										{
+											Name = a.Name,
+											Tag = a
+										};
 
-			Items = data.ToList();
+				Items = query.ToList();
+			}
+
 			base.LoadItems();
 		}
 
@@ -90,11 +95,14 @@ namespace DayCare.ViewModels.Accounts
 
 		public void DeleteAccount()
 		{
-			var model = ServiceProvider.Instance.GetService<Petoeter>();
-
-			model.DeleteAccount(SelectedItem.Tag);
+			//	No real delete
+			using (var db = new PetoeterDb(PetoeterDb.FileName))
+			{
+				SelectedItem.Tag.Deleted = true;
+				db.Accounts.Update(SelectedItem.Tag);
+			}
+			
 			SelectItem(null);
-
 			LoadItems();
 		}
 

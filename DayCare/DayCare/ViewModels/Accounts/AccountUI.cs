@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DayCare.ViewModels.Accounts
 {
-    public class AccountUI : TaggedItemUI<Account>
+    public class AccountUI : TaggedItemUI<DayCare.Model.Lite.Account>
     {
     }
 }

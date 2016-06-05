@@ -151,7 +151,8 @@ namespace DayCare.ViewModels.Precense
 			else if (DateTime.MinValue != presence.ArrivingTime)
 			{
 				CurrentState = State.Arrived;
-				ArrivalMember = _presence.Child.Account.Members.Where(m => m.Id == _presence.Arriving.Id).Select(m => string.Format("{0} {1}", m.FirstName, m.LastName)).First();
+				//	TODO
+				//ArrivalMember = _presence.Child.Account.Members.Where(m => m.Id == _presence.Arriving.Id).Select(m => string.Format("{0} {1}", m.FirstName, m.LastName)).First();
 				SetArrivalTime(_presence.ArrivingTime);
 				UpdateLeaveTime();
 			}
@@ -162,13 +163,13 @@ namespace DayCare.ViewModels.Precense
 			}
 			
 			//var accountID = model.GetChildren().Where(c => c.Id == _presence.Child.Id).Select(c => c.Account_Id).First();
-
-			Resposibles = (from m in _presence.Child.Account.Members // model.GetMember(m => m.Account_Id == accountID && m.Deleted == false)
-                     select new MemberUI
-                     {
-                         Name = string.Format("{0} {1}", m.FirstName, m.LastName),
-                         Tag = m
-                     }).ToList();
+			//	TODO
+			//Resposibles = (from m in _presence.Child.Account.Members // model.GetMember(m => m.Account_Id == accountID && m.Deleted == false)
+			//							 select new MemberUI
+			//							 {
+			//									 Name = string.Format("{0} {1}", m.FirstName, m.LastName),
+			//									 Tag = m
+			//							 }).ToList();
 		}
 
 		public void CloseAction()
@@ -184,14 +185,15 @@ namespace DayCare.ViewModels.Precense
 
 			var model = ServiceProvider.Instance.GetService<Petoeter>();
 
-			if (CurrentState == State.NotArrivedYet)
-			{
-				_presence.Arriving = SelectedResponsible.Tag;
-				_presence.ArrivingTime = _arrivalTime;
+			//	TODO
+			//if (CurrentState == State.NotArrivedYet)
+			//{
+			//	_presence.Arriving = SelectedResponsible.Tag;
+			//	_presence.ArrivingTime = _arrivalTime;
 
-				_presence.Updated = true;
-				model.Save();
-			}
+			//	_presence.Updated = true;
+			//	model.Save();
+			//}
 			//else if (CurrentState == State.Arrived)
 			//{
 			//	_presence.DepartureMember_Id = SelectedResponsible.Tag.Id;

@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
 using DayCare.Model;
+using DayCare.Model.Lite;
 using DayCare.Model.UI;
 using DayCare.ViewModels.Dialogs;
 using DayCare.ViewModels.Members;
@@ -34,14 +35,14 @@ namespace DayCare.ViewModels.Scheduler
 		{
 			try
 			{
-				Items = (from s in _child.Schedules
-								 where s.Deleted == false
-								 orderby s.StartDate
-								 select new ScheduleUI
-								 {
-									 Name = string.Format("{0} - {1}", s.StartDate.ToShortDateString(), s.EndDate.ToShortDateString()),
-									 Tag = s
-								 }).ToList();
+				//Items = (from s in _child.Schedules
+				//				 where s.Deleted == false
+				//				 orderby s.StartDate
+				//				 select new ScheduleUI
+				//				 {
+				//					 Name = string.Format("{0} - {1}", s.StartDate.ToShortDateString(), s.EndDate.ToShortDateString()),
+				//					 Tag = s
+				//				 }).ToList();
 			}
 			catch(Exception e)
 			{
@@ -73,7 +74,7 @@ namespace DayCare.ViewModels.Scheduler
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Core.Events.ShowDialog
 				{
-					Dialog = new AddScheduleViewModel(_child, SelectedItem.Tag)
+					//Dialog = new AddScheduleViewModel(_child, SelectedItem.Tag)
 				});
 		}
 
@@ -95,7 +96,7 @@ namespace DayCare.ViewModels.Scheduler
  			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Core.Events.ShowDialog
 				{
-					Dialog = new ScheduleExceptionViewModel(_child, SelectedItem.Tag)
+					//Dialog = new ScheduleExceptionViewModel(_child, SelectedItem.Tag)
 				});
 		}
 
@@ -103,7 +104,7 @@ namespace DayCare.ViewModels.Scheduler
 		{
 			var model = ServiceProvider.Instance.GetService<Petoeter>();
 
-			_child.Schedules.RemoveAll(s => s.Id == SelectedItem.Tag.Id);
+			//_child.Schedules.RemoveAll(s => s.Id == SelectedItem.Tag.Id);
 
 			model.DeleteSchedule(SelectedItem.Tag);
 			model.Save();

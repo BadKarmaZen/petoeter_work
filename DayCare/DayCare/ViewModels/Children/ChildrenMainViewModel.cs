@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
-using DayCare.Model;
+using DayCare.Model.Lite;
 using DayCare.ViewModels.Dialogs;
 using DayCare.ViewModels.UICore;
 using System;
@@ -111,17 +111,15 @@ namespace DayCare.ViewModels.Children
 
 		public void DeleteChild()
 		{
-			var model = ServiceProvider.Instance.GetService<Petoeter>();
-
-			model.DeleteChild(SelectedItem.Tag);
-			model.Save();
-
+			using (var db = new PetoeterDb(PetoeterDb.FileName))
+			{
+				SelectedItem.Tag.Deleted = true;
+				db.Children.Update(SelectedItem.Tag);
+				//db.Children.Delete(SelectedItem.Tag.Id);
+			}
 			SelectItem(null);
 
 			LoadItems();
 		}
-
-
-
 	}
 }

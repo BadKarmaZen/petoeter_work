@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
-using DayCare.Model;
+using DayCare.Model.Lite;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,11 +13,13 @@ namespace DayCare.ViewModels.Children
 {
 	public class ChildDetailViewModel : Screen
 	{
+		#region Member
 		private string _firstName;
 		private string _lastName;
 		private DateTime _birthDay;
 		private string _image;
 		private BitmapImage _imageData;
+		#endregion
 
 		public BitmapImage ImageData
 		{
@@ -86,7 +88,7 @@ namespace DayCare.ViewModels.Children
 				_firstName = child.FirstName;
 				_lastName = child.LastName;
 				_birthDay = child.BirthDay;
-				ChildId = child.Id;
+				//ChildId = child.Id;
 
 				var img = ServiceProvider.Instance.GetService<ImageManager>();
 
@@ -99,7 +101,7 @@ namespace DayCare.ViewModels.Children
 			child.FirstName = _firstName;
 			child.LastName = _lastName;
 			child.BirthDay = _birthDay;
-			child.Id = ChildId;
+			//child.Id = ChildId;
 		}
 
 		public void SelectImageAction()
@@ -108,15 +110,15 @@ namespace DayCare.ViewModels.Children
 
 			if (dlg.ShowDialog() == true)
 			{
-				var model = ServiceProvider.Instance.GetService<Petoeter>();
+				//var model = ServiceProvider.Instance.GetService<Petoeter>();
 
-				string file = dlg.FileName;
-				string extention = Path.GetExtension(file);
-				string destination = Path.Combine(model.Settings.ImageFolder, string.Format( "{0}.{1}", ChildId.ToString(), extention));
+				//string file = dlg.FileName;
+				//string extention = Path.GetExtension(file);
+				//string destination = Path.Combine(model.Settings.ImageFolder, string.Format( "{0}.{1}", ChildId.ToString(), extention));
 
-				File.Copy(file, destination, true);
+				//File.Copy(file, destination, true);
 				
-				Image = file;				
+				//Image = file;				
 			}
 		}
 

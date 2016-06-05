@@ -60,6 +60,10 @@
       <HintPath>..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="LiteDB, Version=2.0.0.0, Culture=neutral, PublicKeyToken=4ee40123013c9f27, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiteDB.2.0.0-rc\lib\net40\LiteDB.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MySql.Data, Version=6.9.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -139,6 +143,13 @@
     <Compile Include="Model\Databasee\Updates\DatabaseUpdate.cs" />
     <Compile Include="Model\DataObject.cs" />
     <Compile Include="Model\Holiday.cs" />
+    <Compile Include="Model\Lite\Account.cs" />
+    <Compile Include="Model\Lite\Child.cs" />
+    <Compile Include="Model\Lite\Date.cs" />
+    <Compile Include="Model\Lite\LiteRecord.cs" />
+    <Compile Include="Model\Lite\Member.cs" />
+    <Compile Include="Model\Lite\PetoeterDb.cs" />
+    <Compile Include="Model\Lite\SystemSettings.cs" />
     <Compile Include="Model\Member.cs" />
     <Compile Include="Model\Petoeter.cs" />
     <Compile Include="Model\Presence.cs" />
@@ -162,6 +173,7 @@
     <Compile Include="ViewModels\Children\EditChildViewModel.cs" />
     <Compile Include="ViewModels\Database\DatabaseViewModel.cs" />
     <Compile Include="ViewModels\Members\MemberUI.cs" />
+    <Compile Include="ViewModels\Scheduler\EditChildCalendarViewModel.cs" />
     <Compile Include="ViewModels\Scheduler\ScheduleExceptionViewModel.cs" />
     <Compile Include="ViewModels\UICore\BackMenu.cs" />
     <Compile Include="ViewModels\UICore\BaseScreen.cs" />
@@ -265,6 +277,9 @@
     </Compile>
     <Compile Include="Views\Scheduler\AddScheduleView.xaml.cs">
       <DependentUpon>AddScheduleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Scheduler\EditChildCalendarView.xaml.cs">
+      <DependentUpon>EditChildCalendarView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Scheduler\EditChildScheduleView.xaml.cs">
       <DependentUpon>EditChildScheduleView.xaml</DependentUpon>
@@ -423,6 +438,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Scheduler\EditChildCalendarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Scheduler\EditChildScheduleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -473,7 +492,10 @@
     <Resource Include="Resources\database_export.png" />
     <Resource Include="Resources\database_import.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\copy.png" />
+    <Resource Include="Resources\paste.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

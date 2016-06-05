@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
-using DayCare.Model;
+using DayCare.Model.Lite;
 using DayCare.ViewModels.Children;
 using DayCare.ViewModels.Members;
 using DayCare.ViewModels.UICore;
@@ -16,26 +16,35 @@ namespace DayCare.ViewModels.Scheduler
 	{
 		protected override void LoadItems()
 		{
-			var model = ServiceProvider.Instance.GetService<Petoeter>();
+			using (var db = new PetoeterDb(PetoeterDb.FileName))
+			{
+				var query = from c in db.Children.FindAll()
+										where c.Deleted == false
+										orderby c.BirthDay
+										select new ChildUI
+										{
+											Name = string.Format("{0} {1}", c.FirstName, c.LastName),
+											Tag = c
+										};
 
-			Items = (from c in model.GetChildren()
-							 where c.Deleted == false
-							 orderby c.BirthDay
-							 select new ChildUI
-							 {
-								 Name = string.Format("{0} {1}", c.FirstName, c.LastName),
-								 Tag = c
-							 }).ToList();
+				Items = query.ToList();
+			}
 
 			base.LoadItems();
 		}
 		
 		public void EditAction()
 		{
+			//ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+			//	new Core.Events.SwitchTask
+			//	{
+			//		Task = new EditChildScheduleViewModel(SelectedItem.Tag)
+			//	});
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Core.Events.SwitchTask
 				{
-					Task = new EditChildScheduleViewModel(SelectedItem.Tag)
+					Task = new EditChildCalendarViewModel(SelectedItem.Tag)
 				});
 		}
 

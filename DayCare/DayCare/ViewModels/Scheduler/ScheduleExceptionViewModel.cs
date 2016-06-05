@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
 using DayCare.Model;
+using DayCare.Model.Lite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -200,7 +201,8 @@ namespace DayCare.ViewModels.Scheduler
 					_schedule.Details = (from d in Details
 															 select d.Schedule).ToList();
 
-					_child.Schedules.Add(_schedule);
+					//TODO
+					//_child.Schedules.Add(_schedule);
 					model.AddSchedule(_schedule);
 
 					_original.StartDate = _schedule.EndDate.NextMonday();
@@ -220,7 +222,8 @@ namespace DayCare.ViewModels.Scheduler
 					_schedule.Details = (from d in Details
 															 select d.Schedule).ToList();
 
-					_child.Schedules.Add(_schedule);
+					//TODO
+					//_child.Schedules.Add(_schedule);
 					model.AddSchedule(_schedule);
 
 					_original.EndDate = _schedule.StartDate.PreviousFriday();
@@ -238,7 +241,8 @@ namespace DayCare.ViewModels.Scheduler
 
 					if (!_schedule.IsVoid())
 					{
-						_child.Schedules.Add(_schedule);
+						//TODO
+						//_child.Schedules.Add(_schedule);
 						model.AddSchedule(_schedule);						
 					}
 
@@ -248,7 +252,8 @@ namespace DayCare.ViewModels.Scheduler
 					right.Details = (from d in GetWeekDetails(right.Details, right.StartDate, right.EndDate)
 													 select d.Schedule).ToList();
 
-					_child.Schedules.Add(right);
+					//TODO
+					//_child.Schedules.Add(right);
 					model.AddSchedule(right);
 
 					_original.EndDate = _schedule.StartDate.PreviousFriday();
@@ -257,6 +262,8 @@ namespace DayCare.ViewModels.Scheduler
 					_original.Updated = true;
 				}
 			}
+
+			model.SaveSchedules();
 
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 					new Core.Events.SwitchTask

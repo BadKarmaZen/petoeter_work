@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
-using DayCare.Model;
+using DayCare.Model.Lite;
 using DayCare.Model.UI;
 using DayCare.ViewModels.Dialogs;
 using DayCare.ViewModels.UICore;
@@ -84,10 +84,10 @@ namespace DayCare.ViewModels.Members
 
 		protected override void DeleteItem()
 		{
-			var model = ServiceProvider.Instance.GetService<Petoeter>();
-
-			model.DeleteMember(SelectedItem.Tag);
-			model.Save();
+			using (var db = new PetoeterDb(@"E:\petoeter_lite.ldb"))
+			{
+				db.Members.Delete(SelectedItem.Tag.Id);
+			}
 
 			base.DeleteItem();
 		}

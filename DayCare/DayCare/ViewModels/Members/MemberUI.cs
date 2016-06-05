@@ -1,4 +1,4 @@
-﻿using DayCare.Model;
+﻿using DayCare.Model.Lite;
 using DayCare.Model.UI;
 using System;
 using System.Collections.Generic;

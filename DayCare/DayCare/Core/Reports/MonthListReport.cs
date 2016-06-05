@@ -79,58 +79,66 @@ namespace DayCare.Core.Reports
 			var model = ServiceProvider.Instance.GetService<DayCare.Model.Petoeter>();
 
 			var period = DatePeriod.MakePeriod(month, year);
+			var holidays = model.GetHolidays().ToList();
 
-			foreach (var child in from c in model.GetChildren()
-														where c.Active(period)
-														orderby c.BirthDay
-														select c)
-			{
-				ws.Cell(rowIndex, "A").Value = string.Format("{0}.", childIndex);
+			//foreach (var child in from c in model.GetChildren()
+			//											where c.Active(period)
+			//											orderby c.BirthDay
+			//											select c)
+			//{
+			//	ws.Cell(rowIndex, "A").Value = string.Format("{0}.", childIndex);
 
-				ws.Cell(rowIndex, "B").Value = string.Format("{0} {1}", child.LastName, child.FirstName);
-				ws.Cell(rowIndex, "C").Value = child.BirthDay;
+			//	ws.Cell(rowIndex, "B").Value = string.Format("{0} {1}", child.LastName, child.FirstName);
+			//	ws.Cell(rowIndex, "C").Value = child.BirthDay;
 
-				colid = new ColumnId('D');
+			//	colid = new ColumnId('D');
 
-				foreach (var day in weekdays)
-				{
-					var schedule = child.FindSchedule(day.Date);
-					if (schedule != null)
-					{
-						var detail = schedule.GetActiveSchedule(day.Date);
+			//	foreach (var day in weekdays)
+			//	{
+			//		if (holidays.Exists(h => h.Date == day.Date))
+			//		{
+			//			ws.Cell(rowIndex, colid.ToString()).Style.Fill.BackgroundColor = XLColor.LightGray;
+			//		}
+			//		else
+			//		{
+			//			var schedule = child.FindSchedule(day.Date);
+			//			if (schedule != null)
+			//			{
+			//				var detail = schedule.GetActiveSchedule(day.Date);
 
-						var info = string.Empty;
+			//				var info = string.Empty;
 
-						if (detail.ThisMorning(day.Date) && detail.ThisAfternoon(day.Date))
-						{
-							info = "X";
-						}
-						else if (detail.ThisMorning(day.Date))
-						{
-							info = "VM";
-						}
-						else if (detail.ThisAfternoon(day.Date))
-						{
-							info = "NM";
-						}
-						else
-						{
-							ws.Cell(rowIndex, colid.ToString()).Style.Fill.BackgroundColor = XLColor.LightGray;
-						}
+			//				if (detail.ThisMorning(day.Date) && detail.ThisAfternoon(day.Date))
+			//				{
+			//					info = "X";
+			//				}
+			//				else if (detail.ThisMorning(day.Date))
+			//				{
+			//					info = "VM";
+			//				}
+			//				else if (detail.ThisAfternoon(day.Date))
+			//				{
+			//					info = "NM";
+			//				}
+			//				else
+			//				{
+			//					ws.Cell(rowIndex, colid.ToString()).Style.Fill.BackgroundColor = XLColor.LightGray;
+			//				}
 
-						ws.Cell(rowIndex, colid.ToString()).Value = info;
-					}
-					else
-					{
-						ws.Cell(rowIndex, colid.ToString()).Style.Fill.BackgroundColor = XLColor.LightGray;
-					}
+			//				ws.Cell(rowIndex, colid.ToString()).Value = info;
+			//			}
+			//			else
+			//			{
+			//				ws.Cell(rowIndex, colid.ToString()).Style.Fill.BackgroundColor = XLColor.LightGray;
+			//			}
+			//		}					
+					
+			//		colid.Increment();
+			//	}
 
-					colid.Increment();
-				}
-
-				childIndex++;
-				rowIndex++;
-			}
+			//	childIndex++;
+			//	rowIndex++;
+			//}
 
 			var mergedcell = ws.Range(2, 1, 3, 2).Merge();
 			mergedcell.Value = "Naam";

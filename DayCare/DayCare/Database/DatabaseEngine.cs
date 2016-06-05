@@ -4,6 +4,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -30,6 +31,8 @@ namespace DayCare.Database
 		private List<Holiday> _holidays = new List<Holiday>();
 		private List<Presence> _presence = new List<Presence>();
 		private SystemSetting _systemSettings = new SystemSetting();
+
+		private List<ChildPresence> _childPresence = new List<ChildPresence>();
 
 
 		#endregion
@@ -58,6 +61,8 @@ namespace DayCare.Database
 			CreateQueries(typeof(ScheduleDetail));
 			CreateQueries(typeof(Holiday));
 			CreateQueries(typeof(Presence));
+
+			CreateQueries(typeof(ChildPresence));
 
 			if (ApplicationMode == DayCare.Model.Petoeter.ApplicationMode.Configuration)
 			{
@@ -92,6 +97,7 @@ namespace DayCare.Database
 			LoadData(Queries[typeof(Presence)], _presence, new Tuple<string, object>("created", DateTime.Today.Date));
 			LoadData(_presence);
 
+			LoadData(Queries[typeof(ChildPresence)], _childPresence);
 
 			//if (ApplicationMode == DayCare.Model.Petoeter.ApplicationMode.Configuration)
 			//{
@@ -200,7 +206,7 @@ namespace DayCare.Database
 			}
 		}
 
-		private void AddRecord(DatabaseRecord record)
+		public/*private */void AddRecord(DatabaseRecord record)
 		{
 			try
 			{
@@ -210,9 +216,11 @@ namespace DayCare.Database
 
 				var command = Queries[record.GetType()].InsertQuery(DataBase, record);
 				int result = command.ExecuteNonQuery();
+				Debug.WriteLine(string.Format("Add {0}", result));
 			}
 			catch (Exception ex)
 			{
+				Debug.WriteLine(string.Format("AddError {0}", ex.Message));
 			}
 			finally
 			{

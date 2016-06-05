@@ -77,30 +77,30 @@ namespace DayCare.ViewModels.Calendar
 
 			var period = DatePeriod.MakePeriod(date.Month, date.Year);
 
-			foreach (var child in from c in model.GetChildren()
-														where c.Active(period)
-														orderby c.BirthDay
-														select c)
-			{
-				foreach (var weekday in weekdays)
-				{
-					var schedule = child.FindSchedule(weekday.Date);
-					if (schedule != null)
-					{
-						var detail = schedule.GetActiveSchedule(weekday.Date);
+			//foreach (var child in from c in model.GetChildren()
+			//											where c.Active(period)
+			//											orderby c.BirthDay
+			//											select c)
+			//{
+			//	foreach (var weekday in weekdays)
+			//	{
+			//		var schedule = child.FindSchedule(weekday.Date);
+			//		if (schedule != null)
+			//		{
+			//			var detail = schedule.GetActiveSchedule(weekday.Date);
 						
-						if (detail.ThisMorning(weekday.Date))
-						{
-							weekday.MorningCount++;
-						}
+			//			if (detail.ThisMorning(weekday.Date))
+			//			{
+			//				weekday.MorningCount++;
+			//			}
 						
-						if (detail.ThisAfternoon(weekday.Date))
-						{
-							weekday.AfternoonCount++;
-						}
-					}
-				}
-			}
+			//			if (detail.ThisAfternoon(weekday.Date))
+			//			{
+			//				weekday.AfternoonCount++;
+			//			}
+			//		}
+			//	}
+			//}
 
 			Days = weekdays; 
 		}

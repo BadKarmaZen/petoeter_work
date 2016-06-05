@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
-using DayCare.Model;
+using DayCare.Model.Lite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,11 +32,19 @@ namespace DayCare.ViewModels.Accounts
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Events.ShowDialog());
 
-			_account.Name = Name;
-			_account.Updated = true;
+			using (var db = new PetoeterDb(@"E:\petoeter_lite.ldb"))
+			{
+				_account.Name = Name;
 
-			//ServiceProvider.Instance.GetService<Petoeter>().UpdateRecord(_account);
-			ServiceProvider.Instance.GetService<Petoeter>().Save();
+				db.Accounts.Update(_account);
+			}
+
+
+			//_account.Name = Name;
+			//_account.Updated = true;
+
+			////ServiceProvider.Instance.GetService<Petoeter>().UpdateRecord(_account);
+			//ServiceProvider.Instance.GetService<Petoeter>().Save();
 
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 					new Core.Events.SwitchTask
