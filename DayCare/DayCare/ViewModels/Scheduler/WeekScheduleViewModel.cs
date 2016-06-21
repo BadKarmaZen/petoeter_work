@@ -8,80 +8,95 @@ using System.Threading.Tasks;
 
 namespace DayCare.ViewModels.Scheduler
 {
+	public class ScheduleDayUI : PropertyChangedBase
+	{
+		static private string[] _day = new string[5] { "Ma", "Di", "Wo", "Do", "Vr" };
+
+		#region Member
+		private bool _morning;
+		private bool _afternoon;
+		#endregion
+
+		#region Properties
+		public bool Morning
+		{
+			get { return _morning; }
+			set { _morning = value; NotifyOfPropertyChange(() => Morning); }
+		}
+
+		public bool Afternoon
+		{
+			get { return _afternoon; }
+			set { _afternoon = value; NotifyOfPropertyChange(() => Afternoon); }
+		}
+
+		public int Index { get; set; }
+
+		public string Day 
+		{
+			get
+			{
+				return _day[Index];
+			}
+		}
+		#endregion
+	}
+
 	public class WeekScheduleViewModel : Screen
 	{
-		private ScheduleDetail _schedule;
+		private List<ScheduleDayUI> _schedule;
+		private int _index;
 
-		public ScheduleDetail Schedule
+		public int Index
 		{
-			get { return _schedule; }
-			set { _schedule = value; }
+			get { return _index; }
+			set 
+			{ 
+				_index = value;
+				NotifyOfPropertyChange(() => Index);
+				NotifyOfPropertyChange(() => Header);
+			}
+		}
+
+		public string Header 
+		{
+			get { return string.Format("Week {0}", Index); }
 		}
 
 		#region Properties
 
-		public string Header { get; set; }
-		
-		public bool MondayMorning
+		public List<ScheduleDayUI> Schedule
 		{
-			get { return _schedule.MondayMorning; }
-			set { _schedule.MondayMorning = value; NotifyOfPropertyChange(() => MondayMorning); }
-		}
-		public bool MondayAfternoon
-		{
-			get { return _schedule.MondayAfternoon; }
-			set { _schedule.MondayAfternoon = value; NotifyOfPropertyChange(() => MondayAfternoon); }
-		}
-
-		public bool TuesdayMorning
-		{
-			get { return _schedule.TuesdayMorning; }
-			set { _schedule.TuesdayMorning = value; NotifyOfPropertyChange(() => TuesdayMorning); }
-		}
-		public bool TuesdayAfternoon
-		{
-			get { return _schedule.TuesdayAfternoon; }
-			set { _schedule.TuesdayAfternoon = value; NotifyOfPropertyChange(() => TuesdayAfternoon); }
-		}
-
-		public bool WednesdayMorning
-		{
-			get { return _schedule.WednesdayMorning; }
-			set { _schedule.WednesdayMorning = value; NotifyOfPropertyChange(() => WednesdayMorning); }
-		}
-		public bool WednesdayAfternoon
-		{
-			get { return _schedule.WednesdayAfternoon; }
-			set { _schedule.WednesdayAfternoon = value; NotifyOfPropertyChange(() => WednesdayAfternoon); }
-		}
-
-		public bool ThursdayMorning
-		{
-			get { return _schedule.ThursdayMorning; }
-			set { _schedule.ThursdayMorning = value; NotifyOfPropertyChange(() => ThursdayMorning); }
-		}
-		public bool ThursdayAfternoon
-		{
-			get { return _schedule.ThursdayAfternoon; }
-			set { _schedule.ThursdayAfternoon = value; NotifyOfPropertyChange(() => ThursdayAfternoon); }
-		}
-
-		public bool FridayMorning
-		{
-			get { return _schedule.FridayMorning; }
-			set { _schedule.FridayMorning = value; NotifyOfPropertyChange(() => FridayMorning); }
-		}
-		public bool FridayAfternoon
-		{
-			get { return _schedule.FridayAfternoon; }
-			set { _schedule.FridayAfternoon = value; NotifyOfPropertyChange(() => FridayAfternoon); }
+			get { return _schedule; }
+			set { _schedule = value; NotifyOfPropertyChange(() => Schedule); }
 		}
 
 		#endregion
 
-		public WeekScheduleViewModel(ScheduleDetail schedule)
+		public WeekScheduleViewModel(int index)
 		{
-			_schedule = schedule;
+			_schedule = new List<ScheduleDayUI>(from i in Enumerable.Range(0, 5) select new ScheduleDayUI { Index = i });
+			Index = index;
 		}
+
+		#region Actions
+
+		public void ToggleAction(ScheduleDayUI ui)
+		{
+			ui.Morning = !ui.Morning;
+			ui.Afternoon = ui.Morning;
+		}
+
+		public void ToggleMorningAction(ScheduleDayUI ui)
+		{
+			ui.Morning = !ui.Morning;
+		}
+
+		public void ToggleAfternoonAction(ScheduleDayUI ui)
+		{
+			ui.Afternoon = !ui.Afternoon;
+		}
+
+		#endregion
 	}
 }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DayCare.Model.Tasks
 {
-    public class AddAccountTask : BaseTask
-    {
-    }
+		//public class AddAccountTask : BaseTask
+		//{
+		//}
 }

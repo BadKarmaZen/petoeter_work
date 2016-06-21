@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using DayCare.Model.Lite;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -79,7 +80,87 @@ namespace DayCare.Core.Reports
 			var model = ServiceProvider.Instance.GetService<DayCare.Model.Petoeter>();
 
 			var period = DatePeriod.MakePeriod(month, year);
-			var holidays = model.GetHolidays().ToList();
+			//var holidays = model.GetHolidays().ToList();
+
+
+			using (var db = new PetoeterDb(PetoeterDb.FileName))
+			{
+				var fullHolidays = (from d in db.Holidays.FindAll()
+													  where d.Morning && d.Afternoon
+													  select d).ToList();
+
+				var children = from c in db.Children.FindAll()
+											 let month_presence = c.Schedule.Where(d => period.Start <= d.Day).Where(d => d.Day <= period.End).ToList()
+											 where c.Deleted == false && month_presence.Count != 0
+											 orderby c.BirthDay
+											 select new { Child = c, Presence = month_presence };
+
+				foreach (var info in children)
+				{
+					var child = info.Child;
+					info.Presence.RemoveAll(d => d.Afternoon == false && d.Morning == false);
+					info.Presence.RemoveAll(d => fullHolidays.Exists(h => h.Day == d.Day));
+
+					if (info.Presence.Count == 0)
+					{
+						continue;
+					}
+					
+					ws.Cell(rowIndex, "A").Value = string.Format("{0}.", childIndex);
+
+					ws.Cell(rowIndex, "B").Value = string.Format("{0} {1}", child.LastName, child.FirstName);
+					ws.Cell(rowIndex, "C").Value = child.BirthDay;
+
+					colid = new ColumnId('D');
+
+					foreach (var day in weekdays)
+					{
+						var today = db.Holidays.FindOne(h => h.Day == day.Date);
+
+						if (today != null && (today.Morning && today.Afternoon))
+						{
+							//	FULL holiday
+							ws.Cell(rowIndex, colid.ToString()).Style.Fill.BackgroundColor = XLColor.LightGray;
+						}
+						else
+						{
+							var text = string.Empty;
+							var presence_day = info.Presence.FirstOrDefault(d => d.Day == day.Date);
+
+							if (presence_day != null)
+							{
+								if (presence_day.Morning && presence_day.Afternoon)
+								{
+									text = "X";
+								}
+								else if (presence_day.Morning)
+								{
+									text = "VM";
+								}
+								else if (presence_day.Afternoon)
+								{
+									text = "NM";
+								}
+								else
+								{
+									ws.Cell(rowIndex, colid.ToString()).Style.Fill.BackgroundColor = XLColor.LightGray;
+								}
+							}
+							else
+							{
+								ws.Cell(rowIndex, colid.ToString()).Style.Fill.BackgroundColor = XLColor.LightGray;
+							}
+
+							ws.Cell(rowIndex, colid.ToString()).Value = text;
+						}
+
+						colid.Increment();
+					}
+
+					childIndex++;
+					rowIndex++;
+				}
+			}
 
 			//foreach (var child in from c in model.GetChildren()
 			//											where c.Active(period)

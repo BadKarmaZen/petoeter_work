@@ -43,6 +43,7 @@ namespace DayCare.ViewModels.Accounts
 			using (var db = new PetoeterDb(@"E:\petoeter_lite.ldb"))
 			{
 				var query = from a in db.Accounts.FindAll()
+										where a.Deleted == _showDeleted
 										select new AccountUI
 										{
 											Name = a.Name,

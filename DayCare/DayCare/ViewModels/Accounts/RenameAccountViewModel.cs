@@ -39,18 +39,11 @@ namespace DayCare.ViewModels.Accounts
 				db.Accounts.Update(_account);
 			}
 
-
-			//_account.Name = Name;
-			//_account.Updated = true;
-
-			////ServiceProvider.Instance.GetService<Petoeter>().UpdateRecord(_account);
-			//ServiceProvider.Instance.GetService<Petoeter>().Save();
-
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Core.Events.SwitchTask
-					{
-						Task = new EditAccountViewModel(_account)
-					});
+				new Core.Events.SwitchTask
+				{
+					Task = new EditAccountViewModel(_account)
+				});
 		}
 
 		public void CancelAction()
@@ -59,10 +52,10 @@ namespace DayCare.ViewModels.Accounts
 				new Events.ShowDialog());
 
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Core.Events.SwitchTask
-					{
-						Task = new EditAccountViewModel(_account)
-					});
+				new Core.Events.SwitchTask
+				{
+					Task = new EditAccountViewModel(_account)
+				});
 		}
 	}
 }

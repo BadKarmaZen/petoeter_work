@@ -49,26 +49,26 @@ namespace DayCare.Model
 	//	}
 	//}
 
-	public class ChildPresence : DataObject
-	{
-		public DateTime Date { get; set; }
-		public bool Morning { get; set; }
-		public bool Afternoon { get; set; }
-		public bool FullDay
-		{
-			get
-			{
-				return Morning && Afternoon;
-			}
-			set
-			{
-				Morning = value;
-				Afternoon = value;
-			}
-		}
+	//public class ChildPresence : DataObject
+	//{
+	//	public DateTime Date { get; set; }
+	//	public bool Morning { get; set; }
+	//	public bool Afternoon { get; set; }
+	//	public bool FullDay
+	//	{
+	//		get
+	//		{
+	//			return Morning && Afternoon;
+	//		}
+	//		set
+	//		{
+	//			Morning = value;
+	//			Afternoon = value;
+	//		}
+	//	}
 
-		//public Child Child { get; set; }
+	//	//public Child Child { get; set; }
 
 
-	}
+	//}
 }

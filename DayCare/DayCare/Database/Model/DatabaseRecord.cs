@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace DayCare.Database.Model
 {
-	public class DatabaseRecord
-	{
-		public Guid Id { get; set; }
-		public bool Deleted { get; set; }
-		public DateTime Updated { get; set; }
-	}
+	//public class DatabaseRecord
+	//{
+	//	public Guid Id { get; set; }
+	//	public bool Deleted { get; set; }
+	//	public DateTime Updated { get; set; }
+	//}
 }

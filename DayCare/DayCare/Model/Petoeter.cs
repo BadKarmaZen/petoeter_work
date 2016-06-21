@@ -1,6 +1,8 @@
 ﻿using DayCare.Database.Model;
+using DayCare.Model.Lite;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,23 +17,23 @@ namespace DayCare.Model
 			Presence
 		}
 
-		public DayCare.Database.DatabaseEngine Database { get; set; }
+		//public DayCare.Database.DatabaseEngine Database { get; set; }
 		public ApplicationMode Mode { get; set; }
 
 		#region Properties
-		public List<Account> Accounts { get; set; }
-		public List<Child> Children { get; set; }
-		public List<Member> Members { get; set; }
-		public List<Schedule> Schedules { get; set; }
-		public List<ScheduleDetail> ScheduleDetails { get; set; }
+		//public List<Account> Accounts { get; set; }
+		//public List<Child> Children { get; set; }
+		//public List<Member> Members { get; set; }
+		//public List<Schedule> Schedules { get; set; }
+		//public List<ScheduleDetail> ScheduleDetails { get; set; }
 
-		public List<Holiday> Holidays { get; set; }
+		//public List<Holiday> Holidays { get; set; }
 
 		public List<Presence> Presences { get; set; }
 
 		public SystemSetting Settings { get; set; }
 
-		public List<ChildPresence> ChildPresences { get; set; }
+		//public List<ChildPresence> ChildPresences { get; set; }
 
 		#endregion
 
@@ -303,489 +305,82 @@ namespace DayCare.Model
 			return true;
 		}
 
-		private void ConvertSchedule()
-		{
-			//var query = from c in GetChildren()
-			//						orderby c.BirthDay
-			//						select c;
-
-			//var days = new List<DateTime>();
-			//var enddate = new DateTime(2019, 1, 1);
-			//var date = new DateTime(2016, 1, 1);
-
-			//while (date < enddate)
-			//{
-			//	if (date.DayOfWeek != DayOfWeek.Saturday &&
-			//			date.DayOfWeek != DayOfWeek.Sunday)
-			//	{
-			//		days.Add(date);
-			//	}
-			//	date = date.AddDays(1);
-			//}
-
-			//foreach (var child in query)
-			//{
-			//	foreach (var day in days)
-			//	{
-			//		var schedule = child.FindSchedule(day);
-			//		if (schedule != null)
-			//		{
-			//			var detail = schedule.GetActiveSchedule(day.Date);
-			//			if (detail != null)
-			//			{
-			//				int mask = detail.ThisMorning(day) ? Holiday.MaskMorning : 0;
-			//				mask |= detail.ThisAfternoon(day) ? Holiday.MaskAfternoon : 0;
-							
-			//				Database.AddRecord(new ChildPresence
-			//				{
-			//					Id = Guid.NewGuid(),
-			//					Child_Id = child.Id,
-			//					Day = day,
-			//					Mask = mask
-			//				});
-			//			}
-			//		}
-			//	}
-			//}
-		}
-
-		public bool Save()
-		{
-			try
-			{
-				//SaveAccounts();
-				//SaveChildren();
-				//SaveMembers();
-				SaveSchedules();
-				SaveHolidays();
-				SavePresence();
-				SaveChildPresence();
-			}
-			catch (Exception ex)
-			{
-				return false;
-			}
-
-			return true;
-		}
-
-
-
-		#region Account
-		//[Obsolete("",true)]
-		//public IEnumerable<Account> GetAccounts(bool deleted = false)
-		//{
-		//	return Accounts.AsEnumerable().Where(a => a.Deleted == deleted);
-		//}
-
-		//public void AddAccount(Account account)
-		//{
-		//	MarkForAdd(account);
-		//	Accounts.Add(account);
-
-		//	foreach (var member in account.Members)
-		//	{
-		//		AddMember(member);
-		//	}
-		//}
-
-		//public void DeleteAccount(Account account)
-		//{
-		//	account.Updated = true;
-		//	account.Deleted = true;
-
-		//	foreach (var child in account.Children)
-		//	{
-		//		DeleteChild(child);
-		//	}
-
-		//	foreach (var member in account.Members)
-		//	{
-		//		DeleteMember(member);
-		//	}
-
-		//}
-
-		//public void SaveAccounts()
-		//{
-		//	foreach (var account in from a in Accounts where a.Updated select a)
-		//	{
-		//		if (account.Deleted)
-		//		{
-		//			Database.DeleteAccount(account.Id);
-		//		}
-		//		else if (account.Added)
-		//		{
-		//			Database.AddAccount(new Database.Model.Account
-		//			{
-		//				Id = account.Id,
-		//				Name = account.Name
-		//			});
-		//		}
-		//		else
-		//		{
-		//			Database.UpdateAccount(new Database.Model.Account
-		//			{
-		//				Id = account.Id,
-		//				Name = account.Name
-		//			});
-		//		}
-		//	}
-		//}
-
-		#endregion
-
-		//[Obsolete("", true)]
-		//#region Child
-		//public IEnumerable<Child> GetChildren(bool deleted = false)
-		//{
-		//	return Children.AsEnumerable().Where(c => c.Deleted == deleted);
-		//}
-
-		//public void AddChild(Child child)
-		//{
-		//	MarkForAdd(child);
-		//	Children.Add(child);
-		//}
-
-		//public void DeleteChild(Child child)
-		//{
-		//	child.Updated = true;
-		//	child.Deleted = true;
-		//}
-
-		//private void SaveChildren()
-		//{
-		//	foreach (var child in from c in Children where c.Updated select c)
-		//	{
-		//		if (child.Deleted)
-		//		{
-		//			Database.DeleteChild(child.Id);
-		//		}
-		//		else if (child.Added)
-		//		{
-		//			Database.AddChild(new Database.Model.Child
-		//			{
-		//				Id = child.Id,
-		//				FirstName = child.FirstName,
-		//				LastName = child.LastName,
-		//				BirthDay = child.BirthDay,
-		//				Account_Id = child.Account.Id
-		//			});
-		//		}
-		//		else
-		//		{
-		//			Database.UpdateChild(new Database.Model.Child
-		//			{
-		//				Id = child.Id,
-		//				FirstName = child.FirstName,
-		//				LastName = child.LastName,
-		//				BirthDay = child.BirthDay,
-		//				Account_Id = child.Account.Id
-		//			});
-		//		}
-		//	}
-		//}
-	//	#endregion
-
-		#region Member
-		//public IEnumerable<Member> GetMembers(bool deleted = false)
-		//{
-		//	return Members.AsEnumerable().Where(m => m.Deleted == deleted);
-		//}
-
-		//[Obsolete("", true)]
-		//public void AddMember(Member member)
-		//{
-		//	MarkForAdd(member);
-		//	Members.Add(member);
-		//}
-
-		//[Obsolete("", true)]
-		//public void DeleteMember(Member member)
-		//{
-		//	member.Updated = true;
-		//	member.Deleted = true;
-		//}
-
-		//[Obsolete("", true)]
-		//private void SaveMembers()
-		//{
-		//	foreach (var member in from m in Members where m.Updated select m)
-		//	{
-		//		if (member.Deleted)
-		//		{
-		//			Database.DeleteMember(member.Id);
-		//		}
-		//		else if (member.Added)
-		//		{
-		//			Database.AddMember(new Database.Model.Member
-		//			{
-		//				Id = member.Id,
-		//				FirstName = member.FirstName,
-		//				LastName = member.LastName,
-		//				Phone = member.Phone,
-		//				Account_Id = member.Account.Id
-		//			});
-		//		}
-		//		else
-		//		{
-		//			Database.UpdateMember(new Database.Model.Member
-		//			{
-		//				Id = member.Id,
-		//				FirstName = member.FirstName,
-		//				LastName = member.LastName,
-		//				Phone = member.Phone,
-		//				Account_Id = member.Account.Id
-		//			});
-		//		}
-		//	}
-		//}
-		#endregion
-
-		#region Schedule
-		//public IEnumerable<Schedule> GetSchedules()
-		//{
-		//	return Schedules.AsEnumerable();
-		//}
-
-		public void AddSchedule(Schedule schedule)
-		{
-			MarkForAdd(schedule);
-			Schedules.Add(schedule);
-		}
-
-		public void DeleteSchedule(Schedule schedule)
-		{
-			MarkForDelete(schedule);
-		}
-
-		public void SaveSchedules()
-		{
-			foreach (var schedule in from s in Schedules where s.Updated select s)
-			{
-				if (schedule.Deleted)
-				{
-					Database.DeleteSchedule(schedule.Id);
-				}
-				else if (schedule.Added)
-				{
-					Database.AddSchedule(new Database.Model.Schedule
-					{
-						Id = schedule.Id,
-						//Child_Id = schedule.Child.Id,
-						StartDate = schedule.StartDate,
-						EndDate = schedule.EndDate
-					});
-
-					foreach (var detail in schedule.Details)
-					{
-						Database.AddScheduleDetail(new Database.Model.ScheduleDetail
-						{
-							Id = detail.Id,
-							Schedule_Id = schedule.Id,
-							Schedule_Index = detail.Index,
-							Monday = ScheduleDetail.DayState(detail.MondayMorning, detail.MondayAfternoon),
-							Tuesday = ScheduleDetail.DayState(detail.TuesdayMorning, detail.TuesdayAfternoon),
-							Wednesday = ScheduleDetail.DayState(detail.WednesdayMorning, detail.WednesdayAfternoon),
-							Thursday = ScheduleDetail.DayState(detail.ThursdayMorning, detail.ThursdayAfternoon),
-							Friday = ScheduleDetail.DayState(detail.FridayMorning, detail.FridayAfternoon)
-						});
-					}
-				}
-				else
-				{
-					Database.UpdateSchedule(new Database.Model.Schedule
-					{
-						Id = schedule.Id,
-						//Child_Id = schedule.Child.Id,
-						StartDate = schedule.StartDate,
-						EndDate = schedule.EndDate
-					});
-
-					Database.DeleteScheduleDetails(schedule.Id);
-
-					foreach (var detail in schedule.Details)
-					{
-						Database.AddScheduleDetail(new Database.Model.ScheduleDetail
-						{
-							Id = detail.Id,
-							Schedule_Id = schedule.Id,
-							Schedule_Index = detail.Index,
-							Monday = ScheduleDetail.DayState(detail.MondayMorning, detail.MondayAfternoon),
-							Tuesday = ScheduleDetail.DayState(detail.TuesdayMorning, detail.TuesdayAfternoon),
-							Wednesday = ScheduleDetail.DayState(detail.WednesdayMorning, detail.WednesdayAfternoon),
-							Thursday = ScheduleDetail.DayState(detail.ThursdayMorning, detail.ThursdayAfternoon),
-							Friday = ScheduleDetail.DayState(detail.FridayMorning, detail.FridayAfternoon)
-						});
-					}
-				}
-			}
-		}
-		#endregion
-
-		public IEnumerable<Holiday> GetHolidays(bool deleted = false)
-		{
-			return Holidays.AsEnumerable().Where(h => h.Deleted == deleted);
-		}
-
-
-		public void MarkForAdd(DataObject data)
-		{
-			data.Added = true;
-			data.Updated = true;
-		}
-
-		public void MarkForDelete(DataObject data)
-		{
-			data.Deleted = true;
-			data.Updated = true;
-		}
-
-
-		public void SetHoliday(DateTime day, bool morning, bool afternoon)
-		{
-			var holiday = Holidays.FirstOrDefault(h => h.Date == day);
-
-			if (holiday == null)
-			{
-				holiday = new Holiday
-				{
-					Date = day,
-					Morning = morning,
-					Afternoon = afternoon,
-					Updated = true,
-					Added = true,
-					Id = Guid.NewGuid()
-				};
-				Holidays.Add(holiday);
-			}
-			else
-			{
-				holiday.Morning = morning;
-				holiday.Afternoon = afternoon;
-				holiday.Updated = true;
-			}
-
-			SaveHolidays();
-
-		}
-
-		private void SaveHolidays()
-		{
-			foreach (var holiday in from h in Holidays where h.Updated select h)
-			{
-				if (holiday.Added)
-				{
-					Database.AddHoliday(new Database.Model.Holiday
-					{
-						Id = holiday.Id,
-						Date = holiday.Date,
-						Mask = holiday.Mask
-					});
-
-					holiday.Added = false;
-					holiday.Updated = false;
-				}
-				else
-				{
-					Database.UpdateHoliday(new Database.Model.Holiday
-					{
-						Id = holiday.Id,
-						Date = holiday.Date,
-						Mask = holiday.Mask
-					});
-
-					holiday.Updated = false;
-				}
-			}
-		}
-
-		private void SavePresence()
-		{
-			foreach (var presence in from p in Presences where p.Updated select p)
-			{
-				if (presence.Added)
-				{
-					Database.AddPresence(new Database.Model.Presence
-					{
-						
-						//Id = presence.Id,
-						//Child_Id = presence.Child.Id,
-						//FullName = string.Format("{0} {1}", presence.Child.FirstName, presence.Child.LastName),
-						//Created  = presence.,
-
-						//ArrivalMember_Id = presence.Arriving.Id,
-						//ArrivalTime = presence.ArrivingTime,
-						//DepartureMember_Id = pre,
-						//DepartureTime,
-						//TimeCode,
-					});
-				}
-				else
-				{
-					Database.UpdatePresence(new Database.Model.Presence { });
-				}
-			}
-		}
-
-		private void SaveChildPresence()
-		{
-			var query = from d in ChildPresences
-									where d.Deleted || d.Updated
-									select d;
-
-			foreach (var day in query)
-			{
-				//if (day.Deleted)
-				//{
-				//	Database.DeleteChildPresence(day.Id);					
-				//}
-				//else if (day.Updated)
-				//{
-				//	Database.UpdateChildPresence(new ChildPresence
-				//	{
-				//		Id = day.Id,
-				//		Afternoon = day.Afternoon,
-				//		Morning = day.Morning
-				//	});
-				//}
-				//else
-				//{
-				//	Database.AddChildPresence(new ChildPresence
-				//	{
-				//		Id = day.Id,
-				//		Afternoon = day.Afternoon,
-				//		Morning = day.Morning
-				//	});
-				//}
-			}
-		}
 
 		public void Export(string path)
 		{
-			if (Mode == Petoeter.ApplicationMode.Configuration)
+			string filename = Path.Combine(path, "export.ldb");
+
+			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
-				Database.ExportConfigurationData(path);
+				var settings = db.GetSettings();
+				var lastExportTime = settings.ExporTimeStamp;
+				var exportTime = DateTime.Now;
+
+				using (var export = new PetoeterDb(filename))
+				{
+					var children = (from c in db.Children.FindAll()
+													where c.Updated < lastExportTime
+													select c).ToList();
+
+					children.ForEach(c => c.Updated = exportTime);
+
+					db.Children.Update(children);
+					export.Children.Insert(children);
+
+
+					var members = (from m in db.Members.FindAll()
+												 where m.Updated < lastExportTime
+												 select m).ToList();
+
+					members.ForEach(m => m.Updated = exportTime);
+
+					db.Members.Update(members);
+					export.Members.Insert(members);
+
+					var accounts = (from a in db.Accounts.FindAll()
+													where a.Updated < lastExportTime
+													select a).ToList();
+
+					accounts.ForEach(a => a.Updated = exportTime);
+
+					db.Accounts.Update(accounts);
+					export.Accounts.Insert(accounts);
+
+					var holidays = (from h in db.Holidays.FindAll()
+													where h.Updated < lastExportTime
+													select h).ToList();
+
+					holidays.ForEach(h => h.Updated = exportTime);
+
+					db.Holidays.Update(holidays);
+					export.Holidays.Insert(holidays);
+				}
+
+				settings.ExporTimeStamp = DateTime.Now;
+				db.UpdateSystemSettings();
 			}
-			else
-			{
-				Database.ExportPresenceData(path);
-			}
+		}
+
+		private void ExportPresenceToConfig(string path)
+		{
+		}
+
+		private void ExportConfigToPresence(string path)
+		{
 		}
 
 		public void Import(string path)
 		{
-			if (Mode == Petoeter.ApplicationMode.Configuration)
-			{
-				Database.ImportPresenceData(path);
-			}
-			else
-			{
-				Database.ImportConfigurationData(path);
-			}
+			//if (Mode == Petoeter.ApplicationMode.Configuration)
+			//{
+			//	Database.ImportPresenceData(path);
+			//}
+			//else
+			//{
+			//	Database.ImportConfigurationData(path);
+			//}
 
-			LoadData();
+			//LoadData();
 		}
 	}
 }

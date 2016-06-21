@@ -9,6 +9,8 @@ namespace DayCare.Model.Lite
 {
 	public class PetoeterDb : LiteDatabase
 	{
+		public SystemSettings Settings { get; set; }
+
 		public PetoeterDb(string file)
 			: base(file)
 		{
@@ -59,7 +61,25 @@ namespace DayCare.Model.Lite
 			}
 		}
 
-		public SystemSettings Settings { get; set; }
+		public SystemSettings GetSettings()
+		{
+			Settings = GetCollection<SystemSettings>("SystemSettings").FindAll().FirstOrDefault();
+
+			if (Settings == null)
+			{
+				Settings = new SystemSettings { };
+				GetCollection<SystemSettings>("SystemSettings").Insert(Settings);
+			}
+
+			return Settings;
+		}
+
+		public void UpdateSystemSettings()
+		{
+			GetCollection<SystemSettings>("SystemSettings").Update(Settings);
+		}
+
+
 	}
 
 }

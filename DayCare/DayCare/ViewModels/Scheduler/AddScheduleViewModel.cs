@@ -12,55 +12,15 @@ namespace DayCare.ViewModels.Scheduler
 	class AddScheduleViewModel : Screen
 	{
 		#region Members
-
 		private Child _child;
-		//private Schedule _schedule;
-
 		private DateTime _startdate;
 		private DateTime _enddate;
-		private bool _showWeekSelection;
 
 		private List<WeekScheduleViewModel> _details;
-		private DateTime _minStartdate;
-		private DateTime _maxStartdate;
-		private DateTime _minEnddate;
-		private DateTime _maxEnddate;
 
 		#endregion
 
 		#region Properties
-
-		public bool ShowWeekSelection
-		{
-			get { return _showWeekSelection; }
-			set { _showWeekSelection = value; NotifyOfPropertyChange(() => ShowWeekSelection); }
-		}
-
-		public bool Edit { get; set; }
-
-		public DateTime MinStartdate
-		{
-			get { return _minStartdate; }
-			set { _minStartdate = value; NotifyOfPropertyChange(() => MinStartdate); }
-		}
-
-		public DateTime MaxStartdate
-		{
-			get { return _maxStartdate; }
-			set { _maxStartdate = value; NotifyOfPropertyChange(() => MaxStartdate); }
-		}
-
-		public DateTime MinEnddate
-		{
-			get { return _minEnddate; }
-			set { _minEnddate = value; NotifyOfPropertyChange(() => MinEnddate); }
-		}
-
-		public DateTime MaxEnddate
-		{
-			get { return _maxEnddate; }
-			set { _maxEnddate = value; NotifyOfPropertyChange(() => MaxEnddate); }
-		}
 
 		public DateTime? EndDate
 		{
@@ -73,12 +33,8 @@ namespace DayCare.ViewModels.Scheduler
 			get { return _startdate; }
 			set
 			{
-				var newDate = value.Value;
-				if (newDate > MinStartdate)
-				{
-					_startdate = newDate;
-					NotifyOfPropertyChange(() => StartDate);
-				}
+				_startdate = value.Value;
+				NotifyOfPropertyChange(() => StartDate);
 			}
 		}
 
@@ -97,95 +53,84 @@ namespace DayCare.ViewModels.Scheduler
 			this.StartDate = DateTimeProvider.Now();
 			this.EndDate = DateTimeProvider.Now();
 
-			Details = new List<WeekScheduleViewModel> 
-			{ 
-				//new WeekScheduleViewModel(new ScheduleDetail() 
-				//	{ 
-				//		Id = Guid.NewGuid(),
-				//		Index = 0
-				//	})
-				//{
-				//	Header = "Week 1"
-				//} 
+			Details = new List<WeekScheduleViewModel>
+			{
+				new WeekScheduleViewModel(1)
 			};
-			ShowWeekSelection = true;
 		}
-
-		//public AddScheduleViewModel(Child child, Schedule schedule)
-		//{
-		//	this._child = child;
-		//	this._schedule = schedule;
-
-		//	this.StartDate = schedule.StartDate;
-		//	this.EndDate = schedule.EndDate;
-
-
-		//	var query = from d in schedule.Details
-		//							orderby d.Index
-		//							select new WeekScheduleViewModel(d)
-		//							{
-		//								Header = string.Format("Week {0}", d.Index + 1)
-		//							};
-		//	Details = query.ToList();
-
-		//	Edit = true;
-		//	ShowWeekSelection = false;
-		//}
 
 		public void SaveAction()
 		{
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 					new Events.ShowDialog());
 
-			//var model = ServiceProvider.Instance.GetService<Petoeter>();
+			int weekIndex = 0;
+			var startDate = StartDate.Value.Date;
+			var endDate = EndDate.Value.Date;
 
+			//	make full weeks
+			if (startDate.DayOfWeek != DayOfWeek.Monday)
+			{
+				startDate = startDate.PreviousMonday();				
+			}
+			if (endDate.DayOfWeek != DayOfWeek.Friday)
+			{
+				endDate = endDate.NextFriday();
+			}
 
+			var weekDate = startDate;
 
-			//if (Edit == false)
-			//{
-			//	//var schedule = new Schedule
-			//	//{
-			//	//	Id = Guid.NewGuid(),
-			//	//	Child = _child,
-			//	//	StartDate = _startdate,
-			//	//	EndDate = _enddate,
-			//	//	Details = (from d in Details
-			//	//						 select d.Schedule).ToList()
-			//	//};
+			while (weekDate < endDate)
+			{
+				//	add week
+				var period = _details[weekIndex % _details.Count];
 
-			//	//_child.Schedules.Add(schedule);
-			//	//model.AddSchedule(schedule);
-			//}
-			//else
-			//{
-			//	//_schedule.Updated = true;
+				//	monday to friday
+				for (int day = 0; day < 5; day++)
+				{
+					if (StartDate.Value.Date <= weekDate && weekDate <= EndDate.Value.Date)
+					{
+						if (period.Schedule[day].Morning || period.Schedule[day].Afternoon)
+						{
+							_child.Schedule.RemoveAll(d => d.Day == weekDate);
+							_child.Schedule.Add(new Model.Lite.Date 
+							{
+ 								Day = weekDate,
+								Morning = period.Schedule[day].Morning,
+								Afternoon = period.Schedule[day].Afternoon
+							});
+						}						
+					}
+					
+					weekDate = weekDate.AddDays(1);	
+				}
+				//	increment week
+				weekIndex++;
+				weekDate = weekDate.AddDays(2);				
+			}
 
-			//	//_schedule.StartDate = _startdate;
-			//	//_schedule.EndDate = _enddate;
-			//	//_schedule.Details = (from d in Details
-			//	//										 select d.Schedule).ToList();
-			//}
-
-
-			//model.SaveSchedules();
-
-			//ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-			//	new Core.Events.SwitchTask
-			//	{
-			//		Task = new EditChildScheduleViewModel(_child)
-			//	});
+			using (var db = new PetoeterDb(PetoeterDb.FileName))
+			{
+				db.Children.Update(_child);
+			}
+			
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				new Core.Events.SwitchTask
+				{
+					Task = new EditChildCalendarViewModel(_child)
+				});
 		}
 
 		public void CancelAction()
 		{
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Events.ShowDialog());
-
+				new Events.ShowDialog());
+						
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Core.Events.SwitchTask
-					{
-						Task = new EditChildScheduleViewModel(_child)
-					});
+				new Core.Events.SwitchTask
+				{
+					Task = new EditChildCalendarViewModel(_child)
+				});
 		}
 
 		public void OneWeekAction()
@@ -193,65 +138,65 @@ namespace DayCare.ViewModels.Scheduler
 			Details = new List<WeekScheduleViewModel>(Details.Take(1));
 		}
 
-		//public void TwoWeekAction()
-		//{
-		//	var details = new List<WeekScheduleViewModel>(Details.Take(2));
-
-		//	for (int index = Details.Count; index < 2; index++)
-		//	{
-		//		details.Add(new WeekScheduleViewModel(new ScheduleDetail() { Id = Guid.NewGuid(), Index = index }) { Header = string.Format("Week {0}", index + 1) });
-		//	}
-
-		//	Details = details;
-		//}
-
-		//public void ThreeWeekAction()
-		//{
-		//	var details = new List<WeekScheduleViewModel>(Details.Take(2));
-
-		//	for (int index = Details.Count; index < 3; index++)
-		//	{
-		//		details.Add(new WeekScheduleViewModel(new ScheduleDetail() { Id = Guid.NewGuid(), Index = index }) { Header = string.Format("Week {0}", index + 1) });
-		//	}
-
-		//	Details = details;
-		//}
-
-		//public void FourWeekAction()
-		//{
-		//	var details = new List<WeekScheduleViewModel>(Details.Take(2));
-
-		//	for (int index = Details.Count; index < 4; index++)
-		//	{
-		//		details.Add(new WeekScheduleViewModel(new ScheduleDetail() { Id = Guid.NewGuid(), Index = index }) { Header = string.Format("Week {0}", index + 1) });
-		//	}
-
-		//	Details = details;
-		//}
-
-
-		public DateTime Min(DateTime left, DateTime right)
+		public void TwoWeekAction()
 		{
-			if (left < right)
+			var details = new List<WeekScheduleViewModel>(Details.Take(2));
+
+			for (int index = Details.Count + 1; index <= 2; index++)
 			{
-				return left;
+				details.Add(new WeekScheduleViewModel(index));
 			}
-			else
-			{
-				return right;
-			}
+
+			Details = details;
 		}
 
-		public DateTime Max(DateTime left, DateTime right)
+		public void ThreeWeekAction()
 		{
-			if (left > right)
+			var details = new List<WeekScheduleViewModel>(Details.Take(2));
+
+			for (int index = Details.Count + 1; index <= 3; index++)
 			{
-				return left;
+				details.Add(new WeekScheduleViewModel(index));
 			}
-			else
-			{
-				return right;
-			}
+
+			Details = details;
 		}
+
+		public void FourWeekAction()
+		{
+			var details = new List<WeekScheduleViewModel>(Details.Take(3));
+
+			for (int index = Details.Count + 1; index <= 4; index++)
+			{
+				details.Add(new WeekScheduleViewModel(index));
+			}
+
+			Details = details;
+		}
+
+
+		//public DateTime Min(DateTime left, DateTime right)
+		//{
+		//	if (left < right)
+		//	{
+		//		return left;
+		//	}
+		//	else
+		//	{
+		//		return right;
+		//	}
+		//}
+
+		//public DateTime Max(DateTime left, DateTime right)
+		//{
+		//	if (left > right)
+		//	{
+		//		return left;
+		//	}
+		//	else
+		//	{
+		//		return right;
+		//	}
+		//}
 	}
 }

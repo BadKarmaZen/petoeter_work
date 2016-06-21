@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using DayCare.Model;
+using DayCare.Model.Lite;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -38,6 +39,48 @@ namespace DayCare.Core.Reports
 
 				int row = 3;
 				int maxcolumn = 3;
+
+				using (var db = new PetoeterDb(PetoeterDb.FileName))
+				{
+					var accounts = from a in db.Accounts.FindAll()
+												 where a.Deleted == false
+												 orderby a.Name ascending
+												 select a;
+
+					foreach (var account in accounts)
+					{
+						var children = from c in account.Children
+													 where c.Deleted == false
+													 orderby c.FirstName
+													 select c;
+
+						foreach (var child in children)
+						{
+							var cell = ws.Cell(row, 1);
+							cell.Value = string.Format("{0} {1}", child.LastName, child.FirstName);
+
+							cell = ws.Cell(row, 2);
+							cell.Value = child.BirthDay;
+
+							int column = 3;
+							var members = from m in account.Members
+														where m.Deleted == false && !string.IsNullOrWhiteSpace(m.Phone)
+														select m;
+
+							foreach (var member in members.Take(2))
+							{
+								cell = ws.Cell(row, column++);
+								cell.Value = string.Format("{0} {1}", member.FirstName, member.LastName);
+
+								cell = ws.Cell(row, column++);
+								cell.Value = member.Phone;
+								cell.SetDataType(XLCellValues.Text);
+							}
+
+							row++;
+						}
+					}
+				}
 				//foreach (var account in from m in model.GetAccounts()
 				//												where m.Deleted == false
 				//												orderby m.Name ascending

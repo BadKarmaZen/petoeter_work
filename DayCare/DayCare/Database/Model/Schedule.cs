@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace DayCare.Database.Model
 {
-	public class Schedule : DatabaseRecord
-	{
-		public DateTime StartDate { get; set; }
-		public DateTime EndDate { get; set; }
-		public Guid Child_Id { get; set; }
-	}
+	//public class Schedule : DatabaseRecord
+	//{
+	//	public DateTime StartDate { get; set; }
+	//	public DateTime EndDate { get; set; }
+	//	public Guid Child_Id { get; set; }
+	//}
 }

@@ -16,7 +16,7 @@ namespace DayCare.ViewModels.Scheduler
 		#region Member
 		private bool _morning;
 		private bool _afternoon;
-		
+
 		#endregion
 
 		#region Properties
@@ -31,13 +31,13 @@ namespace DayCare.ViewModels.Scheduler
 			get { return _afternoon; }
 			set { _afternoon = value; NotifyOfPropertyChange(() => Afternoon); }
 		}
-		
+
 		//	Not in weekend
 		//	Not in month
 		public bool Active { get; set; }
 		public bool ActiveMonth { get; set; }
 		public DateTime Day { get; set; }
-		
+
 		#endregion
 	}
 
@@ -76,7 +76,7 @@ namespace DayCare.ViewModels.Scheduler
 			get { return _currentDate; }
 			set { _currentDate = value; NotifyOfPropertyChange(() => CurrentDate); }
 		}
-	
+
 		public string FullName
 		{
 			get
@@ -148,7 +148,7 @@ namespace DayCare.ViewModels.Scheduler
 				if (scheduled != null)
 				{
 					day.Morning = scheduled.Morning;
-					day.Afternoon = scheduled.Afternoon;					
+					day.Afternoon = scheduled.Afternoon;
 				}
 
 				days.Add(day);
@@ -240,7 +240,8 @@ namespace DayCare.ViewModels.Scheduler
 
 			var query = from d in Days
 									where d.Afternoon || d.Morning
-									select new DayCare.Model.Lite.Date {
+									select new DayCare.Model.Lite.Date
+									{
 										Morning = d.Morning,
 										Afternoon = d.Afternoon,
 										Day = d.Day
@@ -251,7 +252,7 @@ namespace DayCare.ViewModels.Scheduler
 			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
 				db.Children.Update(_child);
-			}			
+			}
 		}
 
 		#endregion
@@ -322,6 +323,15 @@ namespace DayCare.ViewModels.Scheduler
 			{
 				day.Morning = week.Morning;
 			}
+		}
+
+		public void AddPatternAction()
+		{
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				new Core.Events.ShowDialog
+				{
+					Dialog = new AddScheduleViewModel(_child)
+				});
 		}
 
 		public List<ChildDayUI> CopyWeek { get; set; }

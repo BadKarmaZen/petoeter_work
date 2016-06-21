@@ -39,15 +39,15 @@ namespace DayCare.ViewModels.Accounts
 			ChildrenDetail = new ChildrenMainViewModel(_account);
 			MembersDetail = new MembersMainViewModel(_account);
 
-			ServiceProvider.Instance.GetService<TaskManager>().StartTask(new EditAccountTask
-			{
-				ReturnAction = () =>
-					ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-						new Core.Events.SwitchTask
-						{
-							Task = new EditAccountViewModel(_account)
-						})
-			});
+			//ServiceProvider.Instance.GetService<TaskManager>().StartTask(new EditAccountTask
+			//{
+			//	ReturnAction = () =>
+			//		ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+			//			new Core.Events.SwitchTask
+			//			{
+			//				Task = new EditAccountViewModel(_account)
+			//			})
+			//});
 		}
 
 		//public void SaveAction()

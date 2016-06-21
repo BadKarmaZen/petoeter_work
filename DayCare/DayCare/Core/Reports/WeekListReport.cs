@@ -1,7 +1,9 @@
 ﻿using ClosedXML.Excel;
 using DayCare.Model;
+using DayCare.Model.Lite;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -83,9 +85,89 @@ namespace DayCare.Core.Reports
 
 			int rowIndex = 4;
 			uint childIndex = 1;
-			var model = ServiceProvider.Instance.GetService<Petoeter>();
 
-			//var thisWeek = DatePeriod.MakePeriod(month, year);
+			var startDate = weekdays.Min(d => d.Date);
+			var endDate = weekdays.Max(d => d.Date);
+
+			using (var db = new PetoeterDb(PetoeterDb.FileName))
+			{
+				foreach (var child in db.Children.FindAll())
+				{
+					Debug.WriteLine(child.LastName + " " + child.FirstName);
+
+					//foreach (var weekday in from wd in weekdays select wd.Date)
+					//{
+						
+					//}
+
+					foreach (var day in child.Schedule)
+					{
+						bool in_week = weekdays.Exists(di => di.Date == day.Day);
+
+						if (in_week)
+						{
+							Debug.WriteLine("is coming @ " + day.Day);
+						}
+						else
+						{
+							Debug.WriteLine("not this week@ " + day.Day);
+						}	
+					}					
+				}
+
+
+				var children = from c in db.Children.FindAll()
+											 where c.Schedule.Any(d => weekdays.Any( wd => wd.Date == d.Day))
+											 select c;
+				
+				var rowSize = children.Count() > 30 ? 24.75 : 27.0;
+
+				foreach (var child in children)
+				{
+					var nr = ws.Range(rowIndex, 1, rowIndex + 1, 1).Merge();
+					nr.Value = string.Format("{0}.", childIndex);
+					nr.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+					nr.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+					Enbox(nr.Style);
+
+
+					var cname = ws.Range(rowIndex, 2, rowIndex + 1, 2).Merge();
+					cname.Value = string.Format("{0} {1}", child.LastName, child.FirstName);
+					cname.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+					cname.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+					cname.Style.Alignment.WrapText = true;
+					Enbox(cname.Style);
+
+					cell = ws.Cell(rowIndex, "C");
+					cell.Value = "Aankomst";
+					Enbox(cell.Style);
+					ws.Row(rowIndex).Height = rowSize;
+
+					cell = ws.Cell(rowIndex + 1, "C");
+					cell.Value = "Vertrek";
+					Enbox(cell.Style);
+					ws.Row(rowIndex + 1).Height = rowSize;
+
+					colid = new ColumnId('D');
+					for (int index = 0; index < 15; index++)
+					{
+						cell = ws.Cell(rowIndex, colid.ToString());
+						Enbox(cell.Style);
+						cell = ws.Cell(rowIndex + 1, colid.ToString());
+						Enbox(cell.Style);
+
+						colid.Increment();
+					}
+
+					childIndex++;
+					rowIndex += 2;
+				}
+
+			}
+
+			//var model = ServiceProvider.Instance.GetService<Petoeter>();
+
+			var thisWeek = DatePeriod.MakePeriod(month, year);
 
 			//var children = from c in model.GetChildren()
 			//							 where c.Deleted == false && c.HasValidPeriod(date)
@@ -265,7 +347,7 @@ namespace DayCare.Core.Reports
 				{
 					yield return new DayInfo
 					{
-						Date = current,
+						Date = current.Date,
 						Valid = current < endLimit && current >= startLimit
 					};
 				}

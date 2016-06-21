@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DayCare.Database
 {
-	public class DatabaseIgnoreAttribute : Attribute
-	{
-	}
+	//public class DatabaseIgnoreAttribute : Attribute
+	//{
+	//}
 }

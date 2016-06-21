@@ -12,6 +12,12 @@ namespace DayCare.Model.Lite
 
 		public List<Member> Members { get; set; }
 		public List<Child> Children { get; set; }
+
+		public Account()
+		{
+			Members = new List<Member>();
+			Children = new List<Child>();
+		}
 	}
 
 }
