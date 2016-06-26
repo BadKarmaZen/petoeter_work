@@ -20,7 +20,6 @@ namespace DayCare
 			ServiceProvider.Instance.RegisterService(new EventAggregator());
 			ServiceProvider.Instance.RegisterService(new TaskManager());
 			ServiceProvider.Instance.RegisterService(new Petoeter());
-			ServiceProvider.Instance.RegisterService(new ImageManager());
 		}
 
 		protected override void OnStartup(object sender, StartupEventArgs e)

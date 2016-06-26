@@ -61,6 +61,16 @@ namespace DayCare.Model.Lite
 			}
 		}
 
+		public LiteCollection<Presence> Presences 
+		{
+			get
+			{
+				return GetCollection<Presence>("presence")
+					.Include(p => p.BroughtAt)
+					.Include(p => p.TakenAt)
+					.Include(a => a.Child);
+			}
+		}
 		public SystemSettings GetSettings()
 		{
 			Settings = GetCollection<SystemSettings>("SystemSettings").FindAll().FirstOrDefault();
@@ -82,4 +92,59 @@ namespace DayCare.Model.Lite
 
 	}
 
+	public class PetoeterImageManager
+	{
+		public static System.Windows.Media.Imaging.BitmapImage GetImage(string fileId)
+		{
+			if (string.IsNullOrWhiteSpace(fileId))
+			{
+				return null;
+			}
+
+			using (var db = new PetoeterDb(PetoeterDb.FileName))
+			{
+				var file = db.FileStorage.FindById(fileId);
+
+				if (file == null)
+				{
+					return null;		 
+				}
+				
+				using(var reader = file.OpenRead())
+				{
+					System.IO.MemoryStream mem = new System.IO.MemoryStream();
+					mem.SetLength(file.Length);
+
+					reader.Read(mem.GetBuffer(), 0, (int)file.Length);
+					mem.Flush();
+
+					System.Windows.Media.Imaging.BitmapImage image = new System.Windows.Media.Imaging.BitmapImage();
+
+					image.BeginInit();
+					image.StreamSource = mem;
+					image.EndInit();
+
+					image.Freeze();
+
+					return image;
+				}
+			}
+		}
+
+		public static void SaveFile(string fileId, string fileName)
+		{
+			using (var db = new PetoeterDb(PetoeterDb.FileName))
+			{
+				db.FileStorage.Upload(fileId, fileName);
+			}
+		}
+
+		internal static void RemoveFile(string fileId)
+		{
+			using (var db = new PetoeterDb(PetoeterDb.FileName))
+			{
+				db.FileStorage.Delete(fileId);
+			}
+		}
+	}
 }

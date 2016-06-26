@@ -21,8 +21,7 @@ namespace DayCare.ViewModels.Children
 		{
 			_account = account;
 			Detail = new ChildDetailViewModel() 
-			{ 
-				ChildId = Guid.NewGuid(), 
+			{
 				BirthDay = DateTimeProvider.Now()
 			};
 		}
@@ -34,12 +33,14 @@ namespace DayCare.ViewModels.Children
 
 			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
-				var child =  new Child();
+				var child = new Child();
 			
 				Detail.GetData(child);
+				child.Updated = DateTime.Now;
 				db.Children.Insert(child);
 				
 				_account.Children.Add(child);
+				_account.Updated = DateTime.Now;
 				db.Accounts.Update(_account);
 			}
 

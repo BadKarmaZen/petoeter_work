@@ -17,9 +17,7 @@ namespace DayCare.ViewModels.Children
 		{
 			get
 			{
-				var img = ServiceProvider.Instance.GetService<ImageManager>();
-				
-				return img.CreateBitmap(img.FindImage(Tag.Id.ToString()));
+				return PetoeterImageManager.GetImage(Tag.FileId);
 			}
 		}
 
@@ -27,8 +25,7 @@ namespace DayCare.ViewModels.Children
 		{
 			get
 			{
-				var img = ServiceProvider.Instance.GetService<ImageManager>();
-				return !string.IsNullOrEmpty(img.FindImage(Tag.Id.ToString()));
+				return !string.IsNullOrEmpty(Tag.FileId);
 			}
 		}
 	}

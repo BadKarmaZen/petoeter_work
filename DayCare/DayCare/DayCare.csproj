@@ -143,12 +143,14 @@
     <Compile Include="Model\Databasee\Updates\DatabaseUpdate.cs" />
     <Compile Include="Model\DataObject.cs" />
     <Compile Include="Model\Holiday.cs" />
+    <Compile Include="Model\IFullName.cs" />
     <Compile Include="Model\Lite\Account.cs" />
     <Compile Include="Model\Lite\Child.cs" />
     <Compile Include="Model\Lite\Date.cs" />
     <Compile Include="Model\Lite\LiteRecord.cs" />
     <Compile Include="Model\Lite\Member.cs" />
     <Compile Include="Model\Lite\PetoeterDb.cs" />
+    <Compile Include="Model\Lite\Presence.cs" />
     <Compile Include="Model\Lite\SystemSettings.cs" />
     <Compile Include="Model\Member.cs" />
     <Compile Include="Model\Petoeter.cs" />

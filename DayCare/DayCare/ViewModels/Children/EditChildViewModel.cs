@@ -23,8 +23,7 @@ namespace DayCare.ViewModels.Children
 
 			this._child = child;
 
-			//	TODO
-			//Detail = new ChildDetailViewModel(_child);
+			Detail = new ChildDetailViewModel(_child);
 		}
 
 		public void SaveAction()
@@ -32,17 +31,19 @@ namespace DayCare.ViewModels.Children
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 			 new Events.ShowDialog());
 
-			//	TODO
-			//Detail.GetData(_child);
-			
-			//_child.Updated = true;
-			//ServiceProvider.Instance.GetService<Petoeter>().Save();
+			Detail.GetData(_child);
 
-			//ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-			//		new Core.Events.SwitchTask
-			//		{
-			//			Task = new EditAccountViewModel(_account)
-			//		});
+			using (var db = new PetoeterDb(PetoeterDb.FileName))
+			{
+				_child.Updated = DateTime.Now;
+				db.Children.Update(_child);				
+			}
+
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+					new Core.Events.SwitchTask
+					{
+						Task = new EditAccountViewModel(_account)
+					});
 		}
 
 		public void CancelAction()

@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 
 namespace DayCare.Core
 {
+	[Obsolete("", true)]
 	class ImageManager
 	{
 		private Dictionary<string, BitmapImage> _cache;
@@ -77,4 +78,5 @@ namespace DayCare.Core
 			}
 		}
 	}
+	
 }

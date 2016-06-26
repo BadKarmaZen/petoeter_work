@@ -91,7 +91,10 @@ namespace DayCare.Core.Reports
 
 			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
-				foreach (var child in db.Children.FindAll())
+				var query = from c in db.Children.FindAll()
+										orderby c.BirthDay descending
+										select c;
+				foreach (var child in query)
 				{
 					Debug.WriteLine(child.LastName + " " + child.FirstName);
 
@@ -117,7 +120,8 @@ namespace DayCare.Core.Reports
 
 
 				var children = from c in db.Children.FindAll()
-											 where c.Schedule.Any(d => weekdays.Any( wd => wd.Date == d.Day))
+											 where c.Schedule.Any(d => weekdays.Any(wd => wd.Date == d.Day))
+											 orderby c.BirthDay ascending
 											 select c;
 				
 				var rowSize = children.Count() > 30 ? 24.75 : 27.0;

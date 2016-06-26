@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
 using DayCare.Model;
+using DayCare.Model.Lite;
 using DayCare.Model.UI;
 using DayCare.ViewModels.Children;
 using System;
@@ -30,8 +31,7 @@ namespace DayCare.ViewModels.Precense
 		{
 			get
 			{
-				var img = ServiceProvider.Instance.GetService<ImageManager>();
-				return img.CreateBitmap(img.FindImage(Tag.Child.Id.ToString()));
+				return PetoeterImageManager.GetImage(Tag.Child.FileId);
 			}
 		}
 
@@ -54,7 +54,7 @@ namespace DayCare.ViewModels.Precense
 		{
 			get
 			{
-				if (Tag.ArrivingTime == DateTime.MinValue)
+				if (Tag.BroughtAt == DateTime.MinValue)
 				{
 					return Brushes.White;
 				}
@@ -62,10 +62,10 @@ namespace DayCare.ViewModels.Precense
 				{
 					var time = DateTimeProvider.Now();
 
-					if (Tag.LeavingTime != DateTime.MinValue)
-						time = Tag.LeavingTime;
+					if (Tag.TakenAt != DateTime.MinValue)
+						time = Tag.TakenAt;
 
-					var delta = time - Tag.ArrivingTime;
+					var delta = time - Tag.BroughtAt;
 
 					return delta > MaxTime ? Brushes.Salmon : Brushes.LightGreen;
 				}
@@ -76,7 +76,7 @@ namespace DayCare.ViewModels.Precense
 
 		public void Update()
 		{
-			if (Tag.ArrivingTime == DateTime.MinValue)
+			if (Tag.BroughtAt == DateTime.MinValue)
 			{
 				ToLate = false;
 			}
@@ -84,10 +84,10 @@ namespace DayCare.ViewModels.Precense
 			{
 				var time = DateTimeProvider.Now();
 
-				if (Tag.LeavingTime != DateTime.MinValue)
-					time = Tag.LeavingTime;
+				if (Tag.TakenAt != DateTime.MinValue)
+					time = Tag.TakenAt;
 
-				var delta = time - Tag.ArrivingTime;
+				var delta = time - Tag.BroughtAt;
 
 				ToLate = delta > MaxTime;
 			}
@@ -121,25 +121,62 @@ namespace DayCare.ViewModels.Precense
 
 		public PresenceMainViewModel()
 		{
-			var today = DateTimeProvider.Now();
-			var model = ServiceProvider.Instance.GetService<Petoeter>();
-			var data = model.Presences;
-
 			var lst = new List<PresenceUI>();
 
-			foreach (var item in from d in data 
-													 orderby d.Child.FirstName 
-													 select d)
-			{
-				var ui = new PresenceUI
-				{
-					Name = string.Format("{0} {1}", item.Child.FirstName, item.Child.LastName),
-					Tag = item,
-					MaxTime = new TimeSpan(item.TimeCode, 0, 0)
-				};
+			var today = DateTimeProvider.Now().Date.AddDays(-1);
 
-				lst.Add(ui);
+			using (var db = new PetoeterDb(PetoeterDb.FileName))
+			{
+
+				var data = db.Presences.Find(p => p.Date == today).ToList();
+
+				if (data.Count() == 0)
+				{
+					//	create a presence record for all children for today
+
+					foreach (var child in from c in db.Children.FindAll()
+																	where c.Schedule.Exists(d => d.Day == today)
+																	select c)
+					{
+						var date = child.Schedule.First(d => d.Day == today);
+
+						if (date.Morning || date.Afternoon)
+						{
+							var presence = new Presence 
+							{
+								Child = child,
+								Date = today,
+								Updated = today,
+								TimeCode = CalculateTimeCode(date)
+							};
+
+							db.Presences.Insert(presence);
+							lst.Add(new PresenceUI 
+							{
+								Name = child.GetFullName(),
+								Tag = presence
+							});
+						}
+					}
+				}				
 			}
+			//var model = ServiceProvider.Instance.GetService<Petoeter>();
+			//ar data = model.Presences;
+
+
+			//foreach (var item in from d in data 
+			//										 orderby d.Child.FirstName 
+			//										 select d)
+			//{
+			//	var ui = new PresenceUI
+			//	{
+			//		Name = string.Format("{0} {1}", item.Child.FirstName, item.Child.LastName),
+			//		Tag = item,
+			//		MaxTime = new TimeSpan(item.TimeCode, 0, 0)
+			//	};
+
+			//	lst.Add(ui);
+			//}
 
 			PresenceList = lst;
 			RefreshThumbs();
@@ -151,6 +188,20 @@ namespace DayCare.ViewModels.Precense
 			_timer.Start();
 		}
 
+		private int CalculateTimeCode(Model.Lite.Date date)
+		{
+			if (date.Morning || date.Afternoon)
+			{
+				return 9;	//	hours
+			}
+			else if (date.Morning || date.Afternoon)
+			{
+				return 6;	//	hours
+			}
+			
+			return 0;
+		}
+
 		private void RefreshThumbs()
 		{
 			PresenceList.ForEach(p => p.Update());
@@ -159,10 +210,10 @@ namespace DayCare.ViewModels.Precense
 		public void SelectChildAction(PresenceUI child)
 		{
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-								new Core.Events.ShowDialog
-								{
-									Dialog = new EditPrecenseViewModel(child.Tag)
-								});
+				new Core.Events.ShowDialog
+				{
+					Dialog = new EditPrecenseViewModel(child.Tag)
+				});
 		}
 
 		public void CloseThisScreen()

@@ -40,7 +40,7 @@ namespace DayCare.Model
 
 		public Petoeter()
 		{
-			Mode = ApplicationMode.Configuration;
+			Mode = ApplicationMode.Presence;
 
 			//Database = new DayCare.Database.DatabaseEngine(Mode);
 

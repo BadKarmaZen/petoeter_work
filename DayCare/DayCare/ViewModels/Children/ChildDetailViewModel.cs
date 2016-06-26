@@ -17,7 +17,7 @@ namespace DayCare.ViewModels.Children
 		private string _firstName;
 		private string _lastName;
 		private DateTime _birthDay;
-		private string _image;
+		private string _fileId;
 		private BitmapImage _imageData;
 		#endregion
 
@@ -27,17 +27,17 @@ namespace DayCare.ViewModels.Children
 			set { _imageData = value; NotifyOfPropertyChange(() => ImageData); }
 		}
 	
-		public string Image
+		public string FileID
 		{
-			get { return _image; }
+			get { return _fileId; }
 			set 
 			{ 
-				_image = value;
+				_fileId = value;
 
-				var img = ServiceProvider.Instance.GetService<ImageManager>();
-				ImageData = img.CreateBitmap(_image);
+				//	assign correct file id and need to upload
+				ImageData = PetoeterImageManager.GetImage(FileID);
 
-				NotifyOfPropertyChange(() => Image);
+				NotifyOfPropertyChange(() => FileID);
 				NotifyOfPropertyChange(() => ShowSelect);
 				NotifyOfPropertyChange(() => ShowRemove);
 			}
@@ -47,7 +47,7 @@ namespace DayCare.ViewModels.Children
 		{
 			get
 			{
-				return string.IsNullOrEmpty(_image);
+				return string.IsNullOrEmpty(_fileId);
 			}
 		}
 
@@ -55,7 +55,7 @@ namespace DayCare.ViewModels.Children
 		{
 			get
 			{
-				return !string.IsNullOrEmpty(_image);
+				return !string.IsNullOrEmpty(_fileId);
 			}
 		}
 
@@ -79,7 +79,7 @@ namespace DayCare.ViewModels.Children
 		}
 		#endregion
 
-		public Guid ChildId { get; set; }
+		public int ChildId { get; set; }
 
 		public ChildDetailViewModel(Child child = null)
 		{
@@ -88,11 +88,7 @@ namespace DayCare.ViewModels.Children
 				_firstName = child.FirstName;
 				_lastName = child.LastName;
 				_birthDay = child.BirthDay;
-				//ChildId = child.Id;
-
-				var img = ServiceProvider.Instance.GetService<ImageManager>();
-
-				Image = img.FindImage(ChildId.ToString());
+				FileID = child.FileId;
 			}
 		}
 
@@ -101,7 +97,7 @@ namespace DayCare.ViewModels.Children
 			child.FirstName = _firstName;
 			child.LastName = _lastName;
 			child.BirthDay = _birthDay;
-			//child.Id = ChildId;
+			child.FileId = _fileId;
 		}
 
 		public void SelectImageAction()
@@ -110,27 +106,18 @@ namespace DayCare.ViewModels.Children
 
 			if (dlg.ShowDialog() == true)
 			{
-				//var model = ServiceProvider.Instance.GetService<Petoeter>();
+				var fileId = string.Format("img/child/{0}", Guid.NewGuid());
+				PetoeterImageManager.SaveFile(fileId, dlg.FileName);
 
-				//string file = dlg.FileName;
-				//string extention = Path.GetExtension(file);
-				//string destination = Path.Combine(model.Settings.ImageFolder, string.Format( "{0}.{1}", ChildId.ToString(), extention));
-
-				//File.Copy(file, destination, true);
-				
-				//Image = file;				
+				FileID = fileId;
 			}
 		}
 
 		public void RemoveImageAction()
 		{
-			var name = Image;
-			Image = string.Empty;
-
-			if (File.Exists(name))
-			{
-				File.Delete(name);
-			}
+			var name = FileID;
+			PetoeterImageManager.RemoveFile(FileID);
+			FileID = string.Empty;
 		}
 	}
 }

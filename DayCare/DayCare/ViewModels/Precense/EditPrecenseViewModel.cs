@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
 using DayCare.Model;
+using DayCare.Model.Lite;
 using DayCare.ViewModels.Members;
 using System;
 using System.Collections.Generic;
@@ -64,8 +65,7 @@ namespace DayCare.ViewModels.Precense
 		{
 			get
 			{
-				var img = ServiceProvider.Instance.GetService<ImageManager>();
-				return img.CreateBitmap(img.FindImage(_presence.Child.Id.ToString()));
+				return PetoeterImageManager.GetImage(_presence.Child.FileId);
 			}
 		}
 
@@ -132,28 +132,25 @@ namespace DayCare.ViewModels.Precense
 				
 		public EditPrecenseViewModel(Presence presence)
 		{
-			var model = ServiceProvider.Instance.GetService<Petoeter>();
-
-			// TODO: Complete member initialization
 			this._presence = presence;
 
 			Name = string.Format("{0} {1}", presence.Child.FirstName, presence.Child.LastName);
 
-			if (DateTime.MinValue != presence.LeavingTime)
+			if (DateTime.MinValue != presence.BroughtAt)
 			{
 				CurrentState = State.Left;
-				//ArrivalMember = model.GetMembers(m => m.Id == _presence.ArrivalMember_Id).Select(m => string.Format("{0} {1}", m.FirstName, m.LastName)).First();
-				SetArrivalTime(_presence.ArrivingTime);
+				ArrivalMember = _presence.BroughtBy.GetFullName();
+				SetArrivalTime(_presence.BroughtAt);
 
-				//LeaveMember = model.GetMember(m => m.Id == _presence.DepartureMember_Id).Select(m => string.Format("{0} {1}", m.FirstName, m.LastName)).First();
-				SetLeaveTime(_presence.LeavingTime);
+				LeaveMember = _presence.TakenBy.GetFullName();
+				SetLeaveTime(_presence.TakenAt);
 			}
-			else if (DateTime.MinValue != presence.ArrivingTime)
+			else if (DateTime.MinValue != presence.BroughtAt)
 			{
 				CurrentState = State.Arrived;
-				//	TODO
-				//ArrivalMember = _presence.Child.Account.Members.Where(m => m.Id == _presence.Arriving.Id).Select(m => string.Format("{0} {1}", m.FirstName, m.LastName)).First();
-				SetArrivalTime(_presence.ArrivingTime);
+				
+				ArrivalMember = _presence.BroughtBy.GetFullName();
+				SetArrivalTime(_presence.BroughtAt);
 				UpdateLeaveTime();
 			}
 			else
