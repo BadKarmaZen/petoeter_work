@@ -18,13 +18,18 @@ namespace DayCare.Model.Lite
 
 		public const string FileName = @"E:\petoeter_lite.ldb";
 
-		protected override void OnModelCreating(BsonMapper mapper)
+		protected override void OnModelCreating(BsonMapper mapper) 
 		{
 			base.OnModelCreating(mapper);
 
 			mapper.Entity<Account>()
 				.DbRef(a => a.Members, "member")
 				.DbRef(a => a.Children, "children");
+
+			mapper.Entity<Presence>()
+				.DbRef(p => p.Child, "children")
+				.DbRef(p => p.BroughtBy, "member")
+				.DbRef(p => p.TakenBy, "member");
 		}
 
 		public LiteCollection<Account> Accounts
@@ -66,8 +71,8 @@ namespace DayCare.Model.Lite
 			get
 			{
 				return GetCollection<Presence>("presence")
-					.Include(p => p.BroughtAt)
-					.Include(p => p.TakenAt)
+					.Include(p => p.BroughtBy)
+					.Include(p => p.TakenBy)
 					.Include(a => a.Child);
 			}
 		}
@@ -94,11 +99,20 @@ namespace DayCare.Model.Lite
 
 	public class PetoeterImageManager
 	{
+		public const string Olaf = "img/olaf";
+
+		private static System.Windows.Media.Imaging.BitmapImage _olaf;
+
 		public static System.Windows.Media.Imaging.BitmapImage GetImage(string fileId)
 		{
 			if (string.IsNullOrWhiteSpace(fileId))
 			{
-				return null;
+				if (_olaf == null)
+				{
+					_olaf = GetImage(Olaf);					
+				}
+
+				return _olaf;
 			}
 
 			using (var db = new PetoeterDb(PetoeterDb.FileName))
@@ -107,6 +121,11 @@ namespace DayCare.Model.Lite
 
 				if (file == null)
 				{
+					if (fileId == Olaf)
+					{
+						SaveFile(Olaf, @"E:\[Development]\[Home]\petoeter_work\DayCare\DayCare\Resources\olaf.png");
+					}
+
 					return null;		 
 				}
 				

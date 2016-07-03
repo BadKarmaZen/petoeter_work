@@ -6,6 +6,7 @@ using DayCare.Model.UI;
 using DayCare.ViewModels.Children;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -20,7 +21,7 @@ namespace DayCare.ViewModels.Precense
 	{
 		#region members
 		private bool _toLate;
-		
+
 		#endregion
 
 
@@ -45,11 +46,11 @@ namespace DayCare.ViewModels.Precense
 			set
 			{
 				_toLate = value;
-				NotifyOfPropertyChange(() => ToLate); 
+				NotifyOfPropertyChange(() => ToLate);
 				NotifyOfPropertyChange(() => BackGround);
 			}
 		}
-		
+
 		public Brush BackGround
 		{
 			get
@@ -72,7 +73,7 @@ namespace DayCare.ViewModels.Precense
 			}
 		}
 		#endregion
-		
+
 
 		public void Update()
 		{
@@ -107,42 +108,53 @@ namespace DayCare.ViewModels.Precense
 		//}
 	}
 
-	public class PresenceMainViewModel : Screen, ICloseScreen
+	public class UpdateTimeEvent
 	{
+		public DateTime CurrentTime { get; set; }
+	}
+
+	public class PresenceMainViewModel : Screen, ICloseScreen, IHandle<UpdateTimeEvent>
+	{
+		#region Members
 		private List<PresenceUI> _presenceList;
 
-		private DispatcherTimer _timer;
+		private DispatcherTimer _timer;		
+		#endregion
 
+		#region Properties
 		public List<PresenceUI> PresenceList
 		{
 			get { return _presenceList; }
 			set { _presenceList = value; NotifyOfPropertyChange(() => PresenceList); }
 		}
+		
+		#endregion
+
 
 		public PresenceMainViewModel()
 		{
 			var lst = new List<PresenceUI>();
 
-			var today = DateTimeProvider.Now().Date.AddDays(-1);
+			var today = DateTimeProvider.Now().Date.AddDays(-2);
 
 			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
+				//db.DropCollection("presence");
+				DebugShow(db.Presences.FindAll());
 
-				var data = db.Presences.Find(p => p.Date == today).ToList();
-
-				if (data.Count() == 0)
+				if (db.Presences.Find(p => p.Date == today).Count() == 0)
 				{
 					//	create a presence record for all children for today
 
 					foreach (var child in from c in db.Children.FindAll()
-																	where c.Schedule.Exists(d => d.Day == today)
-																	select c)
+																where c.Schedule.Exists(d => d.Day == today)
+																select c)
 					{
 						var date = child.Schedule.First(d => d.Day == today);
 
 						if (date.Morning || date.Afternoon)
 						{
-							var presence = new Presence 
+							var presence = new Presence
 							{
 								Child = child,
 								Date = today,
@@ -151,33 +163,22 @@ namespace DayCare.ViewModels.Precense
 							};
 
 							db.Presences.Insert(presence);
-							lst.Add(new PresenceUI 
-							{
-								Name = child.GetFullName(),
-								Tag = presence
-							});
 						}
 					}
-				}				
+				}
+
+				//	load
+				foreach (var presence in db.Presences.Find(p => p.Date == today))
+				{
+					lst.Add(new PresenceUI
+					{
+						Name = presence.Child.GetFullName(),
+						Tag = presence,
+						MaxTime = new TimeSpan(presence.TimeCode, 0, 0)
+					});					
+				}
 			}
-			//var model = ServiceProvider.Instance.GetService<Petoeter>();
-			//ar data = model.Presences;
-
-
-			//foreach (var item in from d in data 
-			//										 orderby d.Child.FirstName 
-			//										 select d)
-			//{
-			//	var ui = new PresenceUI
-			//	{
-			//		Name = string.Format("{0} {1}", item.Child.FirstName, item.Child.LastName),
-			//		Tag = item,
-			//		MaxTime = new TimeSpan(item.TimeCode, 0, 0)
-			//	};
-
-			//	lst.Add(ui);
-			//}
-
+			
 			PresenceList = lst;
 			RefreshThumbs();
 
@@ -186,6 +187,16 @@ namespace DayCare.ViewModels.Precense
 			_timer.Tick += (s, e) => { RefreshThumbs(); };
 
 			_timer.Start();
+
+			ServiceProvider.Instance.GetService<EventAggregator>().Subscribe(this);
+		}
+
+		private void DebugShow(IEnumerable<Presence> presences)
+		{
+			foreach (var pres in presences)
+			{
+				Debug.WriteLine("[{0}] {1}", pres.Id, pres.Child.GetFullName());
+			}
 		}
 
 		private int CalculateTimeCode(Model.Lite.Date date)
@@ -198,7 +209,7 @@ namespace DayCare.ViewModels.Precense
 			{
 				return 6;	//	hours
 			}
-			
+
 			return 0;
 		}
 
@@ -219,6 +230,12 @@ namespace DayCare.ViewModels.Precense
 		public void CloseThisScreen()
 		{
 			_timer.Stop();
+		}
+
+
+		public void Handle(UpdateTimeEvent message)
+		{
+			RefreshThumbs();
 		}
 	}
 }
