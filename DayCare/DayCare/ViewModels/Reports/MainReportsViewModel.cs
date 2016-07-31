@@ -16,6 +16,8 @@ namespace DayCare.ViewModels.Reports
 	{
 		public void MonthListAction()
 		{
+			LogManager.GetLog(GetType()).Info("Month List");
+
 			var dlg = new SelectMonthViewModel();
 			dlg.Yes = () => MonthListReport.Create(dlg.Month + 1, dlg.Year);
 
@@ -28,6 +30,8 @@ namespace DayCare.ViewModels.Reports
 
 		public void WeekListAction()
 		{
+			LogManager.GetLog(GetType()).Info("Week List");
+
 			var dlg = new DateDialogViewModel() { Date = Date.NextMonday() };
 			dlg.Yes = () => WeekListReport.Create(dlg.Date);
 
@@ -40,6 +44,8 @@ namespace DayCare.ViewModels.Reports
 
 		public void ParentPhoneAction()
 		{
+			LogManager.GetLog(GetType()).Info("Phone List");
+
 			PhoneListReport.Create();
 		}
 	}

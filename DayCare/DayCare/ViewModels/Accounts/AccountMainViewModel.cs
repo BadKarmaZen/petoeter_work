@@ -40,7 +40,9 @@ namespace DayCare.ViewModels.Accounts
 
 		protected override void LoadItems()
 		{
-			using (var db = new PetoeterDb(@"E:\petoeter_lite.ldb"))
+			LogManager.GetLog(GetType()).Info("Load items");
+
+			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
 				var query = from a in db.Accounts.FindAll()
 										where a.Deleted == _showDeleted
@@ -59,47 +61,59 @@ namespace DayCare.ViewModels.Accounts
 
 		public void AddAction()
 		{
+			LogManager.GetLog(GetType()).Info("Add action");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Core.Events.ShowDialog
-					{
-						Dialog = new AddAccountViewModel()
-					});
+				new Core.Events.ShowDialog
+				{
+					Dialog = new AddAccountViewModel()
+				});
 		}
 
 		public void EditAction()
 		{
+			LogManager.GetLog(GetType()).Info("Edit Action");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Core.Events.SwitchTask
-					{
-						Task = new EditAccountViewModel(SelectedItem.Tag)
-					});
+				new Core.Events.SwitchTask
+				{
+					Task = new EditAccountViewModel(SelectedItem.Tag)
+				});
 		}
 
 		public void OpenAction(AccountUI account)
 		{
+			LogManager.GetLog(GetType()).Info("Open Action");
+
 			SelectItem(account);
 			EditAction();
 		}
 
 		public void DeleteAction()
 		{
+			LogManager.GetLog(GetType()).Info("Delete Action");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Events.ShowDialog
+				new Events.ShowDialog
+				{
+					Dialog = new YesNoDialogViewModel
 					{
-						Dialog = new YesNoDialogViewModel
-						{
-							Message = "Ben je zeker?",
-							Yes = () => DeleteAccount()
-						}
-					});
+						Message = "Ben je zeker?",
+						Yes = () => DeleteAccount()
+					}
+				});
 		}
 
 		public void DeleteAccount()
 		{
+			LogManager.GetLog(GetType()).Info("Delete account");
+
 			//	No real delete
 			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
 				SelectedItem.Tag.Deleted = true;
+				SelectedItem.Tag.Updated = DateTime.Now;
+
 				db.Accounts.Update(SelectedItem.Tag);
 			}
 			

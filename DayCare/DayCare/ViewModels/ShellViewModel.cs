@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using Caliburn.Micro.Logging.NLog;
 using DayCare.Core;
 using System;
 using System.Collections.Generic;
@@ -54,6 +55,7 @@ namespace DayCare.ViewModels
 
 		public ShellViewModel()
 		{
+			LogManager.GetLog(GetType()).Info("Start Shell");
 			ServiceProvider.Instance.GetService<EventAggregator>().Subscribe(this);
 
 			Task = new Dashboard.DashBoardViewModel();
@@ -64,8 +66,11 @@ namespace DayCare.ViewModels
 		{
 			if (Task is ICloseScreen)
 			{
+				LogManager.GetLog(GetType()).Info("Close Screen");
 				((ICloseScreen)Task).CloseThisScreen();				
 			}
+
+			LogManager.GetLog(GetType()).Info("Swith to task: {0}", message.Task.ToString());
 
 			Task = message.Task;
 
@@ -78,11 +83,13 @@ namespace DayCare.ViewModels
 
 		public void Handle(Events.Close message)
 		{
+			LogManager.GetLog(GetType()).Info("TryClose");
 			TryClose();
 		}
 
 		public void Handle(Events.ShowDialog message)
 		{
+			LogManager.GetLog(GetType()).Info("Show Dialog: {0}", message.Dialog);
 			Dialog = message.Dialog;
 		}
 	}

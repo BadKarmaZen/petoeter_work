@@ -48,6 +48,8 @@ namespace DayCare.ViewModels.Scheduler
 
 		public AddScheduleViewModel(Child child)
 		{
+			LogManager.GetLog(GetType()).Info("Create");
+
 			this._child = child;
 
 			this.StartDate = DateTimeProvider.Now();
@@ -61,8 +63,10 @@ namespace DayCare.ViewModels.Scheduler
 
 		public void SaveAction()
 		{
+			LogManager.GetLog(GetType()).Info("Save");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Events.ShowDialog());
+				new Events.ShowDialog());
 
 			int weekIndex = 0;
 			var startDate = StartDate.Value.Date;
@@ -111,6 +115,7 @@ namespace DayCare.ViewModels.Scheduler
 
 			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
+				_child.Updated = DateTime.Now;
 				db.Children.Update(_child);
 			}
 			
@@ -123,6 +128,8 @@ namespace DayCare.ViewModels.Scheduler
 
 		public void CancelAction()
 		{
+			LogManager.GetLog(GetType()).Info("Cancel");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Events.ShowDialog());
 						
@@ -135,11 +142,15 @@ namespace DayCare.ViewModels.Scheduler
 
 		public void OneWeekAction()
 		{
+			LogManager.GetLog(GetType()).Info("One Week");
+
 			Details = new List<WeekScheduleViewModel>(Details.Take(1));
 		}
 
 		public void TwoWeekAction()
 		{
+			LogManager.GetLog(GetType()).Info("Two Weeks");
+
 			var details = new List<WeekScheduleViewModel>(Details.Take(2));
 
 			for (int index = Details.Count + 1; index <= 2; index++)
@@ -152,6 +163,8 @@ namespace DayCare.ViewModels.Scheduler
 
 		public void ThreeWeekAction()
 		{
+			LogManager.GetLog(GetType()).Info("Three Weeks");
+
 			var details = new List<WeekScheduleViewModel>(Details.Take(2));
 
 			for (int index = Details.Count + 1; index <= 3; index++)
@@ -164,6 +177,8 @@ namespace DayCare.ViewModels.Scheduler
 
 		public void FourWeekAction()
 		{
+			LogManager.GetLog(GetType()).Info("Four Weeks");
+
 			var details = new List<WeekScheduleViewModel>(Details.Take(3));
 
 			for (int index = Details.Count + 1; index <= 4; index++)
@@ -173,30 +188,5 @@ namespace DayCare.ViewModels.Scheduler
 
 			Details = details;
 		}
-
-
-		//public DateTime Min(DateTime left, DateTime right)
-		//{
-		//	if (left < right)
-		//	{
-		//		return left;
-		//	}
-		//	else
-		//	{
-		//		return right;
-		//	}
-		//}
-
-		//public DateTime Max(DateTime left, DateTime right)
-		//{
-		//	if (left > right)
-		//	{
-		//		return left;
-		//	}
-		//	else
-		//	{
-		//		return right;
-		//	}
-		//}
 	}
 }

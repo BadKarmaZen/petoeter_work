@@ -22,6 +22,8 @@ namespace DayCare.ViewModels.Accounts
 
 		public RenameAccountViewModel(Account account)
 		{
+			LogManager.GetLog(GetType()).Info("Create");
+
 			_account = account;
 			Name = _account.Name;
 		}
@@ -29,12 +31,15 @@ namespace DayCare.ViewModels.Accounts
 
 		public void SaveAction()
 		{
+			LogManager.GetLog(GetType()).Info("Save");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Events.ShowDialog());
 
-			using (var db = new PetoeterDb(@"E:\petoeter_lite.ldb"))
+			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
 				_account.Name = Name;
+				_account.Updated = DateTime.Now;
 
 				db.Accounts.Update(_account);
 			}
@@ -48,6 +53,8 @@ namespace DayCare.ViewModels.Accounts
 
 		public void CancelAction()
 		{
+			LogManager.GetLog(GetType()).Info("Cancel");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Events.ShowDialog());
 

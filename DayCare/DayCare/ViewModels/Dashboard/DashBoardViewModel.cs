@@ -46,12 +46,16 @@ namespace DayCare.ViewModels.Dashboard
 
 		public void CloseAction()
 		{
+			LogManager.GetLog(GetType()).Info("Close");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Core.Events.Close());
 		}
 
 		public void AdministrationAction()
 		{
+			LogManager.GetLog(GetType()).Info("Administration");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Core.Events.SwitchTask
@@ -62,6 +66,8 @@ namespace DayCare.ViewModels.Dashboard
 
 		public void ManageSchedulesAction()
 		{
+			LogManager.GetLog(GetType()).Info("Schedule");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Core.Events.SwitchTask
@@ -73,6 +79,8 @@ namespace DayCare.ViewModels.Dashboard
 
 		public void StartPrecenseAction()
 		{
+			LogManager.GetLog(GetType()).Info("Start Presence");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Core.Events.SwitchTask
@@ -83,6 +91,8 @@ namespace DayCare.ViewModels.Dashboard
 
 		public void CalendarOverviewAction()
 		{
+			LogManager.GetLog(GetType()).Info("Calendar");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Core.Events.SwitchTask
@@ -93,6 +103,8 @@ namespace DayCare.ViewModels.Dashboard
 
 		public void ReportsAction()
 		{
+			LogManager.GetLog(GetType()).Info("Reports");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Core.Events.SwitchTask
@@ -103,6 +115,8 @@ namespace DayCare.ViewModels.Dashboard
 
 		public void DatabaseAction()
 		{
+			LogManager.GetLog(GetType()).Info("Database");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Core.Events.SwitchTask
@@ -113,6 +127,7 @@ namespace DayCare.ViewModels.Dashboard
 
 		public void ExpensesAction()
 		{
+			//LogManager.GetLog(GetType()).Info("Expenses");
 			//ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
 			//ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 			//	new Core.Events.SwitchTask

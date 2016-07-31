@@ -19,6 +19,8 @@ namespace DayCare.ViewModels.Children
 
 		public AddChildViewModel(Account account)
 		{
+			LogManager.GetLog(GetType()).Info("Create");
+
 			_account = account;
 			Detail = new ChildDetailViewModel() 
 			{
@@ -28,6 +30,8 @@ namespace DayCare.ViewModels.Children
 
 		public void SaveAction()
 		{
+			LogManager.GetLog(GetType()).Info("Save");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Events.ShowDialog());
 
@@ -53,6 +57,8 @@ namespace DayCare.ViewModels.Children
 
 		public void CancelAction()
 		{
+			LogManager.GetLog(GetType()).Info("Cancel");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Events.ShowDialog());
 

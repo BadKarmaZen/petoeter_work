@@ -102,6 +102,7 @@ namespace DayCare.ViewModels.Scheduler
 
 		public EditChildCalendarViewModel(Child child)
 		{
+			LogManager.GetLog(GetType()).Info("Create");
 			_child = child;
 
 			Menu = new BackMenu(Menu, "98d040fb-0e97-4eaf-bee4-8f455650493b", BackAction);
@@ -118,6 +119,8 @@ namespace DayCare.ViewModels.Scheduler
 
 		public void BackAction()
 		{
+			LogManager.GetLog(GetType()).Info("Back");
+
 			SaveHolidays();
 
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
@@ -129,6 +132,7 @@ namespace DayCare.ViewModels.Scheduler
 
 		protected void LoadItems()
 		{
+			LogManager.GetLog(GetType()).Info("Load items");
 			CalculateCalendarRegion();
 
 			var days = new List<ChildDayUI>();
@@ -162,6 +166,7 @@ namespace DayCare.ViewModels.Scheduler
 
 		private void BuildWeeks()
 		{
+			LogManager.GetLog(GetType()).Info("Build weeks");
 			var date = _startDate;
 			var weeks = new List<WeekUI>();
 
@@ -235,6 +240,7 @@ namespace DayCare.ViewModels.Scheduler
 
 		private void SaveHolidays()
 		{
+			LogManager.GetLog(GetType()).Info("Save");
 			//	Remove all scheduled
 			_child.Schedule.RemoveAll(d => _startDate <= d.Day && d.Day <= _endDate);
 
@@ -251,6 +257,7 @@ namespace DayCare.ViewModels.Scheduler
 
 			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
+				_child.Updated = DateTime.Now;
 				db.Children.Update(_child);
 			}
 		}
@@ -327,6 +334,8 @@ namespace DayCare.ViewModels.Scheduler
 
 		public void AddPatternAction()
 		{
+			LogManager.GetLog(GetType()).Info("Add Pattern");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Core.Events.ShowDialog
 				{
@@ -338,6 +347,8 @@ namespace DayCare.ViewModels.Scheduler
 
 		public void CopyWeekAction(WeekUI week)
 		{
+			LogManager.GetLog(GetType()).Info("Copy week");
+
 			CopyWeek = (from d in _days
 									where week.From <= d.Day && d.Day <= week.To
 									select new ChildDayUI { Day = d.Day, Morning = d.Morning, Afternoon = d.Afternoon }).ToList();
@@ -347,6 +358,7 @@ namespace DayCare.ViewModels.Scheduler
 		{
 			if (CopyWeek != null)
 			{
+				LogManager.GetLog(GetType()).Info("Paste week");
 				var daysTo = (from d in _days
 											where week.From <= d.Day && d.Day <= week.To
 											select d).ToList();
@@ -358,6 +370,10 @@ namespace DayCare.ViewModels.Scheduler
 				}
 
 				UpdateWeek(week.From);
+			}
+			else
+			{
+				LogManager.GetLog(GetType()).Warn("Paste week - no source");
 			}
 		}
 

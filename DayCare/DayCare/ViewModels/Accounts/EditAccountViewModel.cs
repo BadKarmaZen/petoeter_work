@@ -30,6 +30,8 @@ namespace DayCare.ViewModels.Accounts
 
 		public EditAccountViewModel(Account account)
 		{
+			LogManager.GetLog(GetType()).Info("Create");
+
 			Menu = new BackMenu(Menu, "d75c9da9-10a3-427e-b9fe-517033674336", CancelAction);
 
 			_account = account;
@@ -38,35 +40,13 @@ namespace DayCare.ViewModels.Accounts
 
 			ChildrenDetail = new ChildrenMainViewModel(_account);
 			MembersDetail = new MembersMainViewModel(_account);
-
-			//ServiceProvider.Instance.GetService<TaskManager>().StartTask(new EditAccountTask
-			//{
-			//	ReturnAction = () =>
-			//		ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-			//			new Core.Events.SwitchTask
-			//			{
-			//				Task = new EditAccountViewModel(_account)
-			//			})
-			//});
 		}
 
-		//public void SaveAction()
-		//{
-		//    _account.Name = Detail.Name;
-		//    _account.Children = (from c in ChildrenDetail.Children
-		//                         select c.Tag).ToList();
-
-		//    ServiceProvider.Instance.GetService<Petoeter>().UpdateRecord(_account);
-		//    ServiceProvider.Instance.GetService<TaskManager>().EndTask();
-		//    ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-		//        new Core.Events.SwitchTask
-		//        {
-		//            Task = new AccountMainViewModel()
-		//        });
-		//}
 
 		public void CancelAction()
 		{
+			LogManager.GetLog(GetType()).Info("Cancel");
+
 			//ServiceProvider.Instance.GetService<TaskManager>().EndTask();
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Core.Events.SwitchTask
@@ -74,12 +54,5 @@ namespace DayCare.ViewModels.Accounts
 					Task = new AccountMainViewModel()
 				});
 		}
-
-		//public override void BackAction()
-		//{
-		//	CancelAction();
-
-		//	base.BackAction();
-		//}
 	}
 }

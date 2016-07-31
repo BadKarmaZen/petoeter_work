@@ -80,10 +80,11 @@ namespace DayCare.ViewModels.Calendar
 		#region Helper
 		protected void LoadItems()
 		{
+			LogManager.GetLog(GetType()).Info("Load items");
+
 			CalculateCalendarRegion();
 
-			var days = new List<DayUI>();
-			
+			var days = new List<DayUI>();			
 
 			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
@@ -167,6 +168,7 @@ namespace DayCare.ViewModels.Calendar
 
 			//_weekCount = (1 + (_endDate - _startDate).Days) / 7;
 		}
+
 		private void SaveHolidays()
 		{
 		}
@@ -184,6 +186,8 @@ namespace DayCare.ViewModels.Calendar
 
 		private static void SaveHoliday(DayUI ui)
 		{
+			LogManager.GetLog(typeof(CalendarMainViewModel)).Info("Save Holiday");
+
 			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
 				var day = db.Holidays.FindOne(d => d.Day == ui.Day);

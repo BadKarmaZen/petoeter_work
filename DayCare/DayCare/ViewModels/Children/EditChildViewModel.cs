@@ -19,6 +19,8 @@ namespace DayCare.ViewModels.Children
 
 		public EditChildViewModel(Account _account, Child child)
 		{
+			LogManager.GetLog(GetType()).Info("Create");
+
 			this._account = _account;
 
 			this._child = child;
@@ -28,6 +30,8 @@ namespace DayCare.ViewModels.Children
 
 		public void SaveAction()
 		{
+			LogManager.GetLog(GetType()).Info("Save");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 			 new Events.ShowDialog());
 
@@ -40,22 +44,24 @@ namespace DayCare.ViewModels.Children
 			}
 
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Core.Events.SwitchTask
-					{
-						Task = new EditAccountViewModel(_account)
-					});
+				new Core.Events.SwitchTask
+				{
+					Task = new EditAccountViewModel(_account)
+				});
 		}
 
 		public void CancelAction()
 		{
-			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Events.ShowDialog());
+			LogManager.GetLog(GetType()).Info("Cancel");
 
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Core.Events.SwitchTask
-					{
-						Task = new EditAccountViewModel(_account)
-					});
+				new Events.ShowDialog());
+
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				new Core.Events.SwitchTask
+				{
+					Task = new EditAccountViewModel(_account)
+				});
 		}
 	}
 }

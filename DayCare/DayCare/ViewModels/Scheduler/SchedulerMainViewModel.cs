@@ -16,6 +16,8 @@ namespace DayCare.ViewModels.Scheduler
 	{
 		protected override void LoadItems()
 		{
+			LogManager.GetLog(GetType()).Info("Load items");
+			
 			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
 				var query = from c in db.Children.FindAll()
@@ -35,6 +37,8 @@ namespace DayCare.ViewModels.Scheduler
 		
 		public void EditAction()
 		{
+			LogManager.GetLog(GetType()).Info("Edit");
+			
 			//ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 			//	new Core.Events.SwitchTask
 			//	{
@@ -50,6 +54,8 @@ namespace DayCare.ViewModels.Scheduler
 
 		public void OpenAction(ChildUI child)
 		{
+			LogManager.GetLog(GetType()).Info("Open");
+			
 			SelectItem(child);
 			EditAction();
 		}

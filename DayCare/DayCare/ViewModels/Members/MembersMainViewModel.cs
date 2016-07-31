@@ -19,19 +19,14 @@ namespace DayCare.ViewModels.Members
 
 		public MembersMainViewModel(Account account)
 		{
+			LogManager.GetLog(GetType()).Info("Create");
+		
 			this._account = account;
 		}
 
 		protected override void LoadItems()
 		{
-			/*var model = ServiceProvider.Instance.GetService<Petoeter>();
-
-			Items = (from m in model.GetMember(m => m.Account_Id == _account.Id && m.Deleted == false)
-							 select new MemberUI
-							 {
-								 Name = string.Format("{0} {1}", m.FirstName, m.LastName),
-								 Tag = m
-							 }).ToList();*/
+			LogManager.GetLog(GetType()).Info("Load items");
 
 			Items = (from m in _account.Members
 							 where m.Deleted == false
@@ -46,6 +41,8 @@ namespace DayCare.ViewModels.Members
 
 		public void AddAction()
 		{
+			LogManager.GetLog(GetType()).Info("Add");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Core.Events.ShowDialog
 				{
@@ -55,6 +52,8 @@ namespace DayCare.ViewModels.Members
 
 		public void EditAction()
 		{
+			LogManager.GetLog(GetType()).Info("Edit");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Core.Events.ShowDialog
 				{
@@ -65,12 +64,16 @@ namespace DayCare.ViewModels.Members
 
 		public void OpenAction(MemberUI member)
 		{
+			LogManager.GetLog(GetType()).Info("Open");
+
 			SelectItem(member);
 			EditAction();
 		}
 
 		public void DeleteAction()
 		{
+			LogManager.GetLog(GetType()).Info("Delete");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Events.ShowDialog
 				{
@@ -84,7 +87,9 @@ namespace DayCare.ViewModels.Members
 
 		protected override void DeleteItem()
 		{
-			using (var db = new PetoeterDb(@"E:\petoeter_lite.ldb"))
+			LogManager.GetLog(GetType()).Info("Delete Item");
+
+			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
 				db.Members.Delete(SelectedItem.Tag.Id);
 			}

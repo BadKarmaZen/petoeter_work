@@ -16,7 +16,7 @@ namespace DayCare.Model.Lite
 		{
 		}
 
-		public const string FileName = @"E:\petoeter_lite.ldb";
+		public const string FileName = @"petoeter_lite.ldb";
 
 		protected override void OnModelCreating(BsonMapper mapper) 
 		{
@@ -123,7 +123,7 @@ namespace DayCare.Model.Lite
 				{
 					if (fileId == Olaf)
 					{
-						SaveFile(Olaf, @"E:\[Development]\[Home]\petoeter_work\DayCare\DayCare\Resources\olaf.png");
+						SaveFile(Olaf, @"olaf.png");
 					}
 
 					return null;		 

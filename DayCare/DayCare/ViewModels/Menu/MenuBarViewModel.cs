@@ -31,6 +31,7 @@ namespace DayCare.ViewModels.Menu
 
 		public void ExecuteAction(MenuItem menu)
 		{
+			LogManager.GetLog(GetType()).Info("Execute menu");
 			menu.Action();
 		}
 
@@ -38,11 +39,12 @@ namespace DayCare.ViewModels.Menu
 		{
 			if (message.Add)
 			{
+				LogManager.GetLog(GetType()).Info("Handle.Add");
 				var menu = _menuItems.Find(m => m.Id == message.Id);
 
 				if (menu != null)
 				{
-					_menuItems.RemoveAll(m => m.Id == message.Id);					
+					_menuItems.RemoveAll(m => m.Id == message.Id);
 				}
 
 				_menuItems.Add(new MenuItem
@@ -56,6 +58,7 @@ namespace DayCare.ViewModels.Menu
 			}
 			else
 			{
+				LogManager.GetLog(GetType()).Info("Handle.Add=false");
 				_menuItems.RemoveAll(m => m.Id == message.Id);
 				NotifyOfPropertyChange(() => MenuItems);
 			}

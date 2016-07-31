@@ -148,6 +148,8 @@ namespace DayCare.ViewModels.Precense
 				
 		public EditPrecenseViewModel(Presence presence)
 		{
+			LogManager.GetLog(GetType()).Info("Create");
+
 			this._presence = presence;
 
 			Name = _presence.Child.GetFullName();
@@ -207,8 +209,10 @@ namespace DayCare.ViewModels.Precense
 		#region Actions
 		public void CloseAction()
 		{
+			LogManager.GetLog(GetType()).Info("Close");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-						 new Events.ShowDialog());
+				new Events.ShowDialog());
 		}
 		
 		#endregion
@@ -216,8 +220,10 @@ namespace DayCare.ViewModels.Precense
 
 		public void ConfirmAction()
 		{
+			LogManager.GetLog(GetType()).Info("Confirm");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-						 new Events.ShowDialog());
+				new Events.ShowDialog());
 
 			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
@@ -257,6 +263,7 @@ namespace DayCare.ViewModels.Precense
 
 		public void SelectResponsible(MemberUI responsible)
 		{
+			LogManager.GetLog(GetType()).Info("Select member");
 			if (responsible.Selected == true)
 			{
 				SelectedResponsible.Selected = false;

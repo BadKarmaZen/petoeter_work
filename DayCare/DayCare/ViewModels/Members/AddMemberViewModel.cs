@@ -43,11 +43,15 @@ namespace DayCare.ViewModels.Members
 		
 		public AddMemberViewModel(Account account)
 		{
+			LogManager.GetLog(GetType()).Info("Create");
+
 			_account = account;
 		}
 
 		public void SaveAction()
 		{
+			LogManager.GetLog(GetType()).Info("Save");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 			 new Events.ShowDialog());
 
@@ -57,12 +61,14 @@ namespace DayCare.ViewModels.Members
 				{
 					FirstName = this.FirstName,
 					LastName = this.LastName,
-					Phone = this.Phone
+					Phone = this.Phone,
+					Updated = DateTime.Now
 				};
 
 				db.Members.Insert(member);
 				_account.Members.Add(member);
 
+				_account.Updated = DateTime.Now;
 				db.Accounts.Update(_account);
 			}
 		
@@ -75,6 +81,8 @@ namespace DayCare.ViewModels.Members
 
 		public void CancelAction()
 		{
+			LogManager.GetLog(GetType()).Info("Cancel");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Events.ShowDialog());
 

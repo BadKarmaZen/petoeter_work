@@ -83,6 +83,7 @@ namespace DayCare.ViewModels.Children
 
 		public ChildDetailViewModel(Child child = null)
 		{
+			LogManager.GetLog(GetType()).Info("Create");
 			if (child != null)
 			{
 				_firstName = child.FirstName;
@@ -102,6 +103,7 @@ namespace DayCare.ViewModels.Children
 
 		public void SelectImageAction()
 		{
+			LogManager.GetLog(GetType()).Info("Select image");
 			var dlg = new Microsoft.Win32.OpenFileDialog();
 
 			if (dlg.ShowDialog() == true)
@@ -115,6 +117,7 @@ namespace DayCare.ViewModels.Children
 
 		public void RemoveImageAction()
 		{
+			LogManager.GetLog(GetType()).Info("Remove image");
 			var name = FileID;
 			PetoeterImageManager.RemoveFile(FileID);
 			FileID = string.Empty;

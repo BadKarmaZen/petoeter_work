@@ -22,10 +22,12 @@ namespace DayCare.ViewModels.Accounts
 		}
 		public void SaveAction()
 		{
+			LogManager.GetLog(GetType()).Info("Save action");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Events.ShowDialog());
 
-			using (var db = new PetoeterDb(@"E:\petoeter_lite.ldb"))
+			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
 				var account = new Account
 				{
@@ -39,6 +41,8 @@ namespace DayCare.ViewModels.Accounts
 				var space = new char [] { ' ' };
 				foreach (var name in names)
 				{
+					LogManager.GetLog(GetType()).Info("Add member'{0}'", name);
+
 					var foo = name.Split(space, StringSplitOptions.RemoveEmptyEntries);
 
 					string firstname = string.Empty;
@@ -62,9 +66,11 @@ namespace DayCare.ViewModels.Accounts
 					};
 
 					account.Members.Add(member);
+					member.Updated = DateTime.Now;
 					db.Members.Insert(member);
 				}
-
+				
+				account.Updated = DateTime.Now;
 				db.Accounts.Insert(account);
 
 				ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
@@ -73,11 +79,12 @@ namespace DayCare.ViewModels.Accounts
 						Task = new EditAccountViewModel(account)
 					});
 			}
-
 		}
 
 		public void CancelAction()
 		{
+			LogManager.GetLog(GetType()).Info("Cancel");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Events.ShowDialog());
 
@@ -87,68 +94,5 @@ namespace DayCare.ViewModels.Accounts
 					Task = new AccountMainViewModel()
 				});
 		}
-	}
-	//public class AddAccountViewModel : ReactivatableScreen
-	//{
-	//    private Account _account;
-	//    public AccountDetailViewModel Detail { get; set; }
-	//    public ChildrenMainViewModel ChildrenDetail { get; set; } 
-
-	//    public AddAccountViewModel(Account account = null)
-	//    {
-	//        if (account == null)
-	//        {
-	//            _account = new Account { Id = Guid.NewGuid() };                
-	//        }
-	//        else
-	//        {
-	//            _account = account;
-	//        }
-
-	//        Detail = new AccountDetailViewModel(_account);
-	//        ChildrenDetail = new ChildrenMainViewModel(_account); 
-
-	//        var tasks = ServiceProvider.Instance.GetService<TaskManager>();
-	//        tasks.StartTask(new AddAccountTask
-	//        {
-	//            ReturnAction = () =>
-	//                ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-	//                    new Core.Events.SwitchTask
-	//                    {
-	//                        Task = new AddAccountViewModel(_account)
-	//                    })
-	//        });
-	//    }
-
-	//    public override void Reactivate()
-	//    {
-	//        ChildrenDetail.Reactivate();
-	//    }
-
-	//    public void SaveAction()
-	//    {
-	//        //  get data
-	//        _account.Name = Detail.Name;
-	//        _account.Children = (from c in ChildrenDetail.Children
-	//                             select c.Tag).ToList();
-
-	//        ServiceProvider.Instance.GetService<Petoeter>().SaveRecord(_account);
-	//        ServiceProvider.Instance.GetService<TaskManager>().EndTask();
-	//        ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-	//            new Core.Events.SwitchTask
-	//            {
-	//                Task = new AccountMainViewModel()
-	//            });
-	//    }
-
-	//    public void CancelAction()
-	//    {
-	//        ServiceProvider.Instance.GetService<TaskManager>().EndTask();
-	//        ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-	//            new Core.Events.SwitchTask
-	//            {
-	//                Task = new AccountMainViewModel()
-	//            });
-	//    }
-	//}    
+	}  
 }

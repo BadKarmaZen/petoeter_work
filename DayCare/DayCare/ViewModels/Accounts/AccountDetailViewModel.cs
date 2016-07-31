@@ -25,6 +25,8 @@ namespace DayCare.ViewModels.Accounts
 
 		public AccountDetailViewModel(Account account)
 		{
+			LogManager.GetLog(GetType()).Info("Create");
+
 			_name = account.Name;
 			_account = account;
 		}		
@@ -32,6 +34,8 @@ namespace DayCare.ViewModels.Accounts
 
 		public void RenameAction()
 		{
+			LogManager.GetLog(GetType()).Info("Rename action");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Core.Events.ShowDialog
 				{

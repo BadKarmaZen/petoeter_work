@@ -75,6 +75,8 @@ namespace DayCare.ViewModels.Scheduler
 
 		public WeekScheduleViewModel(int index)
 		{
+			LogManager.GetLog(GetType()).Info("Create");
+			
 			_schedule = new List<ScheduleDayUI>(from i in Enumerable.Range(0, 5) select new ScheduleDayUI { Index = i });
 			Index = index;
 		}

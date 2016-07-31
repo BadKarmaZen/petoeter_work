@@ -130,16 +130,15 @@ namespace DayCare.ViewModels.Precense
 		
 		#endregion
 
-
 		public PresenceMainViewModel()
 		{
 			var lst = new List<PresenceUI>();
 
 			var today = DateTimeProvider.Now().Date.AddDays(-2);
+			LogManager.GetLog(GetType()).Info("Create({0})", today.ToShortDateString());
 
 			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
-				//db.DropCollection("presence");
 				DebugShow(db.Presences.FindAll());
 
 				if (db.Presences.Find(p => p.Date == today).Count() == 0)
@@ -220,6 +219,8 @@ namespace DayCare.ViewModels.Precense
 
 		public void SelectChildAction(PresenceUI child)
 		{
+			LogManager.GetLog(GetType()).Info("Select child");
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Core.Events.ShowDialog
 				{
