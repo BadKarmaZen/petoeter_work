@@ -17,14 +17,13 @@ namespace DayCare.ViewModels.Dialogs
 		public virtual void YesAction()
 		{
 			LogManager.GetLog(GetType()).Info("Yes Clicked");
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				 new Events.ShowDialog());
 
 			if (Yes != null)
 			{
 				Yes();
 			}
-
-			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-				 new Events.ShowDialog());
 		}
 
 		public void NoAction()
