@@ -17,6 +17,6 @@ namespace DayCare.Model.Lite
 		public DateTime TakenAt { get; set; }
 
 		public int TimeCode { get; set; }
-
+		public Expense Expense { get; set; }
 	}
 }

@@ -166,13 +166,13 @@ namespace DayCare.ViewModels.Dashboard
 
 		public void ExpensesAction()
 		{
-			//LogManager.GetLog(GetType()).Info("Expenses");
-			//ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
-			//ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-			//	new Core.Events.SwitchTask
-			//	{
-			//		Task = new ExpenseMainViewModel()
-			//	});
+			LogManager.GetLog(GetType()).Info("Expenses");
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				new Core.Events.SwitchTask
+				{
+					Task = new ExpenseMainViewModel()
+				});
 		}
 
 	}

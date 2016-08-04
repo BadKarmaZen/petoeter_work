@@ -1,6 +1,8 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
+using DayCare.Model.Lite;
 using DayCare.Model.UI;
+using DayCare.ViewModels.UICore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,48 +12,67 @@ using System.Windows.Media.Imaging;
 
 namespace DayCare.ViewModels.Expenses
 {
-	/*public class ExpenseUI :  TaggedItemUI<Child>
+	public class ExpenseUI :  TaggedItemUI<Expense>
 	{
 		public BitmapImage ImageData
 		{
 			get
 			{
-				var img = ServiceProvider.Instance.GetService<ImageManager>();
-				return img.CreateBitmap(img.FindImage(Tag.Id.ToString()));
+				return PetoeterImageManager.GetImage(FileId);
 			}
 		}
+
+		public bool ShowImage
+		{
+			get
+			{
+				return !string.IsNullOrEmpty(FileId);
+			}
+		}
+
+		public string FileId { get; set; }
 	}
 
-	class ExpenseMainViewModel : Screen, ICloseScreen
+	class ExpenseMainViewModel : ListItemScreen<ExpenseUI>
 	{
-		private List<ExpenseUI> _expenses;
-
-		public List<ExpenseUI> Expenses
-		{
-			get { return _expenses; }
-			set { _expenses = value; NotifyOfPropertyChange(() => Expenses); }
-		}
-
 		public ExpenseMainViewModel()
 		{
-			var model = ServiceProvider.Instance.GetService<Petoeter>();
-
-			Expenses = (from c in model.GetChild(c => c.Deleted == false)
-									select new ExpenseUI() { Tag = c }).ToList();
-
 		}
 
-		public void SelectChildAction(ExpenseUI child)
+		protected override void LoadItems()
 		{
+			var today = DateTimeProvider.Now().Date;
+
+			using (var db = new PetoeterDb(PetoeterDb.FileName))
+			{
+				var query = from p in db.Presences.Find(p => p.Date == today)
+										select new ExpenseUI 
+										{
+											Name = p.Child.GetFullName(),
+											FileId = p.Child.FileId,
+											Tag = p.Expense
+										};
+				Items = query.ToList();
+			}
+			base.LoadItems();
+		}
+
+		public void EditExpenseAction(ExpenseUI expense)
+		{
+			if (expense == null)
+			{
+				expense = SelectedItem;
+			}
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-								new Core.Events.ShowDialog
-								{
-									Dialog = new ExpenseDetailViewModel(child.Tag)
-								});
+				new Core.Events.ShowDialog
+				{
+					Dialog = new ExpenseDetailViewModel(expense)
+				});
 		}
 
 		public void CloseThisScreen()
 		{
 		}
-	}*/
+	}
 }
