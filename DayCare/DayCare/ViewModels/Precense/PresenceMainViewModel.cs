@@ -4,6 +4,7 @@ using DayCare.Model;
 using DayCare.Model.Lite;
 using DayCare.Model.UI;
 using DayCare.ViewModels.Children;
+using DayCare.ViewModels.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -118,7 +119,9 @@ namespace DayCare.ViewModels.Precense
 		#region Members
 		private List<PresenceUI> _presenceList;
 
-		private DispatcherTimer _timer;		
+		private DispatcherTimer _timer;
+
+		public Events.RegisterMenu AddChildMenu { get; set; }
 		#endregion
 
 		#region Properties
@@ -132,19 +135,53 @@ namespace DayCare.ViewModels.Precense
 
 		public PresenceMainViewModel()
 		{
+			LogManager.GetLog(GetType()).Info("Create");
+
+			//	add menu
+			AddChildMenu = new Events.RegisterMenu
+			{
+				Caption = "Toeveogen",
+				Id = "PresenceMainViewModel.AddChildMenu",
+				Add = true,
+				Action = () => 
+				{
+					ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+							new Events.ShowDialog
+							{
+								Dialog = new PasswordDialogViewModel("856039")
+								{
+									Yes = () => AddChildAction()
+								}
+							});
+				}
+			};
+
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddChildMenu);
+
+			LoadPresenceData();
+
+			_timer = new DispatcherTimer(DispatcherPriority.Render);
+			_timer.Interval = TimeSpan.FromSeconds(5);
+			_timer.Tick += (s, e) => { RefreshThumbs(); };
+
+			_timer.Start();
+
+			ServiceProvider.Instance.GetService<EventAggregator>().Subscribe(this);
+		}
+
+		private void LoadPresenceData()
+		{
 			var lst = new List<PresenceUI>();
 
 			var today = DateTimeProvider.Now().Date;
-			LogManager.GetLog(GetType()).Info("Create({0})", today.ToShortDateString());
 
 			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
-				DebugShow(db.Presences.FindAll());
-
 				if (db.Presences.Find(p => p.Date == today).Count() == 0)
 				{
+					LogManager.GetLog(GetType()).Info("Create({0})", today.ToShortDateString());
 					//	create a presence record for all children for today
-					var children = (from c in db.Children.FindAll() select c).ToList();
+					//	var children = (from c in db.Children.FindAll() select c).ToList();
 
 					foreach (var child in from c in db.Children.FindAll()
 																where c.Schedule.Exists(d => d.Day == today)
@@ -166,7 +203,7 @@ namespace DayCare.ViewModels.Precense
 						}
 					}
 				}
-
+				
 				//	load
 				foreach (var presence in db.Presences.Find(p => p.Date == today))
 				{
@@ -175,30 +212,32 @@ namespace DayCare.ViewModels.Precense
 						Name = presence.Child.GetFullName(),
 						Tag = presence,
 						MaxTime = new TimeSpan(presence.TimeCode, 0, 0)
-					});					
+					});
 				}
 			}
 			
+			LogManager.GetLog(GetType()).Info("Loaded children: {0}", lst.Count);
+
 			PresenceList = lst;
 			RefreshThumbs();
-
-			_timer = new DispatcherTimer(DispatcherPriority.Render);
-			_timer.Interval = TimeSpan.FromSeconds(5);
-			_timer.Tick += (s, e) => { RefreshThumbs(); };
-
-			_timer.Start();
-
-			ServiceProvider.Instance.GetService<EventAggregator>().Subscribe(this);
 		}
 
-		private void DebugShow(IEnumerable<Presence> presences)
+		public void AddChildAction()
 		{
-			foreach (var pres in presences)
-			{
-				Debug.WriteLine("[{0}] {1}", pres.Id, pres.Child.GetFullName());
-			}
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				new Events.ShowDialog
+				{
+					Dialog = new AddPresenceDialogViewModel()
+					{
+						Yes = () =>
+						{
+							LoadPresenceData();
+						}
+					}
+				});
+ 
 		}
-
+		
 		private int CalculateTimeCode(Model.Lite.Date date)
 		{
 			if (date.Morning || date.Afternoon)
@@ -231,6 +270,8 @@ namespace DayCare.ViewModels.Precense
 
 		public void CloseThisScreen()
 		{
+			AddChildMenu.Add = false;
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddChildMenu);
 			_timer.Stop();
 		}
 

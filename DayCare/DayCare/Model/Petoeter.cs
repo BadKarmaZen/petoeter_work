@@ -408,8 +408,14 @@ namespace DayCare.Model
 
 					children.ForEach(c =>
 					{
-						var file = db.FileStorage.FindById(c.FileId);
-						export.FileStorage.Upload(c.FileId, file.OpenRead());
+						if (c.FileId != null)
+						{
+							var file = db.FileStorage.FindById(c.FileId);
+							if (file != null)
+							{
+								export.FileStorage.Upload(c.FileId, file.OpenRead());								
+							}					
+						}
 					});
 
 					var members = (from m in db.Members.FindAll()
@@ -528,16 +534,19 @@ namespace DayCare.Model
 								db.Children.Update(child);
 							}
 
-							var file = import.FileStorage.FindById(child.FileId);
-							if (file != null)
+							if (string.IsNullOrEmpty(child.FileId) == false)
 							{
-								if (db.FileStorage.Exists(child.FileId))
+								var file = import.FileStorage.FindById(child.FileId);
+								if (file != null)
 								{
-									log.Info("Update child: remove picture");
-									db.FileStorage.Delete(child.FileId);
-								}
-								log.Info("Update child: upload picture");
-								db.FileStorage.Upload(child.FileId, file.OpenRead());
+									if (db.FileStorage.Exists(child.FileId))
+									{
+										log.Info("Update child: remove picture");
+										db.FileStorage.Delete(child.FileId);
+									}
+									log.Info("Update child: upload picture");
+									db.FileStorage.Upload(child.FileId, file.OpenRead());
+								}								
 							}
 						}
 					}
