@@ -91,136 +91,139 @@ namespace DayCare.Core.Reports
 
 			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
-				var query = from c in db.Children.FindAll()
-										orderby c.BirthDay descending
-										select c;
-				foreach (var child in query)
+				var presenceData = db.Presences.Find(p => p.Date >= startDate.Date && p.Date <= endDate.Date).ToList();
+
+				if (presenceData != null && presenceData.Count != 0)
 				{
-					Debug.WriteLine(child.LastName + " " + child.FirstName);
+					var presences = from p in presenceData
+													orderby p.Child.BirthDay
+													group p by p.Child.Id into presencegroup
+													//orderby presencegroup.Key.BirthDay
+													select presencegroup;
+					var count = presences.Count();
+					var rowSize = count > 30 ? 24.75 : 27.0;
 
-					//foreach (var weekday in from wd in weekdays select wd.Date)
-					//{
-						
-					//}
-
-					foreach (var day in child.Schedule)
+					foreach (var presence in presences)
 					{
-						bool in_week = weekdays.Exists(di => di.Date == day.Day);
+						var nr = ws.Range(rowIndex, 1, rowIndex + 1, 1).Merge();
+						nr.Value = string.Format("{0}.", childIndex);
+						nr.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+						nr.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+						Enbox(nr.Style);
 
-						if (in_week)
+
+						var cname = ws.Range(rowIndex, 2, rowIndex + 1, 2).Merge();
+						cname.Value = presence.First().Child.GetFullName();
+						//Ch.GetFullName();		//	string.Format("{0} {1}", child.LastName, child.FirstName);
+						cname.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+						cname.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+						cname.Style.Alignment.WrapText = true;
+						Enbox(cname.Style);
+
+						cell = ws.Cell(rowIndex, "C");
+						cell.Value = "Aankomst";
+						Enbox(cell.Style);
+						ws.Row(rowIndex).Height = rowSize;
+
+						cell = ws.Cell(rowIndex + 1, "C");
+						cell.Value = "Vertrek";
+						Enbox(cell.Style);
+						ws.Row(rowIndex + 1).Height = rowSize;
+
+						foreach (var day in from p in presence orderby p.Date select p)
 						{
-							Debug.WriteLine("is coming @ " + day.Day);
+							int dateindex = (day.Date - startDate).Days;
+
+							if (day.BroughtBy != null)
+							{
+								colid = new ColumnId('D');
+								colid.Increment(dateindex * 3);
+
+								cell = ws.Cell(rowIndex, colid.ToString());
+								cell.SetValue<string>(day.BroughtAt.ToString("HH:MM"));
+
+								colid.Increment(1);
+								cell = ws.Cell(rowIndex, colid.ToString());
+								cell.Value = day.BroughtBy.GetFullName();
+							}
+
+							if (day.TakenBy != null)
+							{
+								colid = new ColumnId('D');
+								colid.Increment(dateindex * 3);
+
+								cell = ws.Cell(rowIndex + 1, colid.ToString()); 
+								cell.SetValue<string>(day.TakenAt.ToString("HH:MM"));
+
+								colid.Increment(1);
+								cell = ws.Cell(rowIndex + 1, colid.ToString());
+								cell.Value = day.TakenBy.GetFullName();
+							}
 						}
-						else
-						{
-							Debug.WriteLine("not this week@ " + day.Day);
-						}	
-					}					
-				}
 
-
-				var children = from c in db.Children.FindAll()
-											 where c.Schedule.Any(d => weekdays.Any(wd => wd.Date == d.Day))
-											 orderby c.BirthDay ascending
-											 select c;
-				
-				var rowSize = children.Count() > 30 ? 24.75 : 27.0;
-
-				foreach (var child in children)
-				{
-					var nr = ws.Range(rowIndex, 1, rowIndex + 1, 1).Merge();
-					nr.Value = string.Format("{0}.", childIndex);
-					nr.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-					nr.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-					Enbox(nr.Style);
-
-
-					var cname = ws.Range(rowIndex, 2, rowIndex + 1, 2).Merge();
-					cname.Value = string.Format("{0} {1}", child.LastName, child.FirstName);
-					cname.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-					cname.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-					cname.Style.Alignment.WrapText = true;
-					Enbox(cname.Style);
-
-					cell = ws.Cell(rowIndex, "C");
-					cell.Value = "Aankomst";
-					Enbox(cell.Style);
-					ws.Row(rowIndex).Height = rowSize;
-
-					cell = ws.Cell(rowIndex + 1, "C");
-					cell.Value = "Vertrek";
-					Enbox(cell.Style);
-					ws.Row(rowIndex + 1).Height = rowSize;
-
-					colid = new ColumnId('D');
-					for (int index = 0; index < 15; index++)
-					{
-						cell = ws.Cell(rowIndex, colid.ToString());
-						Enbox(cell.Style);
-						cell = ws.Cell(rowIndex + 1, colid.ToString());
-						Enbox(cell.Style);
-
-						colid.Increment();
+						childIndex++;
+						rowIndex += 2;
 					}
-
-					childIndex++;
-					rowIndex += 2;
 				}
+				else
+				{
+					//var query = from c in db.Children.FindAll()
+					//						orderby c.BirthDay descending
+					//						select c;
 
+					var children = from c in db.Children.FindAll()
+												 where c.Schedule.Any(d => weekdays.Any(wd => wd.Date == d.Day))
+												 orderby c.BirthDay ascending
+												 select c;
+
+					var rowSize = children.Count() > 30 ? 24.75 : 27.0;
+
+					foreach (var child in children)
+					{
+						var nr = ws.Range(rowIndex, 1, rowIndex + 1, 1).Merge();
+						nr.Value = string.Format("{0}.", childIndex);
+						nr.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+						nr.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+						Enbox(nr.Style);
+
+
+						var cname = ws.Range(rowIndex, 2, rowIndex + 1, 2).Merge();
+						cname.Value = string.Format("{0} {1}", child.LastName, child.FirstName);
+						cname.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+						cname.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+						cname.Style.Alignment.WrapText = true;
+						Enbox(cname.Style);
+
+						cell = ws.Cell(rowIndex, "C");
+						cell.Value = "Aankomst";
+						Enbox(cell.Style);
+						ws.Row(rowIndex).Height = rowSize;
+
+						cell = ws.Cell(rowIndex + 1, "C");
+						cell.Value = "Vertrek";
+						Enbox(cell.Style);
+						ws.Row(rowIndex + 1).Height = rowSize;
+
+						colid = new ColumnId('D');
+						for (int index = 0; index < 15; index++)
+						{
+							cell = ws.Cell(rowIndex, colid.ToString());
+							Enbox(cell.Style);
+							cell = ws.Cell(rowIndex + 1, colid.ToString());
+							Enbox(cell.Style);
+
+							colid.Increment();
+						}
+
+						childIndex++;
+						rowIndex += 2;
+					}
+				}
 			}
 
 			//var model = ServiceProvider.Instance.GetService<Petoeter>();
-
-			var thisWeek = DatePeriod.MakePeriod(month, year);
-
-			//var children = from c in model.GetChildren()
-			//							 where c.Deleted == false && c.HasValidPeriod(date)
-			//							 orderby c.BirthDay
-			//							 select c;
-
-			//var rowSize = children.Count() > 30 ? 24.75 : 27.0;
-
-			//foreach (var child in children)
-			//{
-			//	var nr = ws.Range(rowIndex, 1, rowIndex + 1, 1).Merge();
-			//	nr.Value = string.Format("{0}.", childIndex);
-			//	nr.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-			//	nr.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-			//	Enbox(nr.Style);
-
-
-			//	var cname = ws.Range(rowIndex, 2, rowIndex + 1, 2).Merge();
-			//	cname.Value = string.Format("{0} {1}", child.LastName, child.FirstName);
-			//	cname.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-			//	cname.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-			//	cname.Style.Alignment.WrapText = true;
-			//	Enbox(cname.Style);
-
-			//	cell = ws.Cell(rowIndex, "C");
-			//	cell.Value = "Aankomst";
-			//	Enbox(cell.Style);
-			//	ws.Row(rowIndex).Height = rowSize;
-
-			//	cell = ws.Cell(rowIndex + 1, "C");
-			//	cell.Value = "Vertrek";
-			//	Enbox(cell.Style);
-			//	ws.Row(rowIndex + 1).Height = rowSize;
-
-			//	colid = new ColumnId('D');
-			//	for (int index = 0; index < 15; index++)
-			//	{
-			//		cell = ws.Cell(rowIndex, colid.ToString());
-			//		Enbox(cell.Style);
-			//		cell = ws.Cell(rowIndex + 1, colid.ToString());
-			//		Enbox(cell.Style);
-
-			//		colid.Increment();
-			//	}
-
-			//	childIndex++;
-			//	rowIndex += 2;
-			//}
-
+			//var thisWeek = DatePeriod.MakePeriod(month, year);
+			
 			var mergedcell = ws.Range(2, 1, 3, 3).Merge();
 			mergedcell.Value = "Naam";
 			mergedcell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
@@ -243,53 +246,6 @@ namespace DayCare.Core.Reports
 				ws.Column((int)(4 + (day * 3) + 1)).Width = 10.14;
 				ws.Column((int)(4 + (day * 3) + 2)).Width = 5.43;
 			}
-
-			/*for (int index = 3; index <= 3 + columns; index++)
-			{
-				cell = ws.Cell(2, index);
-				cell.Style.Border.LeftBorder = XLBorderStyleValues.Thin;
-				cell.Style.Border.TopBorder = XLBorderStyleValues.Thin;
-				cell.Style.Border.RightBorder = XLBorderStyleValues.Thin;
-				cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-
-				cell = ws.Cell(3, index);
-				cell.Style.Border.LeftBorder = XLBorderStyleValues.Thin;
-				cell.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
-				cell.Style.Border.RightBorder = XLBorderStyleValues.Thin;
-				cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-			}
-
-			var rng = ws.Range(4, 3, (int)(2 + childIndex), (int)(3 + columns));
-			rng.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-			rng.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-			rng.Style.Font.FontColor = XLColor.LightGray;
-			rng.Style.Border.LeftBorder = XLBorderStyleValues.Thin;
-			rng.Style.Border.RightBorder = XLBorderStyleValues.Thin;
-			rng.Style.Border.TopBorder = XLBorderStyleValues.Thin;
-			rng.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
-
-			int col = 0;
-			foreach (var column in rng.Columns().Skip(1))
-			{
-				if (!weekdays[col++].Valid)
-				{
-					column.Style.Fill.BackgroundColor = XLColor.LightGray;
-				}
-			}
-
-			rng.FirstColumn().Style.Font.FontColor = XLColor.Black;
-
-			rng = ws.Range(4, 1, (int)(2 + childIndex), 2);
-			rng.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-			rng.Style.Border.LeftBorder = XLBorderStyleValues.Thin;
-			rng.Style.Border.RightBorder = XLBorderStyleValues.Thin;
-			rng.Style.Border.TopBorder = XLBorderStyleValues.Thin;
-			rng.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
-
-			ws.Row(1).Height = 18.75;
-			ws.Row(2).Height = 12.75;
-			ws.Row(3).Height = 12.75;
-			ws.Rows(4, (int)(2 + childIndex)).Height = 25.50;*/
 
 			ws.PageSetup.PageOrientation = XLPageOrientation.Landscape;
 			ws.PageSetup.PaperSize = XLPaperSize.A4Paper;

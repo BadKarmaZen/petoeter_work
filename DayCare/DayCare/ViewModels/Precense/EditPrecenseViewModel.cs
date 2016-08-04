@@ -18,11 +18,11 @@ namespace DayCare.ViewModels.Precense
 		{
 			NotArrivedYet,
 			HasArrived,
-			HasLeft			
+			HasLeft
 		}
 
 		#region Members
-		
+
 		private string _name;
 		private State _currentState;
 		private Presence _presence;
@@ -36,7 +36,7 @@ namespace DayCare.ViewModels.Precense
 		private State CurrentState
 		{
 			get { return _currentState; }
-			set 
+			set
 			{
 				_currentState = value;
 				NotifyOfPropertyChange(() => HasArrived);
@@ -47,12 +47,12 @@ namespace DayCare.ViewModels.Precense
 
 		public bool NotArrivedYet
 		{
-			get 
+			get
 			{
 				return _currentState == State.NotArrivedYet;
 			}
 		}
-		public bool HasArrived 
+		public bool HasArrived
 		{
 			get { return _currentState != State.NotArrivedYet; }
 		}
@@ -73,7 +73,7 @@ namespace DayCare.ViewModels.Precense
 		public DateTime CurrentTime
 		{
 			get { return _currentTime; }
-			set { _currentTime = value; NotifyOfPropertyChange(()=>CurrentTime);}
+			set { _currentTime = value; NotifyOfPropertyChange(() => CurrentTime); }
 		}
 
 		public bool ShowConfirmButton
@@ -104,12 +104,12 @@ namespace DayCare.ViewModels.Precense
 		}
 
 		#endregion
-		
+
 		#region Arriving
-		
+
 		private string _broughtByName;
 		private DateTime _broughtAt;
-			
+
 		public string BroughtByName
 		{
 			get { return _broughtByName; }
@@ -141,11 +141,11 @@ namespace DayCare.ViewModels.Precense
 		public string TakenByName
 		{
 			get { return _takenByName; }
-			set { _takenByName = value; NotifyOfPropertyChange(()=>TakenByName);}
+			set { _takenByName = value; NotifyOfPropertyChange(() => TakenByName); }
 		}
 
 		#endregion
-				
+
 		public EditPrecenseViewModel(Presence presence)
 		{
 			LogManager.GetLog(GetType()).Info("Create");
@@ -159,20 +159,20 @@ namespace DayCare.ViewModels.Precense
 			{
 				CurrentState = State.HasArrived;
 				BroughtByName = _presence.BroughtBy.GetFullName();
-				_broughtAt = _presence.BroughtAt;				
+				_broughtAt = _presence.BroughtAt;
 			}
 
 			if (_presence.TakenBy != null)
 			{
 				CurrentState = State.HasLeft;
 				TakenByName = _presence.TakenBy.GetFullName();
-				_takenAt = _presence.TakenAt;				
+				_takenAt = _presence.TakenAt;
 			}
 
 			CurrentTime = DateTime.Now;
 
 			if (HasLeft == false)
-			{			
+			{
 				using (var db = new PetoeterDb(PetoeterDb.FileName))
 				{
 					//	find account
@@ -180,11 +180,18 @@ namespace DayCare.ViewModels.Precense
 					if (account != null)
 					{
 						Resposibles = (from m in account.Members
-												 select new MemberUI 
-												 {
-													 Name = m.GetFullName(),
-													 Tag = m
-												 }).ToList();
+													 select new MemberUI
+													{
+														Name = m.GetFullName(),
+														Tag = m
+													}).ToList();
+
+						Resposibles.AddRange(from m in db.Members.Find(mem => mem.Phone == "GrandParents")
+																select new MemberUI
+																{
+																	Name = m.FirstName,
+																	Tag = m
+																});
 					}
 				}
 			}
@@ -198,9 +205,9 @@ namespace DayCare.ViewModels.Precense
 				{
 					if (account.Children.Exists(c => c.Id == _presence.Child.Id))
 					{
-						return account;						
-					}					
-				}				
+						return account;
+					}
+				}
 			}
 
 			return null;
@@ -214,7 +221,7 @@ namespace DayCare.ViewModels.Precense
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Events.ShowDialog());
 		}
-		
+
 		#endregion
 
 
@@ -230,14 +237,14 @@ namespace DayCare.ViewModels.Precense
 				if (CurrentState == State.NotArrivedYet)
 				{
 					_presence.BroughtBy = SelectedResponsible.Tag;
-					_presence.BroughtAt	 = _broughtAt = CurrentTime;
+					_presence.BroughtAt = _broughtAt = CurrentTime;
 				}
 				else if (CurrentState == State.HasArrived)
 				{
 					_presence.TakenBy = SelectedResponsible.Tag;
 					_presence.TakenAt = _takenAt = CurrentTime;
 				}
-				
+
 				_presence.Updated = DateTime.Now;
 				db.Presences.Update(_presence);
 			}

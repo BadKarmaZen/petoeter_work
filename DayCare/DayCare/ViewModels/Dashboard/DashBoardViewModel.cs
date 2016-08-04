@@ -2,6 +2,7 @@
 using DayCare.Core;
 using DayCare.ViewModels.Accounts;
 using DayCare.ViewModels.Calendar;
+using DayCare.ViewModels.Dialogs;
 using DayCare.ViewModels.Expenses;
 using DayCare.ViewModels.Precense;
 using DayCare.ViewModels.Reports;
@@ -18,6 +19,18 @@ namespace DayCare.ViewModels.Dashboard
 	{
 		private static Events.RegisterMenu AddBackMenu;
 		private static Events.RegisterMenu RemoveBackMenu;
+
+		private static Events.RegisterMenu AddBackPwdMenu;
+
+		public bool IsPresenceMode 
+		{
+			get
+			{
+				return Properties.Settings.Default.PresenseMode;
+			}
+		}
+
+
 
 		static DashBoardViewModel()
 		{
@@ -41,6 +54,32 @@ namespace DayCare.ViewModels.Dashboard
 			{
 				Id = "Menu.Home",
 				Add = false
+			};
+
+			AddBackPwdMenu = new Events.RegisterMenu
+			{
+				Caption = "Home",
+				Id = "Menu.Home",
+				Add = true,
+				Action = () =>
+					{
+						ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+							new Events.ShowDialog
+							{
+								Dialog = new PasswordDialogViewModel("856039")
+								{
+									Yes = () =>
+									{
+										ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+											new Core.Events.SwitchTask
+											{
+												Task = new DashBoardViewModel()
+											});
+										ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(RemoveBackMenu);
+									}
+								}
+							});					
+					}
 			};
 		}
 
@@ -81,7 +120,7 @@ namespace DayCare.ViewModels.Dashboard
 		{
 			LogManager.GetLog(GetType()).Info("Start Presence");
 
-			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackPwdMenu);
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 				new Core.Events.SwitchTask
 				{

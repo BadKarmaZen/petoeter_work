@@ -34,12 +34,12 @@ namespace DayCare.Core
 
 		public void Error(Exception exception)
 		{
-			WriteLine("ERROR : {0}" + exception);
-			WriteLine("ERROR : {0}" + exception.Message);
+			WriteLine("ERROR : {0}", exception);
+			WriteLine("ERROR : {0}", exception.Message);
 			if (exception.InnerException != null)
 			{
-				WriteLine("ERROR.INNER : {0}" + exception.InnerException);
-				WriteLine("ERROR.INNER : {0}" + exception.InnerException.Message);				
+				WriteLine("ERROR.INNER : {0}", exception.InnerException);
+				WriteLine("ERROR.INNER : {0}", exception.InnerException.Message);				
 			}
 		}
 

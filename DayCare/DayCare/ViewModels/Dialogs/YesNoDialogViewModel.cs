@@ -14,7 +14,7 @@ namespace DayCare.ViewModels.Dialogs
 		public System.Action Yes { get; set; }
 		public System.Action No { get; set; }
 
-		public void YesAction()
+		public virtual void YesAction()
 		{
 			LogManager.GetLog(GetType()).Info("Yes Clicked");
 

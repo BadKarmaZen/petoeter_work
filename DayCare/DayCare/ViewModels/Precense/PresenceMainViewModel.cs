@@ -134,7 +134,7 @@ namespace DayCare.ViewModels.Precense
 		{
 			var lst = new List<PresenceUI>();
 
-			var today = DateTimeProvider.Now().Date.AddDays(-2);
+			var today = DateTimeProvider.Now().Date;
 			LogManager.GetLog(GetType()).Info("Create({0})", today.ToShortDateString());
 
 			using (var db = new PetoeterDb(PetoeterDb.FileName))
@@ -144,6 +144,7 @@ namespace DayCare.ViewModels.Precense
 				if (db.Presences.Find(p => p.Date == today).Count() == 0)
 				{
 					//	create a presence record for all children for today
+					var children = (from c in db.Children.FindAll() select c).ToList();
 
 					foreach (var child in from c in db.Children.FindAll()
 																where c.Schedule.Exists(d => d.Day == today)

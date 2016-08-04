@@ -1,4 +1,5 @@
-﻿using DayCare.Database.Model;
+﻿using Caliburn.Micro;
+using DayCare.Database.Model;
 using DayCare.Model.Lite;
 using System;
 using System.Collections.Generic;
@@ -11,14 +12,16 @@ namespace DayCare.Model
 {
 	public class Petoeter
 	{
-		public enum ApplicationMode
-		{
-			Configuration,
-			Presence
-		}
+		public const string AdminExportFilename = "export_admin.ldb";
+		public const string PresenceExportFilename = "export_presence.ldb";
+		//public enum ApplicationMode
+		//{
+		//	Configuration,
+		//	Presence
+		//}
 
 		//public DayCare.Database.DatabaseEngine Database { get; set; }
-		public ApplicationMode Mode { get; set; }
+		//public ApplicationMode Mode { get; set; }
 
 		#region Properties
 		//public List<Account> Accounts { get; set; }
@@ -29,9 +32,9 @@ namespace DayCare.Model
 
 		//public List<Holiday> Holidays { get; set; }
 
-		public List<Presence> Presences { get; set; }
+		//public List<Presence> Presences { get; set; }
 
-		public SystemSetting Settings { get; set; }
+		//public SystemSetting Settings { get; set; }
 
 		//public List<ChildPresence> ChildPresences { get; set; }
 
@@ -40,11 +43,29 @@ namespace DayCare.Model
 
 		public Petoeter()
 		{
-			Mode = ApplicationMode.Presence;
+			//Mode = ApplicationMode.Presence;
 
 			//Database = new DayCare.Database.DatabaseEngine(Mode);
 
-			LoadData();
+			//	Verify Database
+			VerifyDatabase();
+
+			//LoadData();
+		}
+
+		private void VerifyDatabase()
+		{
+			//	Add Oma and Opa Generic members
+			//
+			using (var db = new PetoeterDb(PetoeterDb.FileName))
+			{
+				var member = db.Members.Find(m => m.Phone == "GrandParents");
+				if (member.Count() == 0)
+				{
+					db.Members.Insert(new Lite.Member { FirstName = "Oma", Phone = "GrandParents" });
+					db.Members.Insert(new Lite.Member { FirstName = "Opa", Phone = "GrandParents" });					
+				}				
+			}
 		}
 
 		public bool LoadData()
@@ -297,10 +318,10 @@ namespace DayCare.Model
 												}).ToList();
 			*/
 			//	TODO
-			Settings = new SystemSetting
-			{
-				ImageFolder = @"E:\[Petoeter]\Images"//Database.SystemSettings.PictureFolder
-			};
+			//Settings = new SystemSetting
+			//{
+			//	ImageFolder = @"E:\[Petoeter]\Images"//Database.SystemSettings.PictureFolder
+			//};
 
 			return true;
 		}
@@ -308,79 +329,300 @@ namespace DayCare.Model
 
 		public void Export(string path)
 		{
-			string filename = Path.Combine(path, "export.ldb");
+			if (Properties.Settings.Default.PresenseMode)
+			{
+				ExportPresence(Path.Combine(path, PresenceExportFilename));
+			}
+			else
+			{
+				ExportAdministration(Path.Combine(path, AdminExportFilename));
+			}
+		}
+
+		private void ExportPresence(string filename)
+		{
+			var log = LogManager.GetLog(GetType());
+			var exportTime = DateTime.Now;
+			log.Info("Start presence export ({0}) : {1}.{2:D3}", filename, exportTime, exportTime.Millisecond);
 
 			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
 				var settings = db.GetSettings();
 				var lastExportTime = settings.ExporTimeStamp;
-				var exportTime = DateTime.Now;
+
+				using (var export = new PetoeterDb(filename))
+				{
+					var presence = (from p in db.Presences.Find(p => p.Updated >= lastExportTime) select p).ToList();
+
+					presence.ForEach(p =>
+					{
+						p.Updated = exportTime;
+						log.Info("Export presence: {0}. [{1}] {2}", p.Id, p.Date.ToShortDateString(), p.Child.GetFullName());
+
+						//export.Children.Insert(p.Child);
+
+						//if (export.Members.Exists(m => m.Id == p.BroughtBy.Id) == false)
+						//{
+						//	export.Members.Insert(p.BroughtBy);
+						//}
+
+						//if (export.Members.Exists(m => m.Id == p.TakenBy.Id) == false)
+						//{
+						//	export.Members.Insert(p.TakenBy);
+						//}
+					});
+
+					export.Presences.Insert(presence);
+				}
+
+				settings.ExporTimeStamp = exportTime;
+				db.UpdateSystemSettings();
+			}
+		}
+
+		private void ExportAdministration(string filename)
+		{
+			var log = LogManager.GetLog(GetType());
+			var exportTime = DateTime.Now;
+			log.Info("Start administration export ({0}) : {1}.{2:D3}", filename, exportTime, exportTime.Millisecond);
+
+			using (var db = new PetoeterDb(PetoeterDb.FileName))
+			{
+				var settings = db.GetSettings();
+				var lastExportTime = settings.ExporTimeStamp;
 
 				using (var export = new PetoeterDb(filename))
 				{
 					var children = (from c in db.Children.FindAll()
-													where c.Updated < lastExportTime
+													where c.Updated >= lastExportTime
 													select c).ToList();
 
-					children.ForEach(c => c.Updated = exportTime);
+					children.ForEach(c =>
+					{
+						c.Updated = exportTime;
+						log.Info("Export child: {0}. {1}", c.Id, c.GetFullName());
+					});
 
 					db.Children.Update(children);
 					export.Children.Insert(children);
 
+					children.ForEach(c =>
+					{
+						var file = db.FileStorage.FindById(c.FileId);
+						export.FileStorage.Upload(c.FileId, file.OpenRead());
+					});
 
 					var members = (from m in db.Members.FindAll()
-												 where m.Updated < lastExportTime
+												 where m.Updated >= lastExportTime
 												 select m).ToList();
 
-					members.ForEach(m => m.Updated = exportTime);
+					members.ForEach(m =>
+					{
+						m.Updated = exportTime;
+						log.Info("Export member: {0}. {1}", m.Id, m.GetFullName());
+					});
 
 					db.Members.Update(members);
 					export.Members.Insert(members);
 
 					var accounts = (from a in db.Accounts.FindAll()
-													where a.Updated < lastExportTime
+													where a.Updated >= lastExportTime
 													select a).ToList();
 
-					accounts.ForEach(a => a.Updated = exportTime);
+					accounts.ForEach(a =>
+					{
+						a.Updated = exportTime;
+						log.Info("Export account: {0}. {1}", a.Id, a.Name);
+					});
 
 					db.Accounts.Update(accounts);
 					export.Accounts.Insert(accounts);
 
 					var holidays = (from h in db.Holidays.FindAll()
-													where h.Updated < lastExportTime
+													where h.Updated >= lastExportTime
 													select h).ToList();
 
-					holidays.ForEach(h => h.Updated = exportTime);
+					holidays.ForEach(h =>
+					{
+						h.Updated = exportTime;
+						log.Info("Export holiday: {0}. {1}", h.Id, h.Day);
+					});
 
 					db.Holidays.Update(holidays);
 					export.Holidays.Insert(holidays);
 				}
 
-				settings.ExporTimeStamp = DateTime.Now;
+				settings.ExporTimeStamp = exportTime;
 				db.UpdateSystemSettings();
 			}
 		}
 
-		private void ExportPresenceToConfig(string path)
-		{
-		}
-
-		private void ExportConfigToPresence(string path)
-		{
-		}
-
 		public void Import(string path)
 		{
-			//if (Mode == Petoeter.ApplicationMode.Configuration)
-			//{
-			//	Database.ImportPresenceData(path);
-			//}
-			//else
-			//{
-			//	Database.ImportConfigurationData(path);
-			//}
+			if (Properties.Settings.Default.PresenseMode)
+			{
+				ImportAdministration(Path.Combine(path, AdminExportFilename));
+			}
+			else
+			{
+ 				ImportPresence(Path.Combine(path, PresenceExportFilename));
+			}
+		}
 
-			//LoadData();
+		private void ImportPresence(string filename)
+		{
+			var log = LogManager.GetLog(GetType());
+			var importTime = DateTime.Now;
+
+			log.Info("Start administration import ({0}) : {1}.{2:D3}", filename, importTime, importTime.Millisecond);
+
+			using (var db = new PetoeterDb(PetoeterDb.FileName))
+			{
+				using (var import = new PetoeterDb(filename))
+				{
+					var presences = import.GetCollection<Presence>(PetoeterDb.TablePresence).FindAll().ToList();
+					log.Info("Import presences (#{0})", presences.Count);
+
+					foreach (var presence in presences)
+					{
+						log.Info("Import presence: {0}. [{1}] {2})", presence.Id, presence.Date.ToShortDateString(), presence.Child.GetFullName());
+						presence.Updated = importTime;
+						db.Presences.Insert(presence);
+					}
+
+					import.DropAll();
+				}
+			}
+		}
+
+		private void ImportAdministration(string filename)
+		{
+			var log = LogManager.GetLog(GetType());
+			var importTime = DateTime.Now;
+
+			log.Info("Start administration import ({0}) : {1}.{2:D3}", filename, importTime, importTime.Millisecond);
+
+			using (var db = new PetoeterDb(PetoeterDb.FileName))
+			{
+				using (var import = new PetoeterDb(filename))
+				{
+					if (import.Children.Count() != 0)
+					{
+						var children = (from c in import.Children.FindAll() select c).ToList();
+						log.Info("Import children (#{0})", children.Count);
+
+						foreach (var child in children)
+						{
+							var update_child = db.Children.FindById(child.Id);
+
+							if (update_child == null)
+							{
+								log.Info("Import child: {0}. {1}", child.Id, child.GetFullName());
+								child.Updated = importTime;
+								db.Children.Insert(child);
+							}
+							else
+							{
+								log.Info("Update child: {0}. {1}", child.Id, child.GetFullName());
+								child.Updated = importTime;
+								db.Children.Update(child);
+							}
+
+							var file = import.FileStorage.FindById(child.FileId);
+							if (file != null)
+							{
+								if (db.FileStorage.Exists(child.FileId))
+								{
+									log.Info("Update child: remove picture");
+									db.FileStorage.Delete(child.FileId);
+								}
+								log.Info("Update child: upload picture");
+								db.FileStorage.Upload(child.FileId, file.OpenRead());
+							}
+						}
+					}
+
+					if (import.Members.Count() != 0)
+					{
+						var members = (from m in import.Members.FindAll() select m).ToList();
+						log.Info("Import members (#{0})", members.Count);
+
+						foreach (var member in members)
+						{
+							var update_member = db.Members.FindById(member.Id);
+
+							if (update_member == null)
+							{
+								log.Info("Import member: {0}. {1}", member.Id, member.GetFullName());
+								member.Updated = importTime;
+								db.Members.Insert(member);
+							}
+							else
+							{
+								log.Info("Update member: {0}. {1}", member.Id, member.GetFullName());
+								member.Updated = importTime;
+								db.Members.Update(member);
+							}
+						}
+					}
+
+					if (import.Accounts.Count() != 0)
+					{
+						//var accounts = (from a in import.Accounts.FindAll() select a).ToList();
+						var accounts = (from a in import.GetCollection<Account>(PetoeterDb.TableAccount).FindAll() select a).ToList();
+
+						log.Info("Import accounts (#{0})", accounts.Count);
+
+						foreach (var account in accounts)
+						{
+							//	check if account exist
+							var updateaccount = db.Accounts.FindById(account.Id);
+
+							if (updateaccount == null)
+							{
+								log.Info("Import account: #{0}. {1}", account.Id, account.Name);
+								account.Updated = importTime;
+								db.Accounts.Insert(account);
+							}
+							else
+							{
+								log.Info("Update account: #{0}. {1}", account.Id, account.Name);
+								account.Updated = importTime;
+								db.Accounts.Update(account);
+							}
+						}
+					}
+
+					if (import.Holidays.Count() != 0)
+					{
+						var holidays = (from h in import.Holidays.FindAll() select h).ToList();
+
+						log.Info("Import holidays (#{0})", holidays.Count);
+
+						foreach (var holiday in holidays)
+						{
+							//	check if account exist
+							var updateholiday = db.Accounts.FindById(holiday.Id);
+
+							if (updateholiday == null)
+							{
+								log.Info("Import holiday: #{0}. {1}", holiday.Id, holiday.Day);
+								holiday.Updated = importTime;
+								db.Holidays.Insert(holiday);
+							}
+							else
+							{
+								log.Info("Update holiday: #{0}. {1}", holiday.Id, holiday.Day);
+								holiday.Updated = importTime;
+								db.Holidays.Update(holiday);
+							}
+						}
+					}
+
+					log.Info("Drop all");
+					import.DropAll();
+				}
+			}
 		}
 	}
 }

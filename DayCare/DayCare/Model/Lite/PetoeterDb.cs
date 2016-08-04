@@ -9,6 +9,14 @@ namespace DayCare.Model.Lite
 {
 	public class PetoeterDb : LiteDatabase
 	{
+
+		public const string TableAccount = "account";
+		public const string TableMember = "member";
+		public const string TableChildren = "children";
+		public const string TableHolidays = "holidays";
+		public const string TablePresence = "presence";
+		public const string TableSystem = "SystemSettings";
+
 		public SystemSettings Settings { get; set; }
 
 		public PetoeterDb(string file)
@@ -23,20 +31,20 @@ namespace DayCare.Model.Lite
 			base.OnModelCreating(mapper);
 
 			mapper.Entity<Account>()
-				.DbRef(a => a.Members, "member")
-				.DbRef(a => a.Children, "children");
+				.DbRef(a => a.Members, PetoeterDb.TableMember)
+				.DbRef(a => a.Children, PetoeterDb.TableChildren);
 
 			mapper.Entity<Presence>()
-				.DbRef(p => p.Child, "children")
-				.DbRef(p => p.BroughtBy, "member")
-				.DbRef(p => p.TakenBy, "member");
+				.DbRef(p => p.Child, PetoeterDb.TableChildren)
+				.DbRef(p => p.BroughtBy, PetoeterDb.TableMember)
+				.DbRef(p => p.TakenBy, PetoeterDb.TableMember);
 		}
 
 		public LiteCollection<Account> Accounts
 		{
 			get
 			{
-				return GetCollection<Account>("account")
+				return GetCollection<Account>(PetoeterDb.TableAccount)
 					.Include(a => a.Members)
 					.Include(a => a.Children);
 			}
@@ -46,7 +54,7 @@ namespace DayCare.Model.Lite
 		{
 			get
 			{
-				return GetCollection<Member>("member");
+				return GetCollection<Member>(PetoeterDb.TableMember);
 			}
 		}
 
@@ -54,7 +62,7 @@ namespace DayCare.Model.Lite
 		{
 			get
 			{
-				return GetCollection<Child>("children");
+				return GetCollection<Child>(PetoeterDb.TableChildren);
 			}
 		}
 
@@ -62,7 +70,7 @@ namespace DayCare.Model.Lite
 		{
 			get
 			{
-				return GetCollection<Date>("holidays");
+				return GetCollection<Date>(PetoeterDb.TableHolidays);
 			}
 		}
 
@@ -70,7 +78,7 @@ namespace DayCare.Model.Lite
 		{
 			get
 			{
-				return GetCollection<Presence>("presence")
+				return GetCollection<Presence>(PetoeterDb.TablePresence)
 					.Include(p => p.BroughtBy)
 					.Include(p => p.TakenBy)
 					.Include(a => a.Child);
@@ -78,12 +86,12 @@ namespace DayCare.Model.Lite
 		}
 		public SystemSettings GetSettings()
 		{
-			Settings = GetCollection<SystemSettings>("SystemSettings").FindAll().FirstOrDefault();
+			Settings = GetCollection<SystemSettings>(PetoeterDb.TableSystem).FindAll().FirstOrDefault();
 
 			if (Settings == null)
 			{
 				Settings = new SystemSettings { };
-				GetCollection<SystemSettings>("SystemSettings").Insert(Settings);
+				GetCollection<SystemSettings>(PetoeterDb.TableSystem).Insert(Settings);
 			}
 
 			return Settings;
@@ -91,10 +99,24 @@ namespace DayCare.Model.Lite
 
 		public void UpdateSystemSettings()
 		{
-			GetCollection<SystemSettings>("SystemSettings").Update(Settings);
+			GetCollection<SystemSettings>(PetoeterDb.TableSystem).Update(Settings);
 		}
 
 
+
+		internal void DropAll()
+		{
+			DropCollection(PetoeterDb.TableAccount);
+			DropCollection(PetoeterDb.TableChildren);
+			DropCollection(PetoeterDb.TableMember);
+			DropCollection(PetoeterDb.TablePresence);
+			DropCollection(PetoeterDb.TableHolidays);
+			DropCollection(PetoeterDb.TableSystem);
+
+			var fileIds = (from fs in FileStorage.FindAll()
+										 select fs.Id).ToList();
+			fileIds.ForEach(id => FileStorage.Delete(id));
+		}
 	}
 
 	public class PetoeterImageManager

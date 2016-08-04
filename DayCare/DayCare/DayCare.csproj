@@ -187,6 +187,7 @@
     <Compile Include="ViewModels\Children\ChildUI.cs" />
     <Compile Include="ViewModels\Children\EditChildViewModel.cs" />
     <Compile Include="ViewModels\Database\DatabaseViewModel.cs" />
+    <Compile Include="ViewModels\Dialogs\PasswordDialogViewModel.cs" />
     <Compile Include="ViewModels\Members\MemberUI.cs" />
     <Compile Include="ViewModels\Scheduler\EditChildCalendarViewModel.cs" />
     <Compile Include="ViewModels\Scheduler\ScheduleExceptionViewModel.cs" />
@@ -256,6 +257,9 @@
     </Compile>
     <Compile Include="Views\Dialogs\DateDialogView.xaml.cs">
       <DependentUpon>DateDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Dialogs\PasswordDialogView.xaml.cs">
+      <DependentUpon>PasswordDialogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Dialogs\YesNoDialogView.xaml.cs">
       <DependentUpon>YesNoDialogView.xaml</DependentUpon>
@@ -405,6 +409,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Dialogs\DateDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\PasswordDialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
