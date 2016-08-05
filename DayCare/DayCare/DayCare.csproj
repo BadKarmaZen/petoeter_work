@@ -160,6 +160,7 @@
     <Compile Include="Model\Lite\Account.cs" />
     <Compile Include="Model\Lite\Child.cs" />
     <Compile Include="Model\Lite\Date.cs" />
+    <Compile Include="Model\Lite\Expense.cs" />
     <Compile Include="Model\Lite\LiteRecord.cs" />
     <Compile Include="Model\Lite\Member.cs" />
     <Compile Include="Model\Lite\PetoeterDb.cs" />
