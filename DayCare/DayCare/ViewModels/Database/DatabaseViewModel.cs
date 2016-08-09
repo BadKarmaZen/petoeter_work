@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
 using DayCare.Model;
+using DayCare.ViewModels.Dialogs;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,15 @@ namespace DayCare.ViewModels.Database
 				if (result == System.Windows.Forms.DialogResult.OK)
 				{
 					model.Export(dlg.SelectedPath);
+
+					ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+						new Events.ShowDialog
+						{
+							Dialog = new OkDialogViewModel
+							{
+								Message = "Export is uitgevoerd!"
+							}
+						});
 				}
 			}
 		}
@@ -40,6 +50,15 @@ namespace DayCare.ViewModels.Database
 				if (result == System.Windows.Forms.DialogResult.OK)
 				{
 					model.Import(dlg.SelectedPath);
+
+					ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+						new Events.ShowDialog
+						{
+							Dialog = new OkDialogViewModel
+							{
+								Message = "Import is uitgevoerd!"
+							}
+						});
 				}
 			}
 		}

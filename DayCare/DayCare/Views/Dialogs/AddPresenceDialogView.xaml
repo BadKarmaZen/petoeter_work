@@ -13,12 +13,14 @@
 		</Grid.RowDefinitions>
 
 		<TextBlock Text="Selecteer wie er toegevoegd moet worden" TextWrapping="Wrap" Style="{DynamicResource LabelStyle}" Margin="10" />
-		<ComboBox Grid.Row="1" Margin="10" ItemsSource="{Binding Children}" SelectedItem="{Binding SelectedItem}">
-			<!--<ComboBox.ItemTemplate>
+		<ComboBox Grid.Row="1" Margin="10" ItemsSource="{Binding Children}" SelectedItem="{Binding SelectedItem}" FontSize="24" >
+			<ComboBox.ItemTemplate>
 				<DataTemplate>
-					<TextBlock Binding.
+					<Border BorderBrush="Black" CornerRadius="5">
+						<TextBlock Text="{Binding Name}" Style="{DynamicResource LabelStyle}" />
+					</Border>
 				</DataTemplate>
-			</ComboBox.ItemTemplate>-->
+			</ComboBox.ItemTemplate>
 		</ComboBox>
 
 		<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">

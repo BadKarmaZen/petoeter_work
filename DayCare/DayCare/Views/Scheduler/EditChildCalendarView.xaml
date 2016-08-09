@@ -43,73 +43,128 @@
 			<Button x:Name="NextAction" Margin="5" Content="&gt;" Grid.Column="3" Style="{DynamicResource ButtonStyle}" Height="26" Width="80"/>
 			<Button x:Name="FastNextAction" Margin="5" Content="&gt;&gt;" Grid.Column="4" Style="{DynamicResource ButtonStyle}" Height="26" Width="80"/>
 		</Grid>
+		<Viewbox HorizontalAlignment="Center" Grid.Row="2" Stretch="Uniform">
 
-		<Grid HorizontalAlignment="Center" Grid.Row="2">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto"/>
-				<ColumnDefinition Width="Auto"/>
-			</Grid.ColumnDefinitions>
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
 
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto" />
-				<RowDefinition Height="Auto" />
-			</Grid.RowDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
 
-			<Border>
-				<Button x:Name="AddPatternAction" Margin="0"  Content="Add" Style="{DynamicResource ButtonStyle}" Height="40" Width="100" HorizontalAlignment="Center"/>
-			</Border>
-			<Border Width="1000" HorizontalAlignment="Center" Grid.Column="1">
-				<UniformGrid Columns="7">
-					<Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Width="100" Height="Auto" Background="#FFE47738">
-						<TextBlock Text="Ma" HorizontalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
-					</Border>
-					<Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Width="100" Height="Auto" Background="#FFE47738">
-						<TextBlock Text="Di" HorizontalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
-					</Border>
-					<Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Width="100" Height="Auto" Background="#FFE47738">
-						<TextBlock Text="Wo" HorizontalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
-					</Border>
-					<Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Width="100" Height="Auto" Background="#FFE47738">
-						<TextBlock Text="Do" HorizontalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
-					</Border>
-					<Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Width="100" Height="Auto" Background="#FFE47738">
-						<TextBlock Text="Vr" HorizontalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
-					</Border>
-					<Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Width="100" Height="Auto" Background="#FFE47738">
-						<TextBlock Text="Za" HorizontalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
-					</Border>
-					<Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Width="100" Height="Auto" Background="#FFE47738">
-						<TextBlock Text="Zo" HorizontalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
-					</Border>
-				</UniformGrid>
-			</Border>
+				<Border>
+					<Button x:Name="AddPatternAction" Margin="0"  Content="Add" Style="{DynamicResource ButtonStyle}" Height="40" Width="100" HorizontalAlignment="Center"/>
+				</Border>
+				<Border Width="1000" HorizontalAlignment="Center" Grid.Column="1">
+					<UniformGrid Columns="7">
+						<Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Width="100" Height="Auto" Background="#FFE47738">
+							<TextBlock Text="Ma" HorizontalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
+						</Border>
+						<Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Width="100" Height="Auto" Background="#FFE47738">
+							<TextBlock Text="Di" HorizontalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
+						</Border>
+						<Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Width="100" Height="Auto" Background="#FFE47738">
+							<TextBlock Text="Wo" HorizontalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
+						</Border>
+						<Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Width="100" Height="Auto" Background="#FFE47738">
+							<TextBlock Text="Do" HorizontalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
+						</Border>
+						<Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Width="100" Height="Auto" Background="#FFE47738">
+							<TextBlock Text="Vr" HorizontalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
+						</Border>
+						<Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Width="100" Height="Auto" Background="#FFE47738">
+							<TextBlock Text="Za" HorizontalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
+						</Border>
+						<Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Width="100" Height="Auto" Background="#FFE47738">
+							<TextBlock Text="Zo" HorizontalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
+						</Border>
+					</UniformGrid>
+				</Border>
 
-			<ItemsControl ItemsSource="{Binding Days}" Grid.Row="1" Grid.Column="1" Width="1000" HorizontalAlignment="Center">
-				<ItemsControl.ItemsPanel>
-					<ItemsPanelTemplate>
-						<UniformGrid Columns="7"/>
-					</ItemsPanelTemplate>
-				</ItemsControl.ItemsPanel>
-				<ItemsControl.ItemTemplate>
-					<DataTemplate>
-						<Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Width="100" Height="100" >
-							<Grid>
-								<Grid.RowDefinitions>
-									<RowDefinition Height="Auto"/>
-									<RowDefinition Height="1*"/>
-									<RowDefinition Height="1*"/>
-								</Grid.RowDefinitions>
-
+				<ItemsControl ItemsSource="{Binding Days}" Grid.Row="1" Grid.Column="1" Width="1000" HorizontalAlignment="Center">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<UniformGrid Columns="7"/>
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Width="100" Height="100" >
+								<Border.Style>
+									<Style TargetType="{x:Type Border}">
+										<Setter Property="Background" Value="NavajoWhite" />
+										<Style.Triggers>
+											<DataTrigger Binding="{Binding Active}" Value="False">
+												<Setter Property="Background" Value="Gray" />
+											</DataTrigger>
+											<DataTrigger Binding="{Binding ActiveMonth}" Value="False">
+												<Setter Property="Background" Value="#FFD08016" />
+											</DataTrigger>
+											<!--<DataTrigger Binding="{Binding Weekday}" Value="False">
+										<Setter Property="Background" Value="Gray" />
+									</DataTrigger>-->
+										</Style.Triggers>
+									</Style>
+								</Border.Style>
 								<Grid>
-									<TextBlock Text="{Binding Day.Day}" FontFamily="Comic Sans MS" FontSize="18" HorizontalAlignment="Center" />
+									<Grid.RowDefinitions>
+										<RowDefinition Height="Auto"/>
+										<RowDefinition Height="1*"/>
+										<RowDefinition Height="1*"/>
+									</Grid.RowDefinitions>
 
-									<Border Margin="0"
-												cal:Message.Attach="[Event MouseUp] = [Action ToggleAction($this)]" 
-												Visibility="{Binding Active, Converter={StaticResource BooleanVisibilityConverter}}">
+									<Grid>
+										<TextBlock Text="{Binding Day.Day}" FontFamily="Comic Sans MS" FontSize="18" HorizontalAlignment="Center" />
+
+										<Border Margin="0"
+											cal:Message.Attach="[Event MouseUp] = [Action ToggleAction($this)]" 
+											Visibility="{Binding Active, Converter={StaticResource BooleanVisibilityConverter}}">
+											<Border.Style>
+												<Style TargetType="{x:Type Border}">
+													<Setter Property="Background" Value="Transparent" />
+													<Style.Triggers>
+														<Trigger Property="IsMouseOver" Value="True">
+															<Setter Property="Background" Value="#25000000" />
+														</Trigger>
+													</Style.Triggers>
+												</Style>
+											</Border.Style>
+										</Border>
+
+									</Grid>
+
+									<Border Margin="2" Grid.Row="1" 
+										cal:Message.Attach="[Event MouseUp] = [Action ToggleMorningAction($this)]"
+										Visibility="{Binding Active, Converter={StaticResource BooleanVisibilityConverter}}">
 										<Border.Style>
-											<Style TargetType="Border">
+											<Style TargetType="{x:Type Border}">
 												<Setter Property="Background" Value="Transparent" />
 												<Style.Triggers>
+													<DataTrigger Binding="{Binding Morning}" Value="True">
+														<Setter Property="Background" Value="#FFA4F036" />
+													</DataTrigger>
+													<Trigger Property="IsMouseOver" Value="True">
+														<Setter Property="Background" Value="#25000000" />
+													</Trigger>
+												</Style.Triggers>
+											</Style>
+										</Border.Style>
+									</Border>
+
+									<Border Margin="2" Grid.Row="2" 
+										cal:Message.Attach="[Event MouseUp] = [Action ToggleAfternoonAction($this)]"
+										Visibility="{Binding Active, Converter={StaticResource BooleanVisibilityConverter}}">
+										<Border.Style>
+											<Style TargetType="{x:Type Border}">
+												<Setter Property="Background" Value="Transparent" />
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Afternoon}" Value="True">
+														<Setter Property="Background" Value="#FFA4F036" />
+													</DataTrigger>
 													<Trigger Property="IsMouseOver" Value="True">
 														<Setter Property="Background" Value="#25000000" />
 													</Trigger>
@@ -119,97 +174,43 @@
 									</Border>
 
 								</Grid>
+							</Border>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
 
-								<Border Margin="2" Grid.Row="1" 
-											cal:Message.Attach="[Event MouseUp] = [Action ToggleMorningAction($this)]"
-											Visibility="{Binding Active, Converter={StaticResource BooleanVisibilityConverter}}">
-									<Border.Style>
-										<Style TargetType="Border">
-											<Setter Property="Background" Value="Transparent" />
-											<Style.Triggers>
-												<DataTrigger Binding="{Binding Morning}" Value="True">
-													<Setter Property="Background" Value="#FFA4F036" />
-												</DataTrigger>
-												<Trigger Property="IsMouseOver" Value="True">
-													<Setter Property="Background" Value="#25000000" />
-												</Trigger>
-											</Style.Triggers>
-										</Style>
-									</Border.Style>
-								</Border>
-
-								<Border Margin="2" Grid.Row="2" 
-											cal:Message.Attach="[Event MouseUp] = [Action ToggleAfternoonAction($this)]"
-											Visibility="{Binding Active, Converter={StaticResource BooleanVisibilityConverter}}">
-									<Border.Style>
-										<Style TargetType="Border">
-											<Setter Property="Background" Value="Transparent" />
-											<Style.Triggers>
-												<DataTrigger Binding="{Binding Afternoon}" Value="True">
-													<Setter Property="Background" Value="#FFA4F036" />
-												</DataTrigger>
-												<Trigger Property="IsMouseOver" Value="True">
-													<Setter Property="Background" Value="#25000000" />
-												</Trigger>
-											</Style.Triggers>
-										</Style>
-									</Border.Style>
-								</Border>
-
-							</Grid>
-							<Border.Style>
-								<Style TargetType="Border">
-									<Setter Property="Background" Value="NavajoWhite" />
-									<Style.Triggers>
-										<DataTrigger Binding="{Binding Active}" Value="False">
-											<Setter Property="Background" Value="Gray" />
-										</DataTrigger>
-										<DataTrigger Binding="{Binding ActiveMonth}" Value="False">
-											<Setter Property="Background" Value="#FFD08016" />
-										</DataTrigger>
-										<!--<DataTrigger Binding="{Binding Weekday}" Value="False">
-										<Setter Property="Background" Value="Gray" />
-									</DataTrigger>-->
-									</Style.Triggers>
-								</Style>
-							</Border.Style>
-						</Border>
-					</DataTemplate>
-				</ItemsControl.ItemTemplate>
-			</ItemsControl>
-
-			<ItemsControl ItemsSource="{Binding Weeks}" Grid.Row="1">
-				<ItemsControl.ItemsPanel>
-					<ItemsPanelTemplate>
-						<UniformGrid Columns="1"/>
-					</ItemsPanelTemplate>
-				</ItemsControl.ItemsPanel>
-				<ItemsControl.ItemTemplate>
-					<DataTemplate>
-						<Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Width="100" Height="100" 
-										Background="NavajoWhite">
-							<Grid>
-								<Grid.RowDefinitions>
-									<RowDefinition Height="Auto"/>
-									<RowDefinition Height="1*"/>
-									<RowDefinition Height="1*"/>
-								</Grid.RowDefinitions>
-
+				<ItemsControl ItemsSource="{Binding Weeks}" Grid.Row="1">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<UniformGrid Columns="1"/>
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Width="100" Height="100" 
+								Background="NavajoWhite">
 								<Grid>
-									<Grid.ColumnDefinitions>
-										<ColumnDefinition />
-										<ColumnDefinition />
-									</Grid.ColumnDefinitions>
+									<Grid.RowDefinitions>
+										<RowDefinition Height="Auto"/>
+										<RowDefinition Height="1*"/>
+										<RowDefinition Height="1*"/>
+									</Grid.RowDefinitions>
 
-									<Border Margin="2" cal:Message.Attach="[Event MouseUp] = [Action CopyWeekAction($this)]">
-										<Image Source="/DayCare;component/Resources/copy.png" Height="20" Width="20"/>
-									</Border>
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition />
+											<ColumnDefinition />
+										</Grid.ColumnDefinitions>
 
-									<Border Grid.Column="1" cal:Message.Attach="[Event MouseUp] = [Action PasteWeekAction($this)]">
-										<Image Source="/DayCare;component/Resources/paste.png" Height="20" Width="20"/>
-									</Border>
+										<Border Margin="2" cal:Message.Attach="[Event MouseUp] = [Action CopyWeekAction($this)]">
+											<Image Source="/DayCare;component/Resources/copy.png" Height="20" Width="20"/>
+										</Border>
 
-									<!--<Border Margin="0"
+										<Border Grid.Column="1" cal:Message.Attach="[Event MouseUp] = [Action PasteWeekAction($this)]">
+											<Image Source="/DayCare;component/Resources/paste.png" Height="20" Width="20"/>
+										</Border>
+
+										<!--<Border Margin="0"
 												cal:Message.Attach="[Event MouseUp] = [Action ToggleAction($this)]" 
 												Visibility="{Binding Active, Converter={StaticResource BooleanVisibilityConverter}}">
 										<Border.Style>
@@ -223,50 +224,51 @@
 											</Style>
 										</Border.Style>
 									</Border>-->
+									</Grid>
+
+									<Border Margin="2" Grid.Row="1" 
+										cal:Message.Attach="[Event MouseUp] = [Action ToggleMorningWeekAction($this)]">
+										<Border.Style>
+											<Style TargetType="{x:Type Border}">
+												<Setter Property="Background" Value="Transparent" />
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Morning}" Value="True">
+														<Setter Property="Background" Value="#FFA4F036" />
+													</DataTrigger>
+													<Trigger Property="IsMouseOver" Value="True">
+														<Setter Property="Background" Value="#25000000" />
+													</Trigger>
+												</Style.Triggers>
+											</Style>
+										</Border.Style>
+									</Border>
+
+									<Border Margin="2" Grid.Row="2" 
+										cal:Message.Attach="[Event MouseUp] = [Action ToggleAfternoonWeekAction($this)]">
+										<Border.Style>
+											<Style TargetType="{x:Type Border}">
+												<Setter Property="Background" Value="Transparent" />
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Afternoon}" Value="True">
+														<Setter Property="Background" Value="#FFA4F036" />
+													</DataTrigger>
+													<Trigger Property="IsMouseOver" Value="True">
+														<Setter Property="Background" Value="#25000000" />
+													</Trigger>
+												</Style.Triggers>
+											</Style>
+										</Border.Style>
+									</Border>
+
 								</Grid>
 
-								<Border Margin="2" Grid.Row="1" 
-											cal:Message.Attach="[Event MouseUp] = [Action ToggleMorningWeekAction($this)]">
-									<Border.Style>
-										<Style TargetType="Border">
-											<Setter Property="Background" Value="Transparent" />
-											<Style.Triggers>
-												<DataTrigger Binding="{Binding Morning}" Value="True">
-													<Setter Property="Background" Value="#FFA4F036" />
-												</DataTrigger>
-												<Trigger Property="IsMouseOver" Value="True">
-													<Setter Property="Background" Value="#25000000" />
-												</Trigger>
-											</Style.Triggers>
-										</Style>
-									</Border.Style>
-								</Border>
 
-								<Border Margin="2" Grid.Row="2" 
-											cal:Message.Attach="[Event MouseUp] = [Action ToggleAfternoonWeekAction($this)]">
-									<Border.Style>
-										<Style TargetType="Border">
-											<Setter Property="Background" Value="Transparent" />
-											<Style.Triggers>
-												<DataTrigger Binding="{Binding Afternoon}" Value="True">
-													<Setter Property="Background" Value="#FFA4F036" />
-												</DataTrigger>
-												<Trigger Property="IsMouseOver" Value="True">
-													<Setter Property="Background" Value="#25000000" />
-												</Trigger>
-											</Style.Triggers>
-										</Style>
-									</Border.Style>
-								</Border>
+							</Border>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
 
-							</Grid>
-
-
-						</Border>
-					</DataTemplate>
-				</ItemsControl.ItemTemplate>
-			</ItemsControl>
-
-		</Grid>
+			</Grid>
+		</Viewbox>
 	</Grid>
 </UserControl>

@@ -7,7 +7,7 @@
              xmlns:vc="clr-namespace:DayCare.Converters"
 						 xmlns:bh="clr-namespace:DayCare.Behaviour"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="706" d:DesignWidth="1366">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<vc:BooleanVisibilityConverter x:Key="BooleanVisibilityConverter" />
@@ -20,7 +20,10 @@
 		</Grid.RowDefinitions>
 
 		<StackPanel Margin="10,5" Orientation="Horizontal" HorizontalAlignment="Left">
-			<Button x:Name="EditExpenseAction" Content="Toevoegen" Margin="5,0" MinWidth="150" Height="30" Style="{DynamicResource ButtonStyle}" />
+			<Button x:Name="EditExpenseAction" Content="Aanpassen" Margin="5,0" MinWidth="150" Height="30" Style="{DynamicResource ButtonStyle}" />
+			<Button x:Name="DecrementDateAction" Content="&lt;" Margin="5,0" MinWidth="30" Height="30" Style="{DynamicResource ButtonStyle}" />
+			<DatePicker SelectedDate="{Binding EditDate}" FirstDayOfWeek="Monday" FontFamily="Calibri" Height="30" FontSize="22" CalendarStyle="{StaticResource LargeCalendarStyle}" />
+			<Button x:Name="IncrementDateAction" Content="&gt;" Margin="5,0" MinWidth="30" Height="30" Style="{DynamicResource ButtonStyle}" />
 		</StackPanel>
 
 		<ScrollViewer Grid.Row="1" Margin="2">

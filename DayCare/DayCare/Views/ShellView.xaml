@@ -7,9 +7,8 @@
         xmlns:cal="http://www.caliburnproject.org"
         xmlns:vc="clr-namespace:DayCare.Converters"
         mc:Ignorable="d"
-        d:DesignHeight="300" d:DesignWidth="600"
         WindowStyle="None" ResizeMode="NoResize"  
-        WindowStartupLocation="CenterScreen" WindowState="Maximized">
+        WindowStartupLocation="CenterScreen" WindowState="Maximized"><!--Width="1366" Height="768"-->
     <Window.Resources>
         <ResourceDictionary>
             <vc:BooleanVisibilityConverter x:Key="BooleanVisibilityConverter" />
