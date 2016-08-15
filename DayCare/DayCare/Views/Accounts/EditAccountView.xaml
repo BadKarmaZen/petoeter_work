@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="300">
+             d:DesignHeight="706" d:DesignWidth="1366">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -15,36 +15,37 @@
         <Border BorderBrush="Black" BorderThickness="0,0,0,4" Margin="10,0">
             <TextBlock Text="Account bewerken" Style="{DynamicResource LabelTitleStyle}" HorizontalAlignment="Center" />
         </Border>
+		<ScrollViewer Grid.Row="1">
+			<Grid >
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
 
-        <Grid Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+				<GroupBox HorizontalAlignment="Stretch" Margin="10">
+					<GroupBox.Header>
+						<TextBlock Text="Algemeen" Style="{DynamicResource GroupBoxHeaderStyle}" />
+					</GroupBox.Header>
+					<ContentControl cal:View.Model="{Binding Detail}" Margin="10" />
+				</GroupBox>
 
-            <GroupBox HorizontalAlignment="Stretch" Margin="10">
-                <GroupBox.Header>
-                    <TextBlock Text="Algemeen" Style="{DynamicResource GroupBoxHeaderStyle}" />
-                </GroupBox.Header>
-                <ContentControl cal:View.Model="{Binding Detail}" Margin="10" />
-            </GroupBox>
+				<GroupBox Grid.Row="1" HorizontalAlignment="Stretch" Margin="10,5,10,5">
+					<GroupBox.Header>
+						<TextBlock Text="Kinderen" Style="{DynamicResource GroupBoxHeaderStyle}" />
+					</GroupBox.Header>
+					<ContentControl cal:View.Model="{Binding ChildrenDetail}" Margin="5" />
+				</GroupBox>
 
-            <GroupBox Grid.Row="1" HorizontalAlignment="Stretch" Margin="10,10,10,5">
-                <GroupBox.Header>
-                    <TextBlock Text="Kinderen" Style="{DynamicResource GroupBoxHeaderStyle}" />
-                </GroupBox.Header>
-                <ContentControl cal:View.Model="{Binding ChildrenDetail}" Margin="10" />
-            </GroupBox>
-
-			<GroupBox Grid.Row="2" HorizontalAlignment="Stretch" Margin="10,10,10,5">
-				<GroupBox.Header>
-					<TextBlock Text="Familie" Style="{DynamicResource GroupBoxHeaderStyle}" />
-				</GroupBox.Header>
-				<ContentControl cal:View.Model="{Binding MembersDetail}" Margin="10" />
-			</GroupBox>
-		</Grid>
-    </Grid>
+				<GroupBox Grid.Row="2" HorizontalAlignment="Stretch" Margin="10,5,10,5">
+					<GroupBox.Header>
+						<TextBlock Text="Familie" Style="{DynamicResource GroupBoxHeaderStyle}" />
+					</GroupBox.Header>
+					<ContentControl cal:View.Model="{Binding MembersDetail}" Margin="5" />
+				</GroupBox>
+			</Grid>
+		</ScrollViewer>
+	</Grid>
 </UserControl>

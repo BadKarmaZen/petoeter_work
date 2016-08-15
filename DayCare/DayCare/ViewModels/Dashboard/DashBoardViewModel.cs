@@ -4,6 +4,7 @@ using DayCare.ViewModels.Accounts;
 using DayCare.ViewModels.Calendar;
 using DayCare.ViewModels.Dialogs;
 using DayCare.ViewModels.Expenses;
+using DayCare.ViewModels.Invoice;
 using DayCare.ViewModels.Precense;
 using DayCare.ViewModels.Reports;
 using DayCare.ViewModels.Scheduler;
@@ -174,6 +175,19 @@ namespace DayCare.ViewModels.Dashboard
 					Task = new ExpenseMainViewModel()
 				});
 		}
+
+		public void FactuurAction()
+		{
+			LogManager.GetLog(GetType()).Info("FactuurAction");
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				new Core.Events.SwitchTask
+				{
+					Task = new InvoiceMainViewModel()
+				});
+		}
+
+		
 
 	}
 }

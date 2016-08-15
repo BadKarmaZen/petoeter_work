@@ -140,7 +140,7 @@ namespace DayCare.ViewModels.Precense
 			//	add menu
 			AddChildMenu = new Events.RegisterMenu
 			{
-				Caption = "Toeveogen",
+				Caption = "Toevoegen",
 				Id = "PresenceMainViewModel.AddChildMenu",
 				Add = true,
 				Action = () => 

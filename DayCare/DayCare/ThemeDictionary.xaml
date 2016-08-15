@@ -3,96 +3,110 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
 
-    <!-- Resource dictionary entries should be defined here. -->
+	<!-- Resource dictionary entries should be defined here. -->
 
-    <Style x:Key="LabelTitleStyle" TargetType="{x:Type TextBlock}">
-        <Setter Property="FontFamily" Value="Comic Sans MS"/>
-        <Setter Property="FontSize" Value="50"/>
-    </Style>
+	<Style x:Key="LabelTitleStyle" TargetType="{x:Type TextBlock}">
+		<Setter Property="FontFamily" Value="Comic Sans MS"/>
+		<Setter Property="FontSize" Value="50"/>
+	</Style>
 
-    <Style x:Key="LabelStyle" TargetType="{x:Type TextBlock}">
-        <Setter Property="FontFamily" Value="Comic Sans MS"/>
-        <Setter Property="FontSize" Value="29.333"/>
-    </Style>
+	<Style x:Key="LabelStyle" TargetType="{x:Type TextBlock}">
+		<Setter Property="FontFamily" Value="Comic Sans MS"/>
+		<Setter Property="FontSize" Value="29.333"/>
+	</Style>
 
-    <Style x:Key="GroupBoxHeaderStyle" TargetType="{x:Type TextBlock}">
-        <Setter Property="FontFamily" Value="Comic Sans MS"/>
-        <Setter Property="FontSize" Value="22"/>
-    </Style>
+	<Style x:Key="GroupBoxHeaderStyle" TargetType="{x:Type TextBlock}">
+		<Setter Property="FontFamily" Value="Comic Sans MS"/>
+		<Setter Property="FontSize" Value="22"/>
+	</Style>
 
-    
+	<!--FontFamily="Comic Sans MS" FontSize="22"-->
+	<Style x:Key="TextBoxStyle" TargetType="TextBox">
+		<Setter Property="FontFamily" Value="Comic Sans MS"/>
+		<Setter Property="FontSize" Value="29.333"/>
+	</Style>
 
-    <!--FontFamily="Comic Sans MS" FontSize="22"-->
-    <Style x:Key="TextBoxStyle" TargetType="TextBox">
-        <Setter Property="FontFamily" Value="Comic Sans MS"/>
-        <Setter Property="FontSize" Value="29.333"/>
-    </Style>
+	<Style x:Key="ButtonStyle"  TargetType="{x:Type Button}">
+		<Setter Property="Background" Value="#373737" />
+		<Setter Property="Foreground" Value="White" />
+		<Setter Property="FontSize" Value="15" />
+		<Setter Property="SnapsToDevicePixels" Value="True" />
 
-    <Style x:Key="ButtonStyle"  TargetType="{x:Type Button}">
-        <Setter Property="Background" Value="#373737" />
-        <Setter Property="Foreground" Value="White" />
-        <Setter Property="FontSize" Value="15" />
-        <Setter Property="SnapsToDevicePixels" Value="True" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type Button}">
+					<Border CornerRadius="15" Background="{TemplateBinding Background}">
+						<Grid>
+							<ContentPresenter x:Name="MyContentPresenter" Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" />
+						</Grid>
+					</Border>
 
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Border CornerRadius="15" Background="{TemplateBinding Background}">
-                        <Grid>
-                            <ContentPresenter x:Name="MyContentPresenter" Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" />
-                        </Grid>
-                    </Border>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Setter Property="Background" Value="#E59400" />
+							<Setter Property="Foreground" Value="White" />
+						</Trigger>
 
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#E59400" />
-                            <Setter Property="Foreground" Value="White" />
-                        </Trigger>
+						<Trigger Property="IsPressed" Value="True">
+							<Setter Property="Background" Value="OrangeRed" />
+							<Setter Property="Foreground" Value="White" />
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
 
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Background" Value="OrangeRed" />
-                            <Setter Property="Foreground" Value="White" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style TargetType="{x:Type GroupBox}">
-        <!--<Setter Property="Foreground" Value="WhiteSmoke" />-->
+	<Style TargetType="{x:Type GroupBox}">
+		<!--<Setter Property="Foreground" Value="WhiteSmoke" />-->
 
 
-        <!--<Setter Property="BorderBrush" Value="#D5DFE5" />#FF042271" />
+		<!--<Setter Property="BorderBrush" Value="#D5DFE5" />#FF042271" />
 		<Setter Property="BorderThickness" Value="1" />
 		<Setter Property="FocusVisualStyle" Value="{DynamicResource NuclearButtonFocusVisual}" />
 		
 		<Setter Property="FontFamily" Value="Trebuchet MS" />
 		<Setter Property="FontSize" Value="12" />-->
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type GroupBox}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type GroupBox}">
 
-                    <Grid SnapsToDevicePixels="true">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
+					<Grid SnapsToDevicePixels="true">
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="*" />
+						</Grid.RowDefinitions>
 
-                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5,5,0,0" Padding="5,0" Background="Orange" >
-                            <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" ContentSource="Header"
+						<Border BorderBrush="Black" BorderThickness="1" CornerRadius="5,5,0,0" Padding="5,0" Background="Orange" >
+							<ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" ContentSource="Header"
 									RecognizesAccessKey="True" Margin="0,4,0,2" TextElement.FontWeight="Bold" />
-                        </Border>
+						</Border>
 
-                        <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1,0,1,1" Margin="0" CornerRadius="0,0,5,5" Padding="4"
+						<Border Grid.Row="1" BorderBrush="Black" BorderThickness="1,0,1,1" Margin="0" CornerRadius="0,0,5,5" Padding="4"
 								Background="WhiteSmoke">
 
-                            <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Margin="{TemplateBinding Padding}" />
-                        </Border>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    <SolidColorBrush x:Key="DayScheduleBrush" Color="#FF852323"/>
+							<ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Margin="{TemplateBinding Padding}" />
+						</Border>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	<SolidColorBrush x:Key="DayScheduleBrush" Color="#FF852323"/>
+
+	<Style x:Key="LargeCalendarStyle" TargetType="{x:Type Calendar}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type Calendar}">
+					<Viewbox Height="400" Width="400">
+						<CalendarItem x:Name="PART_CalendarItem"
+                                  Background="{TemplateBinding Background}"
+                                  BorderBrush="{TemplateBinding BorderBrush}"
+                                  BorderThickness="{TemplateBinding BorderThickness}" />
+					</Viewbox>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
 </ResourceDictionary>

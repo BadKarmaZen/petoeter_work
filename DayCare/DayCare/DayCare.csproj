@@ -189,7 +189,11 @@
     <Compile Include="ViewModels\Children\EditChildViewModel.cs" />
     <Compile Include="ViewModels\Database\DatabaseViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\AddPresenceDialogViewModel.cs" />
+    <Compile Include="ViewModels\Dialogs\OkDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\PasswordDialogViewModel.cs" />
+    <Compile Include="ViewModels\Dialogs\SelectDriveViewModel.cs" />
+    <Compile Include="ViewModels\Invoice\InvoiceDetailViewModel.cs" />
+    <Compile Include="ViewModels\Invoice\InvoiceMainViewModel.cs" />
     <Compile Include="ViewModels\Members\MemberUI.cs" />
     <Compile Include="ViewModels\Scheduler\EditChildCalendarViewModel.cs" />
     <Compile Include="ViewModels\Scheduler\ScheduleExceptionViewModel.cs" />
@@ -263,8 +267,14 @@
     <Compile Include="Views\Dialogs\DateDialogView.xaml.cs">
       <DependentUpon>DateDialogView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Dialogs\OkDialogView.xaml.cs">
+      <DependentUpon>OkDialogView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Dialogs\PasswordDialogView.xaml.cs">
       <DependentUpon>PasswordDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Dialogs\SelectDriveView.xaml.cs">
+      <DependentUpon>SelectDriveView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Dialogs\YesNoDialogView.xaml.cs">
       <DependentUpon>YesNoDialogView.xaml</DependentUpon>
@@ -274,6 +284,12 @@
     </Compile>
     <Compile Include="Views\Expenses\ExpenseMainView.xaml.cs">
       <DependentUpon>ExpenseMainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Invoice\InvoiceDetailView.xaml.cs">
+      <DependentUpon>InvoiceDetailView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Invoice\InvoiceMainView.xaml.cs">
+      <DependentUpon>InvoiceMainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Members\AddMemberView.xaml.cs">
       <DependentUpon>AddMemberView.xaml</DependentUpon>
@@ -421,7 +437,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Dialogs\OkDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Dialogs\PasswordDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\SelectDriveView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -434,6 +458,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Expenses\ExpenseMainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Invoice\InvoiceDetailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Invoice\InvoiceMainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -530,6 +562,9 @@
   <ItemGroup>
     <Resource Include="Resources\copy.png" />
     <Resource Include="Resources\paste.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Factuur.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
