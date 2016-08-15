@@ -191,6 +191,7 @@
     <Compile Include="ViewModels\Dialogs\AddPresenceDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\OkDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\PasswordDialogViewModel.cs" />
+    <Compile Include="ViewModels\Dialogs\SelectDriveViewModel.cs" />
     <Compile Include="ViewModels\Invoice\InvoiceDetailViewModel.cs" />
     <Compile Include="ViewModels\Invoice\InvoiceMainViewModel.cs" />
     <Compile Include="ViewModels\Members\MemberUI.cs" />
@@ -271,6 +272,9 @@
     </Compile>
     <Compile Include="Views\Dialogs\PasswordDialogView.xaml.cs">
       <DependentUpon>PasswordDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Dialogs\SelectDriveView.xaml.cs">
+      <DependentUpon>SelectDriveView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Dialogs\YesNoDialogView.xaml.cs">
       <DependentUpon>YesNoDialogView.xaml</DependentUpon>
@@ -438,6 +442,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Dialogs\PasswordDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\SelectDriveView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

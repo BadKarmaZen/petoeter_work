@@ -352,7 +352,7 @@ namespace DayCare.Model
 
 				using (var export = new PetoeterDb(filename))
 				{
-					var presence = (from p in db.Presences.Find(p => p.Updated >= lastExportTime) select p).ToList();
+					var presence = (from p in db.Presences.Find(p => p.Updated < lastExportTime) select p).ToList();
 
 					presence.ForEach(p =>
 					{
@@ -394,7 +394,7 @@ namespace DayCare.Model
 				using (var export = new PetoeterDb(filename))
 				{
 					var children = (from c in db.Children.FindAll()
-													where c.Updated >= lastExportTime
+													where c.Updated < lastExportTime
 													select c).ToList();
 
 					children.ForEach(c =>
@@ -419,7 +419,7 @@ namespace DayCare.Model
 					});
 
 					var members = (from m in db.Members.FindAll()
-												 where m.Updated >= lastExportTime
+												 where m.Updated < lastExportTime
 												 select m).ToList();
 
 					members.ForEach(m =>
@@ -432,7 +432,7 @@ namespace DayCare.Model
 					export.Members.Insert(members);
 
 					var accounts = (from a in db.Accounts.FindAll()
-													where a.Updated >= lastExportTime
+													where a.Updated < lastExportTime
 													select a).ToList();
 
 					accounts.ForEach(a =>
@@ -445,7 +445,7 @@ namespace DayCare.Model
 					export.Accounts.Insert(accounts);
 
 					var holidays = (from h in db.Holidays.FindAll()
-													where h.Updated >= lastExportTime
+													where h.Updated < lastExportTime
 													select h).ToList();
 
 					holidays.ForEach(h =>
