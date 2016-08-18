@@ -3,6 +3,7 @@ using DayCare.Database.Model;
 using DayCare.Model.Lite;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -55,17 +56,77 @@ namespace DayCare.Model
 
 		private void VerifyDatabase()
 		{
-			//	Add Oma and Opa Generic members
+			//	Sanityze
 			//
 			using (var db = new PetoeterDb(PetoeterDb.FileName))
+			{
+				//var accounts = (from a in db.Accounts.FindAll()
+				//							 //where a.Deleted != false
+				//							 select a).ToList();
+
+				//foreach (var account in accounts)
+				//{
+				//	if (account.Members.Count == 2)
+				//	{
+				//		var oma = new Member { FirstName = "Oma" };
+				//		var opa = new Member { FirstName = "Opa" };
+				//		var other = new Member { FirstName = "Andere" };
+
+				//		account.Members.Add(oma);
+				//		db.Members.Insert(oma);
+				//		account.Members.Add(opa);
+				//		db.Members.Insert(opa);
+				//		account.Members.Add(other);
+				//		db.Members.Insert(other);
+
+				//		db.Accounts.Update(account);						
+				//	}
+									
+				//}
+				//var accounts = db.GetCollection<Account>(PetoeterDb.TableAccount);
+				//var members = db.GetCollection<Member>(PetoeterDb.TableMember);
+
+				//Debug.WriteLine(accounts.Count());
+				//accounts.Delete(new LiteDB.BsonValue(19));
+				//Debug.WriteLine(accounts.Count());
+
+				//Debug.WriteLine(members.Count());
+				//members.Delete(new LiteDB.BsonValue(37));
+				//members.Delete(new LiteDB.BsonValue(77));
+				//Debug.WriteLine(members.Count());
+				
+				//foreach (var account in accounts)
+				//{
+				//	Debug.WriteLine(string.Format("A [{0}] {1}", account.Id, account.Name));
+				//	Debug.WriteLine(account.Members.Count);
+
+				//	foreach (var mi in account.Members)
+				//	{
+				//		var member = members.FindById(mi.Id);
+
+				//		Debug.WriteLine(string.Format("M [{0}] {1}",member.Id, member.GetFullName()));
+				//	}					
+				//}
+			}
+
+
+			//	Add Oma and Opa Generic members
+			//
+			/*using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
 				var member = db.Members.Find(m => m.Phone == "GrandParents");
 				if (member.Count() == 0)
 				{
 					db.Members.Insert(new Lite.Member { FirstName = "Oma", Phone = "GrandParents" });
 					db.Members.Insert(new Lite.Member { FirstName = "Opa", Phone = "GrandParents" });					
+				}			
+	
+				member = db.Members.Find(m => m.Phone == "Other");
+				if (member.Count() == 0)
+				{
+					db.Members.Insert(new Lite.Member { FirstName = "Andere", Phone = "Other" });			
 				}				
-			}
+			}*/
 		}
 
 		public bool LoadData()

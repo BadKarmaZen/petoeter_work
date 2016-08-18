@@ -195,6 +195,7 @@
     <Compile Include="ViewModels\Invoice\InvoiceDetailViewModel.cs" />
     <Compile Include="ViewModels\Invoice\InvoiceMainViewModel.cs" />
     <Compile Include="ViewModels\Members\MemberUI.cs" />
+    <Compile Include="ViewModels\Precense\PresenceScheduleViewModel.cs" />
     <Compile Include="ViewModels\Scheduler\EditChildCalendarViewModel.cs" />
     <Compile Include="ViewModels\Scheduler\ScheduleExceptionViewModel.cs" />
     <Compile Include="ViewModels\UICore\BackMenu.cs" />
@@ -308,6 +309,9 @@
     </Compile>
     <Compile Include="Views\Precense\PresenceMainView.xaml.cs">
       <DependentUpon>PresenceMainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Precense\PresenceScheduleView.xaml.cs">
+      <DependentUpon>PresenceScheduleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Reports\MainReportsView.xaml.cs">
       <DependentUpon>MainReportsView.xaml</DependentUpon>
@@ -490,6 +494,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Precense\PresenceMainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Precense\PresenceScheduleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -57,10 +57,22 @@
 						<RowDefinition Height="1*"/>
 						<RowDefinition Height="Auto"/>
 					</Grid.RowDefinitions>
-					<Image Source="/DayCare;component/Resources/Presence.png"/>
+					<Image Source="/DayCare;component/Resources/Presence.png" HorizontalAlignment="Right" Width="150"/>
 					<Button Grid.Row="1" Content="Aanwezigheid" x:Name="StartPrecenseAction"
                             Style="{DynamicResource ButtonStyle}" FontFamily="Comic Sans MS" FontSize="22" />
 				</Grid>
+			</Border>
+
+			<Border Width="150" Height="200" Margin="25" Visibility="{Binding IsPresenceMode, Converter={StaticResource BooleanVisibilityConverter}}">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="1*"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+					<Image Source="/DayCare;component/Resources/Schedule.png" HorizontalAlignment="Right" Width="150"/>
+					<Button Grid.Row="1" Content="Overzicht" x:Name="StartOverviewPrecenseAction"
+                            Style="{DynamicResource ButtonStyle}" FontFamily="Comic Sans MS" FontSize="22" />
+			</Grid>
 			</Border>
 
 			<Border Width="150" Height="200" Margin="25" Visibility="{Binding IsPresenceMode, Converter={StaticResource InverseBooleanVisibilityConverter}}">

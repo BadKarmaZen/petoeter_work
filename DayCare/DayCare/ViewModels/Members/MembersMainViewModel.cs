@@ -91,7 +91,10 @@ namespace DayCare.ViewModels.Members
 
 			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
+				//	remove from account
+				_account.Members.Remove(SelectedItem.Tag);
 				db.Members.Delete(SelectedItem.Tag.Id);
+				db.Accounts.Update(_account);
 			}
 
 			base.DeleteItem();

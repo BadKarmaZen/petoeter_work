@@ -186,12 +186,12 @@ namespace DayCare.ViewModels.Precense
 														Tag = m
 													}).ToList();
 
-						Resposibles.AddRange(from m in db.Members.Find(mem => mem.Phone == "GrandParents")
-																select new MemberUI
-																{
-																	Name = m.FirstName,
-																	Tag = m
-																});
+						//Resposibles.AddRange(from m in db.Members.Find(mem => ( mem.Phone == "GrandParents" || mem.Phone == "Other"))
+						//										select new MemberUI
+						//										{
+						//											Name = m.FirstName,
+						//											Tag = m
+						//										});
 					}
 				}
 			}

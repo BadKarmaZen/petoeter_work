@@ -129,6 +129,18 @@ namespace DayCare.ViewModels.Dashboard
 				});
 		}
 
+		public void StartOverviewPrecenseAction()
+		{
+			LogManager.GetLog(GetType()).Info("Start Overview Presence");
+
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(AddBackMenu);
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				new Core.Events.SwitchTask
+				{
+					Task = new PresenceScheduleViewModel()
+				});
+		}
+
 		public void CalendarOverviewAction()
 		{
 			LogManager.GetLog(GetType()).Info("Calendar");

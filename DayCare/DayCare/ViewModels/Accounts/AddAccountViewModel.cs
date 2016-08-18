@@ -69,6 +69,18 @@ namespace DayCare.ViewModels.Accounts
 					member.Updated = DateTime.Now;
 					db.Members.Insert(member);
 				}
+
+				//	Add oma, opa, ander
+				var oma = new Member { FirstName = "Oma", Updated = DateTime.Now };
+				var opa = new Member { FirstName = "Opa", Updated = DateTime.Now };
+				var other = new Member { FirstName = "Andere", Updated = DateTime.Now };
+
+				account.Members.Add(oma);
+				db.Members.Insert(oma);
+				account.Members.Add(opa);
+				db.Members.Insert(opa);
+				account.Members.Add(other);
+				db.Members.Insert(other);
 				
 				account.Updated = DateTime.Now;
 				db.Accounts.Insert(account);

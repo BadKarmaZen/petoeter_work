@@ -179,7 +179,7 @@ namespace DayCare.ViewModels.Precense
 			{
 				if (db.Presences.Find(p => p.Date == today).Count() == 0)
 				{
-					LogManager.GetLog(GetType()).Info("Create({0})", today.ToShortDateString());
+					LogManager.GetLog(GetType()).Info("LoadPresenceData({0})", today.ToShortDateString());
 					//	create a presence record for all children for today
 					//	var children = (from c in db.Children.FindAll() select c).ToList();
 
