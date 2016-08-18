@@ -192,7 +192,7 @@ namespace DayCare.ViewModels.Invoice
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
 					new Core.Events.ShowDialog
 					{
-						Dialog = new InvoiceDetailViewModel(invoice)
+						Dialog = new InvoiceDetailViewModel(invoice, new DateTime(SelectedYear.Data, SelectedMonth.Data,1))
 					}); 
 		}
 	}

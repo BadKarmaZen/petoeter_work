@@ -165,6 +165,7 @@
     <Compile Include="Model\Lite\Member.cs" />
     <Compile Include="Model\Lite\PetoeterDb.cs" />
     <Compile Include="Model\Lite\Presence.cs" />
+    <Compile Include="Model\Lite\PricingInformation.cs" />
     <Compile Include="Model\Lite\SystemSettings.cs" />
     <Compile Include="Model\Member.cs" />
     <Compile Include="Model\Petoeter.cs" />

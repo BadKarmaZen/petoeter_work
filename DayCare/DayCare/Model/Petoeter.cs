@@ -60,6 +60,22 @@ namespace DayCare.Model
 			//
 			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
+				//db.Pricings.Insert(new PricingInformation 
+				//{
+				//	Start = new DateTime(2016, 1, 1),
+				//	End = DateTime.MaxValue,
+				//	FullDay = 23.0,
+				//	HalfDay = 15.5,
+				//	ExtraMeal = 3.25,
+				//	ExtraHour = 1,
+				//	Diapers = 0.5,
+				//	Medication = 1.0,
+				//	ToLate = 5.0,
+				//	FullDaySick = 11.5,
+				//	HalfDaySick = 7.75
+				//});
+
+
 				//var accounts = (from a in db.Accounts.FindAll()
 				//							 //where a.Deleted != false
 				//							 select a).ToList();

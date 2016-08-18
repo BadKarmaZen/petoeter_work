@@ -16,6 +16,7 @@ namespace DayCare.Model.Lite
 		public const string TableHolidays = "holidays";
 		public const string TablePresence = "presence";
 		public const string TableSystem = "SystemSettings";
+		public const string TablePrices = "prices";
 
 		public SystemSettings Settings { get; set; }
 
@@ -102,7 +103,13 @@ namespace DayCare.Model.Lite
 			GetCollection<SystemSettings>(PetoeterDb.TableSystem).Update(Settings);
 		}
 
-
+		public LiteCollection<PricingInformation> Pricings
+		{
+			get
+			{
+				return GetCollection<PricingInformation>(PetoeterDb.TablePrices);
+			}
+		}
 
 		internal void DropAll()
 		{

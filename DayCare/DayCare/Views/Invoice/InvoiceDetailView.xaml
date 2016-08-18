@@ -4,41 +4,117 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="500" d:DesignWidth="300">
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="11*"/>
-			<RowDefinition Height="64*"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 
-		<TextBlock Text="Detail" />
+		<TextBlock Text="Detail" Style="{DynamicResource LabelStyle}" /> 
 
 		<Grid Grid.Row="1">
 			<Grid.RowDefinitions>
-				<RowDefinition Height="26*"/>
-				<RowDefinition Height="30*"/>
-				<RowDefinition Height="36*"/>
-				<RowDefinition Height="30*"/>
-				<RowDefinition Height="31*"/>
-				<RowDefinition Height="20*"/>
-				<RowDefinition Height="22*"/>
-				<RowDefinition Height="17*"/>
-				<RowDefinition Height="23*"/>
-				<RowDefinition Height="21*"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="62*"/>
-				<ColumnDefinition Width="42*"/>
-				<ColumnDefinition Width="58*"/>
-				<ColumnDefinition Width="41*"/>
-				<ColumnDefinition Width="33*"/>
-				<ColumnDefinition Width="64*"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="Auto"/>
 			</Grid.ColumnDefinitions>
 
-			<TextBlock Text="Volle dag:" Grid.Row="1"/>
-			<TextBlock Text="Halve dag:" Grid.Row="2"/>
+			<TextBlock Text="Aantal" Grid.Row="0" Grid.Column="3" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="Totaal" Grid.Row="0" Grid.Column="5" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
 
+			<TextBlock Text="Volle dag:" Grid.Row="1" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="Halve dag:" Grid.Row="2" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="Extra maaltijd:" Grid.Row="3" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="Extra uur:" Grid.Row="4" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="Luiers:" Grid.Row="5" Margin="2"  Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="Koortswerend middel:" Grid.Row="6" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="Laattijdig afhalen:" Grid.Row="7" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="Ziek (volle dag):" Grid.Row="8" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="Ziek (halve dag):" Grid.Row="9" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+
+			<TextBlock Text="{Binding FullDayPrice}" Grid.Column="1" Grid.Row="1" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="{Binding HalfDayPrice}" Grid.Column="1" Grid.Row="2" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="{Binding MealPrice}" Grid.Column="1" Grid.Row="3" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="{Binding ExtraHourPrice}" Grid.Column="1" Grid.Row="4" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="{Binding DiapersPrice}" Grid.Column="1" Grid.Row="5" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="{Binding MedicationPrice}" Grid.Column="1" Grid.Row="6" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="{Binding ToLatePrice}" Grid.Column="1" Grid.Row="7" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="{Binding SickFullPrice}" Grid.Column="1" Grid.Row="8" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="{Binding SickHalfPrice}" Grid.Column="1" Grid.Row="9" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+
+			<TextBlock Text="EUR x" Grid.Column="2" Grid.Row="1" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="EUR x" Grid.Column="2" Grid.Row="2" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="EUR x" Grid.Column="2" Grid.Row="3" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="EUR x" Grid.Column="2" Grid.Row="4" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="EUR x" Grid.Column="2" Grid.Row="5" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="EUR x" Grid.Column="2" Grid.Row="6" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="EUR x" Grid.Column="2" Grid.Row="7" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="EUR x" Grid.Column="2" Grid.Row="8" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="EUR x" Grid.Column="2" Grid.Row="9" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+
+			<TextBlock Text="{Binding FullDayCount}" Grid.Column="3" Grid.Row="1" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="{Binding HalfDayCount}" Grid.Column="3" Grid.Row="2" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="{Binding MealCount}" Grid.Column="3" Grid.Row="3" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="{Binding ExtraHourCount}" Grid.Column="3" Grid.Row="4" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="{Binding DiapersCount}" Grid.Column="3" Grid.Row="5" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="{Binding MedicationCount}" Grid.Column="3" Grid.Row="6" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="{Binding ToLateCount}" Grid.Column="3" Grid.Row="7" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="{Binding SickFullCount}" Grid.Column="3" Grid.Row="8" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="{Binding SickHalfCount}" Grid.Column="3" Grid.Row="9" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+
+			<TextBlock Text="=" Grid.Column="4" Grid.Row="1" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="=" Grid.Column="4" Grid.Row="2" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="=" Grid.Column="4" Grid.Row="3" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="=" Grid.Column="4" Grid.Row="4" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="=" Grid.Column="4" Grid.Row="5" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="=" Grid.Column="4" Grid.Row="6" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="=" Grid.Column="4" Grid.Row="7" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="=" Grid.Column="4" Grid.Row="8" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="=" Grid.Column="4" Grid.Row="9" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+
+			<TextBlock Text="{Binding FullDayTotal}" Grid.Column="5" Grid.Row="1"  Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="{Binding HalfDayTotal}" Grid.Column="5" Grid.Row="2" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="{Binding MealTotal}" Grid.Column="5" Grid.Row="3" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="{Binding ExtraHourTotal}"  Grid.Column="5" Grid.Row="4" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="{Binding DiapersTotal}"  Grid.Column="5" Grid.Row="5" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="{Binding MedicationTotal}" Grid.Column="5" Grid.Row="6" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="{Binding ToLateTotal}" Grid.Column="5" Grid.Row="7" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="{Binding SickFullTotal}"  Grid.Column="5" Grid.Row="8" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="{Binding SickHalfTotal}"  Grid.Column="5" Grid.Row="9" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+
+			<TextBlock Text="EUR" Grid.Column="6" Grid.Row="1" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="EUR" Grid.Column="6" Grid.Row="2" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="EUR" Grid.Column="6" Grid.Row="3" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="EUR" Grid.Column="6" Grid.Row="4" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="EUR" Grid.Column="6" Grid.Row="5" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="EUR" Grid.Column="6" Grid.Row="6" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="EUR" Grid.Column="6" Grid.Row="7" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="EUR" Grid.Column="6" Grid.Row="8" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
+			<TextBlock Text="EUR" Grid.Column="6" Grid.Row="9" Margin="2" Style="{DynamicResource LabelInfoStyle}"/>
 		</Grid>
 
+		<StackPanel Grid.Row="2" HorizontalAlignment="Right" Orientation="Horizontal">
+			<Button x:Name="DocumentAction" Content="Document" Style="{DynamicResource ButtonStyle}" Height="30" MinWidth="75" Margin="5,0"/>			
+			<Button x:Name="OkAction" Content="OK" Style="{DynamicResource ButtonStyle}" Height="30" MinWidth="75" Margin="5,0"/>
+		</StackPanel>
 	</Grid>
 </UserControl>
