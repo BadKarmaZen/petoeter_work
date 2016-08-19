@@ -102,15 +102,7 @@ namespace DayCare.Model.Lite
 		{
 			GetCollection<SystemSettings>(PetoeterDb.TableSystem).Update(Settings);
 		}
-
-		public LiteCollection<PricingInformation> Pricings
-		{
-			get
-			{
-				return GetCollection<PricingInformation>(PetoeterDb.TablePrices);
-			}
-		}
-
+		
 		internal void DropAll()
 		{
 			DropCollection(PetoeterDb.TableAccount);

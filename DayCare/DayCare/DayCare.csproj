@@ -113,6 +113,9 @@
     <Compile Include="Core\Extentions.cs" />
     <Compile Include="Core\ICloseScreen.cs" />
     <Compile Include="Core\ImageManager.cs" />
+    <Compile Include="Core\Invoicing\Invoice.cs" />
+    <Compile Include="Core\Invoicing\InvoiceManager.cs" />
+    <Compile Include="Core\Invoicing\InvoicePriceDetails.cs" />
     <Compile Include="Core\Log.cs" />
     <Compile Include="Core\ReactivatableScreen.cs" />
     <Compile Include="Core\Reports\ColumnId.cs" />
@@ -165,7 +168,6 @@
     <Compile Include="Model\Lite\Member.cs" />
     <Compile Include="Model\Lite\PetoeterDb.cs" />
     <Compile Include="Model\Lite\Presence.cs" />
-    <Compile Include="Model\Lite\PricingInformation.cs" />
     <Compile Include="Model\Lite\SystemSettings.cs" />
     <Compile Include="Model\Member.cs" />
     <Compile Include="Model\Petoeter.cs" />
@@ -361,6 +363,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="InvoiceTemplates\2016.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Nlog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -574,6 +579,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Factuur.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\sleep.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

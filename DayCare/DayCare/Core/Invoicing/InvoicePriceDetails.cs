@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DayCare.Model.Lite
+namespace DayCare.Core.Invoicing
 {
-	public class PricingInformation : LiteRecord
+	public class InvoicePriceDetails
 	{
-		public DateTime Start { get; set; }
-		public DateTime End { get; set; }
-
 		public double FullDay { get; set; }
 		public double HalfDay { get; set; }
 		public double ExtraMeal { get; set; }

@@ -20,14 +20,32 @@ namespace DayCare.ViewModels.Precense
 {
 	public class PresenceUI : TaggedItemUI<Presence>
 	{
+		enum State
+		{
+			NotArrivedYet,
+			HasArrived,
+			HasLeft
+		}
+
+
 		#region members
-		private bool _toLate;
+		//private bool _toLate;
+		private State _currentState;
+
+		private State CurrentState
+		{
+			get { return _currentState; }
+			set { _currentState = value; 
+				NotifyOfPropertyChange(() => CurrentState);
+				NotifyOfPropertyChange(() => BackGround);
+			}
+		}
 
 		#endregion
 
 
 		#region Properties
-		public TimeSpan MaxTime { get; set; }
+		//public TimeSpan MaxTime { get; set; }
 
 		public BitmapImage ImageData
 		{
@@ -37,39 +55,36 @@ namespace DayCare.ViewModels.Precense
 			}
 		}
 
-		public bool ToLate
-		{
-			get
-			{
-				return _toLate;
-			}
+		//public bool ToLate
+		//{
+		//	get
+		//	{
+		//		return _toLate;
+		//	}
 
-			set
-			{
-				_toLate = value;
-				NotifyOfPropertyChange(() => ToLate);
-				NotifyOfPropertyChange(() => BackGround);
-			}
-		}
+		//	set
+		//	{
+		//		_toLate = value;
+		//		NotifyOfPropertyChange(() => ToLate);
+		//		NotifyOfPropertyChange(() => BackGround);
+		//	}
+		//}
 
 		public Brush BackGround
 		{
 			get
 			{
-				if (Tag.BroughtAt == DateTime.MinValue)
+				if (CurrentState == State.NotArrivedYet)
 				{
-					return Brushes.White;
+					return Brushes.White;					
+				}
+				else if (CurrentState == State.HasArrived)
+				{
+					return Brushes.LightGreen;
 				}
 				else
 				{
-					var time = DateTimeProvider.Now();
-
-					if (Tag.TakenAt != DateTime.MinValue)
-						time = Tag.TakenAt;
-
-					var delta = time - Tag.BroughtAt;
-
-					return delta > MaxTime ? Brushes.Salmon : Brushes.LightGreen;
+					return Brushes.Salmon;
 				}
 			}
 		}
@@ -78,20 +93,17 @@ namespace DayCare.ViewModels.Precense
 
 		public void Update()
 		{
-			if (Tag.BroughtAt == DateTime.MinValue)
+			if (Tag.BroughtBy == null)
 			{
-				ToLate = false;
+				CurrentState = State.NotArrivedYet;				
+			}
+			else if (Tag.TakenBy == null)
+			{
+				CurrentState = State.HasArrived;
 			}
 			else
 			{
-				var time = DateTimeProvider.Now();
-
-				if (Tag.TakenAt != DateTime.MinValue)
-					time = Tag.TakenAt;
-
-				var delta = time - Tag.BroughtAt;
-
-				ToLate = delta > MaxTime;
+				CurrentState = State.HasLeft;
 			}
 		}
 
@@ -161,7 +173,7 @@ namespace DayCare.ViewModels.Precense
 			LoadPresenceData();
 
 			_timer = new DispatcherTimer(DispatcherPriority.Render);
-			_timer.Interval = TimeSpan.FromSeconds(5);
+			_timer.Interval = TimeSpan.FromSeconds(1);
 			_timer.Tick += (s, e) => { RefreshThumbs(); };
 
 			_timer.Start();
@@ -211,7 +223,7 @@ namespace DayCare.ViewModels.Precense
 					{
 						Name = presence.Child.GetFullName(),
 						Tag = presence,
-						MaxTime = new TimeSpan(presence.TimeCode, 0, 0)
+						//MaxTime = new TimeSpan(presence.TimeCode, 0, 0)
 					});
 				}
 			}

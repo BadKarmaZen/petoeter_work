@@ -198,8 +198,10 @@ namespace DayCare.ViewModels.Dashboard
 					Task = new InvoiceMainViewModel()
 				});
 		}
-
-		
-
+		public void SleepAction()
+		{
+			LogManager.GetLog(GetType()).Info("SleepAction");
+			System.Windows.Forms.Application.SetSuspendState(System.Windows.Forms.PowerState.Suspend, true, true);
+		}
 	}
 }

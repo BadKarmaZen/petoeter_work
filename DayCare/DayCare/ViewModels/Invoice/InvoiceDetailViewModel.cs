@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using ClosedXML.Excel;
 using DayCare.Core;
+using DayCare.Core.Invoicing;
 using DayCare.Model.Lite;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace DayCare.ViewModels.Invoice
 {
-	class ExpenseReport
+	public class ExpenseReport
 	{
 		public int FullDay { get; set; }
 		public int HalfDay { get; set; }
@@ -29,7 +30,7 @@ namespace DayCare.ViewModels.Invoice
 		#region Properties
 
 		public InvoiceUI Info { get; set; }
-		public DateTime Month { get; set; }
+		public DateTime InvoicePeriod { get; set; }
 		public ExpenseReport TotalExpense { get; set; }
 
 		public double FullDayPrice { get; set; }
@@ -65,9 +66,9 @@ namespace DayCare.ViewModels.Invoice
 			
 #endregion
 
-		public InvoiceDetailViewModel(InvoiceUI invoice, DateTime month)
+		public InvoiceDetailViewModel(InvoiceUI invoice, DateTime period)
 		{
-			Month = month;
+			InvoicePeriod = period;
 			Info = invoice;
 
 			Calculate();
@@ -84,25 +85,19 @@ namespace DayCare.ViewModels.Invoice
 			SickHalfCount = TotalExpense.HalfSickDay;
 
 			// pricing
-			using (var db = new PetoeterDb(PetoeterDb.FileName))
-			{
-				var pricing = (from p in db.Pricings.FindAll()
-											 where p.Start.Date <= month.Date && month.Date <= p.End.Date
-											 select p).FirstOrDefault();
+			var mgr = new InvoiceManager();
+			var prices = mgr.GetCurrentPrices();
 
-				if (pricing != null)
-				{
-					FullDayPrice =  pricing.FullDay;
-					HalfDayPrice =  pricing.HalfDay;
-					MealPrice =  pricing.ExtraMeal;
-					ExtraHourPrice =  pricing.ExtraHour;
-					DiapersPrice =  pricing.Diapers;
-					MedicationPrice =  pricing.Medication;
-					ToLatePrice =  pricing.ToLate;
-					SickFullPrice =  pricing.FullDaySick;
-					SickHalfPrice = pricing.HalfDaySick;					
-				}				
-			}
+			FullDayPrice = prices.FullDay;
+			HalfDayPrice = prices.HalfDay;
+			MealPrice = prices.ExtraMeal;
+			ExtraHourPrice = prices.ExtraHour;
+			DiapersPrice = prices.Diapers;
+			MedicationPrice = prices.Medication;
+			ToLatePrice = prices.ToLate;
+			SickFullPrice = prices.FullDaySick;
+			SickHalfPrice = prices.HalfDaySick;					
+
 
 			//	Total
 			FullDayTotal = FullDayCount * FullDayPrice;
@@ -206,52 +201,13 @@ namespace DayCare.ViewModels.Invoice
 
 		public void DocumentAction()
 		{
- 			//
-			var invoiceFile = Path.Combine(Folder, string.Format("{0}_{1}.xlsx", Info.Child.FirstName, Info.Child.LastName));
-
-			if (File.Exists(invoiceFile) == false)
-			{
-				File.Copy("InvoiceTemplate.xlsx", invoiceFile);				
-			}
-
-			var Months = new List<string> { "Januari", "Februari", "Maart", "April",
-																			"Mei", "Juni", "Juli", "Augustus", 
-																			"September", "Oktober", "November", "December" };
-
-			var wb = new XLWorkbook(invoiceFile);
+			var mgr = new InvoiceManager();
+			var invoice = mgr.FindInvoice(Info.Child, InvoicePeriod.Year);
 			
-			IXLWorksheet wsYear;
-			wb.Worksheets.TryGetWorksheet("Jaaroverzicht", out wsYear);
-
-			var cell = wsYear.Cell(12, "G");
-			cell.Value = Info.Child.GetFullName();
-
-			wsYear.Cell(19, "C").Value = FullDayPrice;
-			wsYear.Cell(19, "E").Value = HalfDayPrice;
-			wsYear.Cell(19, "G").Value = MealPrice;
-			wsYear.Cell(19, "I").Value = ExtraHourPrice;
-			wsYear.Cell(19, "K").Value = DiapersPrice;
-			wsYear.Cell(19, "M").Value = MedicationPrice;
-			wsYear.Cell(19, "O").Value = ToLatePrice;
-			wsYear.Cell(19, "Q").Value = SickFullPrice;
-			wsYear.Cell(19, "S").Value = SickHalfPrice;
-
-
-			//	
-			IXLWorksheet wsMonth;
-			wb.Worksheets.TryGetWorksheet(Months[Month.Month-1], out wsMonth);
-
-			wsMonth.Cell(25, "G").Value = FullDayCount;
-			wsMonth.Cell(27, "G").Value = HalfDayCount;
-			wsMonth.Cell(29, "G").Value = MealCount;
-			wsMonth.Cell(31, "G").Value = ExtraHourCount;
-			wsMonth.Cell(33, "G").Value = DiapersCount;
-			wsMonth.Cell(35, "G").Value = MedicationCount;
-			wsMonth.Cell(37, "G").Value = ToLateCount;
-			wsMonth.Cell(40, "G").Value = SickFullCount;
-			wsMonth.Cell(42, "G").Value = SickHalfCount;
-
-			wb.Save();
+			if (string.IsNullOrEmpty(invoice.File) == false)
+			{
+				invoice.SetMonth(InvoicePeriod.Month, TotalExpense);
+			}
 		}
 	}
 }
