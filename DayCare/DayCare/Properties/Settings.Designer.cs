@@ -31,5 +31,14 @@ namespace DayCare.Properties {
                 return ((bool)(this["PresenseMode"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("08/20/2016 23:30:00")]
+        public global::System.DateTime SleepTime {
+            get {
+                return ((global::System.DateTime)(this["SleepTime"]));
+            }
+        }
     }
 }
