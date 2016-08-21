@@ -12,7 +12,7 @@ namespace DayCare.Core.Invoicing
 	{
 		public string File { get; set; }
 
-		public void SetMonth(int month, ExpenseReport expense)
+		public void SetMonth(int month, ExpenseRecord expense)
 		{
 			var Months = new List<string> { "Januari", "Februari", "Maart", "April",
 																			"Mei", "Juni", "Juli", "Augustus", 

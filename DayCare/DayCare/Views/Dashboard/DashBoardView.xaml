@@ -99,7 +99,7 @@
 				</Grid>
 			</Border>
 
-			<Border Width="150" Height="200" Margin="25">
+			<Border Width="150" Height="200" Margin="25" Visibility="Collapsed">
 				<Grid>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="1*"/>

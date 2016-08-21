@@ -31,7 +31,8 @@ namespace DayCare.ViewModels.Invoice
 
 		public InvoiceUI Info { get; set; }
 		public DateTime InvoicePeriod { get; set; }
-		public ExpenseReport TotalExpense { get; set; }
+		//public ExpenseReport TotalExpense { get; set; }
+		public ExpenseRecord ExpensesCount { get; set; }
 
 		public double FullDayPrice { get; set; }
 		public double HalfDayPrice{ get; set; }
@@ -71,18 +72,18 @@ namespace DayCare.ViewModels.Invoice
 			InvoicePeriod = period;
 			Info = invoice;
 
-			Calculate();
+			ExpensesCount = Calculate();
 
 			//	count
-			FullDayCount = TotalExpense.FullDay;
-			HalfDayCount = TotalExpense.HalfDay;
-			MealCount = TotalExpense.ExtraMeal;
-			ExtraHourCount = TotalExpense.ExtraHour;
-			DiapersCount = TotalExpense.Diapers;
-			MedicationCount = TotalExpense.Medication;
-			ToLateCount = TotalExpense.ToLatePickup;
-			SickFullCount = TotalExpense.FullSickDay;
-			SickHalfCount = TotalExpense.HalfSickDay;
+			FullDayCount = ExpensesCount.FullDay;
+			HalfDayCount = ExpensesCount.HalfDay;
+			MealCount = ExpensesCount.ExtraMeal;
+			ExtraHourCount = ExpensesCount.ExtraHour;
+			DiapersCount = ExpensesCount.Diapers;
+			MedicationCount = ExpensesCount.Medication;
+			ToLateCount = ExpensesCount.ToLatePickup;
+			SickFullCount = ExpensesCount.FullSickDay;
+			SickHalfCount = ExpensesCount.HalfSickDay;
 
 			// pricing
 			var mgr = new InvoiceManager();
@@ -111,84 +112,16 @@ namespace DayCare.ViewModels.Invoice
 			SickHalfTotal = SickHalfCount * SickHalfPrice;
 		}
 
-		private void Calculate()
+		private ExpenseRecord Calculate()
 		{
-			TotalExpense = new ExpenseReport();
+			var calculator = new InvoiceCalculator();
 
 			foreach (var presence in Info.Presences)
 			{
-				if (presence.Expense == null)
-					presence.Expense = new Expense();
-
-				//	check time present
-				TimeSpan period = new TimeSpan (presence.TimeCode,0,0);
-				var closeTime = presence.Date.AddHours(18);
-
-				if (presence.BroughtBy != null)
-				{
-					if (presence.TakenBy != null)
-					{
-						period = presence.TakenAt - presence.BroughtAt;
-					}
-					else
-					{
-						//	asume until 18:00
-						period = closeTime - presence.BroughtAt;
-					}
-				}
-				else
-				{
-					if (presence.TakenBy != null)
-					{
-						//	asume from 07:00
-		 				var morning = presence.Date.AddHours(7);
-					}
-				}
-
-				if (presence.TimeCode == 9 || period.TotalHours > 6)
-				{
-					if (presence.Expense.Sick)
-					{
-						TotalExpense.FullSickDay++;
-					}
-					else
-					{
-						TotalExpense.FullDay++;
-					}
-				}
-				else
-				{
-					if (presence.Expense.Sick)
-					{
-						TotalExpense.HalfSickDay++;
-					}
-					else
-					{
-						TotalExpense.HalfDay++;
-					}
-				}
-
-				if (presence.TakenBy != null && presence.TakenAt > closeTime)
-				{
-					//	every started 15 minutes
-					TotalExpense.ToLatePickup += 1 + (int)((presence.TakenAt - closeTime).TotalMinutes / 15);					
-				}
-
-				var extra = period.TotalHours;
-				while (extra > 9.0)
-				{
-					extra -= 1.0;
-					TotalExpense.ExtraHour++;					
-				}
-
-				if (presence.Expense.ExtraMeal)
-				{
-					TotalExpense.ExtraMeal++;					
-				}
-
-				TotalExpense.Diapers += presence.Expense.Diapers;
-				TotalExpense.Medication += presence.Expense.Diapers;
+				calculator.AddExpenses(presence);
 			}
+
+			return calculator.Expenses;
 		}
 
 		public void OKAction()
@@ -206,7 +139,7 @@ namespace DayCare.ViewModels.Invoice
 			
 			if (string.IsNullOrEmpty(invoice.File) == false)
 			{
-				invoice.SetMonth(InvoicePeriod.Month, TotalExpense);
+				invoice.SetMonth(InvoicePeriod.Month, ExpensesCount);
 			}
 		}
 	}

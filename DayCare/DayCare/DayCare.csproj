@@ -113,7 +113,9 @@
     <Compile Include="Core\Extentions.cs" />
     <Compile Include="Core\ICloseScreen.cs" />
     <Compile Include="Core\ImageManager.cs" />
+    <Compile Include="Core\Invoicing\ExpenseRecord.cs" />
     <Compile Include="Core\Invoicing\Invoice.cs" />
+    <Compile Include="Core\Invoicing\InvoiceCalculator.cs" />
     <Compile Include="Core\Invoicing\InvoiceManager.cs" />
     <Compile Include="Core\Invoicing\InvoicePriceDetails.cs" />
     <Compile Include="Core\Log.cs" />

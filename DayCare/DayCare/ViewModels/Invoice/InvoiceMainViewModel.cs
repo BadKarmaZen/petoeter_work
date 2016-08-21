@@ -195,5 +195,14 @@ namespace DayCare.ViewModels.Invoice
 						Dialog = new InvoiceDetailViewModel(invoice, new DateTime(SelectedYear.Data, SelectedMonth.Data,1))
 					}); 
 		}
+
+
+		public void MonthOverviewAction()
+		{
+
+		}
+ 
+		public void PersonDetailAction() {}
+		public void SepaAction() { } 
 	}
 }

@@ -17,7 +17,8 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="111*"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="1*"/>
 		</Grid.RowDefinitions>
 
 		<ItemsControl ItemsSource="{Binding Years}" Grid.Row="0">
@@ -75,7 +76,12 @@
 			</ItemsControl.ItemTemplate>
 		</ItemsControl>
 
-		<ScrollViewer Grid.Row="2" Margin="2">
+		<StackPanel Grid.Row="2" Orientation="Horizontal">
+			<Button Name="MonthOverviewAction" Content="Maand overzicht" Style="{DynamicResource ButtonStyle}" Margin="5,2" MinWidth="150" MinHeight="30"/>
+			<Button Name="PersonDetailAction" Content="Persoon detail" Style="{DynamicResource ButtonStyle}" Margin="5,2" MinWidth="150" MinHeight="30"/>
+			<Button Name="SepaAction" Content="SEPA" Style="{DynamicResource ButtonStyle}" Margin="5,2" MinWidth="150" MinHeight="30"/> 
+		</StackPanel>
+		<ScrollViewer Grid.Row="3" Margin="2">
 			<ItemsControl ItemsSource="{Binding Items}" >
 				<ItemsControl.ItemsPanel>
 					<ItemsPanelTemplate>
