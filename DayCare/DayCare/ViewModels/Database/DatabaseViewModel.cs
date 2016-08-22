@@ -141,5 +141,15 @@ namespace DayCare.ViewModels.Database
 				});
 
 		}
+
+		public void MaintenanceAction()
+		{
+			Petoeter.ForceExport();
+			//ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+			//	 new Core.Events.SwitchTask
+			//	 {
+			//		 Task = new MaintenanceViewModel()
+			//	 }); 
+		}
 	}
 }

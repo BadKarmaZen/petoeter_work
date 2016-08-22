@@ -83,7 +83,7 @@ namespace DayCare.ViewModels.Precense
 			Date = Date.AddDays(-1);
 			if (Date.DayOfWeek == DayOfWeek.Sunday)
 			{
-				Date = Date.AddDays(1);
+				Date = Date.AddDays(-2);
 			}
 			LoadPresenceData();
 		}

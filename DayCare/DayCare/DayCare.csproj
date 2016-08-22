@@ -192,7 +192,9 @@
     <Compile Include="ViewModels\Children\ChildrenMainViewModel.cs" />
     <Compile Include="ViewModels\Children\ChildUI.cs" />
     <Compile Include="ViewModels\Children\EditChildViewModel.cs" />
+    <Compile Include="ViewModels\Database\AcountTableViewModel.cs" />
     <Compile Include="ViewModels\Database\DatabaseViewModel.cs" />
+    <Compile Include="ViewModels\Database\MaintenanceViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\AddPresenceDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\OkDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\PasswordDialogViewModel.cs" />
@@ -266,6 +268,9 @@
     </Compile>
     <Compile Include="Views\Database\DatabaseView.xaml.cs">
       <DependentUpon>DatabaseView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Database\MaintenanceView.xaml.cs">
+      <DependentUpon>MaintenanceView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Dialogs\AddPresenceDialogView.xaml.cs">
       <DependentUpon>AddPresenceDialogView.xaml</DependentUpon>
@@ -441,6 +446,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Database\MaintenanceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Dialogs\AddPresenceDialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -584,6 +593,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\sleep.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\reset_database.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

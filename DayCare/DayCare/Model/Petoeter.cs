@@ -11,6 +11,21 @@ using System.Threading.Tasks;
 
 namespace DayCare.Model
 {
+	public class Data : DayCare.Core.XmlBaseConfig<Data>
+	{
+		public List<Account> Accounts { get; set; }
+
+		public List<Member> Members { get; set; }
+
+		public List<Child> Children { get; set; }
+
+		public List<Presence> Presences { get; set; }
+
+		public List<Date> Holidays { get; set; }
+
+		public SystemSettings Settings { get; set; }
+	}
+
 	public class Petoeter
 	{
 		public const string AdminExportFilename = "export_admin.ldb";
@@ -49,9 +64,26 @@ namespace DayCare.Model
 			//Database = new DayCare.Database.DatabaseEngine(Mode);
 
 			//	Verify Database
-			VerifyDatabase();
+			//	DumpDatabase();
 
 			//LoadData();
+		}
+
+		private void DumpDatabase()
+		{
+			var data = new Data();
+
+			using (var db = new PetoeterDb(@"E:\Temp\petoeter_db\db.ldb"))
+			{
+				data.Accounts = db.Accounts.FindAll().ToList();
+				data.Members = db.Members.FindAll().ToList();
+				data.Children = db.Children.FindAll().ToList();
+				data.Presences = db.Presences.FindAll().ToList();
+				data.Holidays = db.Holidays.FindAll().ToList();
+				data.Settings = db.GetSettings();
+
+				data.SaveToFile(@"E:\Temp\petoeter_db\data.xml");
+			}
 		}
 
 		private void VerifyDatabase()
@@ -406,6 +438,7 @@ namespace DayCare.Model
 
 		public void Export(string path)
 		{
+			//ForceExport();
 			if (Properties.Settings.Default.PresenseMode)
 			{
 				ExportPresence(Path.Combine(path, PresenceExportFilename));
@@ -414,6 +447,16 @@ namespace DayCare.Model
 			{
 				ExportAdministration(Path.Combine(path, AdminExportFilename));
 			}
+		}
+
+		public static void ForceExport()
+		{
+			using (var db = new PetoeterDb(PetoeterDb.FileName))
+			{
+				var settings = db.GetSettings();
+				settings.ExporTimeStamp = new DateTime(2016, 08, 01);
+				db.UpdateSystemSettings();
+			} 
 		}
 
 		private void ExportPresence(string filename)
@@ -429,14 +472,14 @@ namespace DayCare.Model
 
 				using (var export = new PetoeterDb(filename))
 				{
-					var presence = (from p in db.Presences.Find(p => p.Updated < lastExportTime) select p).ToList();
+					var presence = (from p in db.Presences.Find(p => p.Updated > lastExportTime) select p).ToList();
 
 					presence.ForEach(p =>
 					{
 						p.Updated = exportTime;
 						log.Info("Export presence: {0}. [{1}] {2}", p.Id, p.Date.ToShortDateString(), p.Child.GetFullName());
 
-						//export.Children.Insert(p.Child);
+						db.Presences.Update(p);
 
 						//if (export.Members.Exists(m => m.Id == p.BroughtBy.Id) == false)
 						//{
@@ -471,7 +514,7 @@ namespace DayCare.Model
 				using (var export = new PetoeterDb(filename))
 				{
 					var children = (from c in db.Children.FindAll()
-													where c.Updated < lastExportTime
+													where c.Updated > lastExportTime
 													select c).ToList();
 
 					children.ForEach(c =>
@@ -496,7 +539,7 @@ namespace DayCare.Model
 					});
 
 					var members = (from m in db.Members.FindAll()
-												 where m.Updated < lastExportTime
+												 where m.Updated > lastExportTime
 												 select m).ToList();
 
 					members.ForEach(m =>
@@ -509,7 +552,7 @@ namespace DayCare.Model
 					export.Members.Insert(members);
 
 					var accounts = (from a in db.Accounts.FindAll()
-													where a.Updated < lastExportTime
+													where a.Updated > lastExportTime
 													select a).ToList();
 
 					accounts.ForEach(a =>
@@ -522,7 +565,7 @@ namespace DayCare.Model
 					export.Accounts.Insert(accounts);
 
 					var holidays = (from h in db.Holidays.FindAll()
-													where h.Updated < lastExportTime
+													where h.Updated > lastExportTime
 													select h).ToList();
 
 					holidays.ForEach(h =>

@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using DayCare.Core;
+using DayCare.Core.Invoicing;
 using DayCare.Model.Lite;
 using DayCare.Model.UI;
 using DayCare.ViewModels.UICore;
@@ -103,7 +104,6 @@ namespace DayCare.ViewModels.Invoice
 
 		#endregion
 
-
 		public InvoiceMainViewModel()
 		{
 			var months = new List<DateInfo>();
@@ -189,20 +189,65 @@ namespace DayCare.ViewModels.Invoice
 
 		public void OpenAction(InvoiceUI invoice)
 		{
+			var calculator = new InvoiceCalculator();
+
+			foreach (var presence in invoice.Presences)
+			{
+				calculator.AddExpenses(presence);
+			}
+
 			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
-					new Core.Events.ShowDialog
-					{
-						Dialog = new InvoiceDetailViewModel(invoice, new DateTime(SelectedYear.Data, SelectedMonth.Data,1))
-					}); 
+				new Core.Events.ShowDialog
+				{
+					Dialog = new InvoiceDetailViewModel(calculator.Expenses, new DateTime(SelectedYear.Data, SelectedMonth.Data, 1))
+				}); 
 		}
 
 
 		public void MonthOverviewAction()
 		{
+			var calculator = new InvoiceCalculator();
 
+			foreach (var invoice in Items)
+			{
+				foreach (var presence in invoice.Presences)
+				{
+					calculator.AddExpenses(presence);
+				}
+			}
+
+			ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+				new Core.Events.ShowDialog
+				{
+					Dialog = new InvoiceDetailViewModel(calculator.Expenses, new DateTime(SelectedYear.Data, SelectedMonth.Data, 1))
+				});
 		}
  
-		public void PersonDetailAction() {}
-		public void SepaAction() { } 
+		public void PersonDetailAction() 
+		{
+			OpenAction(SelectedItem);
+		}
+
+		public void SepaAction()
+		{
+			var mgr = new InvoiceManager();
+
+			foreach (var invoice in Items)
+			{
+				var invoiceFile = mgr.FindInvoice(invoice.Child, SelectedYear.Data);
+
+				if (string.IsNullOrEmpty(invoiceFile.File) == false)
+				{
+					var calculator = new InvoiceCalculator();
+
+					foreach (var presence in invoice.Presences)
+					{
+						calculator.AddExpenses(presence);
+					}
+
+					invoiceFile.SetMonth(SelectedMonth.Data, calculator.Expenses);
+				}
+			}
+		} 
 	}
 }

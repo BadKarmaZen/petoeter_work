@@ -12,18 +12,18 @@ using System.Threading.Tasks;
 
 namespace DayCare.ViewModels.Invoice
 {
-	public class ExpenseReport
-	{
-		public int FullDay { get; set; }
-		public int HalfDay { get; set; }
-		public int FullSickDay { get; set; }
-		public int HalfSickDay { get; set; }
-		public int ExtraMeal { get; set; }
-		public int ExtraHour { get; set; }
-		public int Diapers { get; set; }
-		public int Medication { get; set; }
-		public int ToLatePickup { get; set; }		
-	}
+	//public class ExpenseReport
+	//{
+	//	public int FullDay { get; set; }
+	//	public int HalfDay { get; set; }
+	//	public int FullSickDay { get; set; }
+	//	public int HalfSickDay { get; set; }
+	//	public int ExtraMeal { get; set; }
+	//	public int ExtraHour { get; set; }
+	//	public int Diapers { get; set; }
+	//	public int Medication { get; set; }
+	//	public int ToLatePickup { get; set; }		
+	//}
 
 	class InvoiceDetailViewModel : Screen
 	{
@@ -35,8 +35,8 @@ namespace DayCare.ViewModels.Invoice
 		public ExpenseRecord ExpensesCount { get; set; }
 
 		public double FullDayPrice { get; set; }
-		public double HalfDayPrice{ get; set; }
-		public double MealPrice{ get; set; }
+		public double HalfDayPrice { get; set; }
+		public double MealPrice { get; set; }
 		public double ExtraHourPrice { get; set; }
 		public double DiapersPrice { get; set; }
 		public double MedicationPrice { get; set; }
@@ -54,7 +54,6 @@ namespace DayCare.ViewModels.Invoice
 		public double SickFullCount { get; set; }
 		public double SickHalfCount { get; set; }
 
-
 		public double FullDayTotal { get; set; }
 		public double HalfDayTotal { get; set; }
 		public double MealTotal { get; set; }
@@ -64,15 +63,15 @@ namespace DayCare.ViewModels.Invoice
 		public double ToLateTotal { get; set; }
 		public double SickFullTotal { get; set; }
 		public double SickHalfTotal { get; set; }
-			
-#endregion
 
-		public InvoiceDetailViewModel(InvoiceUI invoice, DateTime period)
+		public double FullResultTotal { get; set; }
+
+		#endregion
+
+		public InvoiceDetailViewModel(ExpenseRecord expenses, DateTime period)
 		{
 			InvoicePeriod = period;
-			Info = invoice;
-
-			ExpensesCount = Calculate();
+			ExpensesCount = expenses;
 
 			//	count
 			FullDayCount = ExpensesCount.FullDay;
@@ -97,7 +96,7 @@ namespace DayCare.ViewModels.Invoice
 			MedicationPrice = prices.Medication;
 			ToLatePrice = prices.ToLate;
 			SickFullPrice = prices.FullDaySick;
-			SickHalfPrice = prices.HalfDaySick;					
+			SickHalfPrice = prices.HalfDaySick;
 
 
 			//	Total
@@ -107,9 +106,13 @@ namespace DayCare.ViewModels.Invoice
 			ExtraHourTotal = ExtraHourCount * ExtraHourPrice;
 			DiapersTotal = DiapersCount * DiapersPrice;
 			MedicationTotal = MedicationCount * MedicationPrice;
-			ToLateCount = ToLateCount * ToLatePrice;
+			ToLateTotal = ToLateCount * ToLatePrice;
 			SickFullTotal = SickFullCount * SickFullPrice;
 			SickHalfTotal = SickHalfCount * SickHalfPrice;
+
+			FullResultTotal = FullDayTotal + HalfDayTotal + MealTotal +
+												ExtraHourTotal + DiapersTotal + MedicationTotal +
+												ToLateTotal + SickFullTotal + SickHalfTotal;
 		}
 
 		private ExpenseRecord Calculate()
@@ -136,7 +139,7 @@ namespace DayCare.ViewModels.Invoice
 		{
 			var mgr = new InvoiceManager();
 			var invoice = mgr.FindInvoice(Info.Child, InvoicePeriod.Year);
-			
+
 			if (string.IsNullOrEmpty(invoice.File) == false)
 			{
 				invoice.SetMonth(InvoicePeriod.Month, ExpensesCount);

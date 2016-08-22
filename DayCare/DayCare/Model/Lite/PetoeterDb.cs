@@ -121,6 +121,7 @@ namespace DayCare.Model.Lite
 	public class PetoeterImageManager
 	{
 		public const string Olaf = "img/olaf";
+		public static Dictionary<string, System.Windows.Media.Imaging.BitmapImage> _cache = new Dictionary<string, System.Windows.Media.Imaging.BitmapImage>();
 
 		private static System.Windows.Media.Imaging.BitmapImage _olaf;
 
@@ -134,6 +135,11 @@ namespace DayCare.Model.Lite
 				}
 
 				return _olaf;
+			}
+
+			if (_cache.Keys.Contains(fileId))
+			{
+				return _cache[fileId];
 			}
 
 			using (var db = new PetoeterDb(PetoeterDb.FileName))
@@ -165,6 +171,8 @@ namespace DayCare.Model.Lite
 					image.EndInit();
 
 					image.Freeze();
+
+					_cache.Add(fileId, image);
 
 					return image;
 				}
