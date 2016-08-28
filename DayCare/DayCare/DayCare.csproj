@@ -78,6 +78,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Caliburn.Micro.3.0.0-beta1\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -199,6 +200,7 @@
     <Compile Include="ViewModels\Dialogs\OkDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\PasswordDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\SelectDriveViewModel.cs" />
+    <Compile Include="ViewModels\Images\PasportImageViewModel.cs" />
     <Compile Include="ViewModels\Invoice\InvoiceDetailViewModel.cs" />
     <Compile Include="ViewModels\Invoice\InvoiceMainViewModel.cs" />
     <Compile Include="ViewModels\Members\MemberUI.cs" />
@@ -295,6 +297,9 @@
     </Compile>
     <Compile Include="Views\Expenses\ExpenseMainView.xaml.cs">
       <DependentUpon>ExpenseMainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Images\PasportImageView.xaml.cs">
+      <DependentUpon>PasportImageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Invoice\InvoiceDetailView.xaml.cs">
       <DependentUpon>InvoiceDetailView.xaml</DependentUpon>
@@ -479,6 +484,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Expenses\ExpenseMainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Images\PasportImageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -186,7 +186,7 @@ namespace DayCare.ViewModels.Calendar
 
 		private static void SaveHoliday(DayUI ui)
 		{
-			LogManager.GetLog(typeof(CalendarMainViewModel)).Info("Save Holiday");
+			LogManager.GetLog(typeof(CalendarMainViewModel)).Info("Save Holiday ({0})", ui.Day.ToShortDateString());
 
 			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
@@ -197,6 +197,7 @@ namespace DayCare.ViewModels.Calendar
 					// update
 					day.Afternoon = ui.Afternoon;
 					day.Morning = ui.Morning;
+					day.Updated = DateTime.Now;
 
 					db.Holidays.Update(day);
 				}
@@ -208,7 +209,8 @@ namespace DayCare.ViewModels.Calendar
 						{
 							Day = ui.Day,
 							Morning = ui.Morning,
-							Afternoon = ui.Afternoon
+							Afternoon = ui.Afternoon,
+							Updated = DateTime.Now
 						});
 					}
 				}

@@ -11,7 +11,7 @@ using System.Windows.Media.Imaging;
 
 namespace DayCare.ViewModels.Children
 {
-	public class ChildDetailViewModel : Screen
+	public class ChildDetailViewModel : Screen, IHandle<Core.Events.SaveSnapshot>
 	{
 		#region Member
 		private string _firstName;
@@ -91,6 +91,8 @@ namespace DayCare.ViewModels.Children
 				_birthDay = child.BirthDay;
 				FileID = child.FileId;
 			}
+
+			ServiceProvider.Instance.GetService<EventAggregator>().Subscribe(this);
 		}
 
 		internal void GetData(Child child)
@@ -108,10 +110,16 @@ namespace DayCare.ViewModels.Children
 
 			if (dlg.ShowDialog() == true)
 			{
-				var fileId = string.Format("img/child/{0}", Guid.NewGuid());
-				PetoeterImageManager.SaveFile(fileId, dlg.FileName);
+				ServiceProvider.Instance.GetService<EventAggregator>().PublishOnUIThread(
+					new Core.Events.ShowSnapshot
+					{
+						FileName = dlg.FileName,
+						FileId = string.Format("img/child/{0}", Guid.NewGuid())
+					});
+				
+				//PetoeterImageManager.SaveFile(fileId, dlg.FileName);
 
-				FileID = fileId;
+				//FileID = fileId;
 			}
 		}
 
@@ -121,6 +129,11 @@ namespace DayCare.ViewModels.Children
 			var name = FileID;
 			PetoeterImageManager.RemoveFile(FileID);
 			FileID = string.Empty;
+		}
+
+		public void Handle(Events.SaveSnapshot message)
+		{
+			FileID = message.FileId;
 		}
 	}
 }

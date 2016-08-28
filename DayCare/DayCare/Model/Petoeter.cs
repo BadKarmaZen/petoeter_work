@@ -632,124 +632,169 @@ namespace DayCare.Model
 			{
 				using (var import = new PetoeterDb(filename))
 				{
-					if (import.Children.Count() != 0)
-					{
-						var children = (from c in import.Children.FindAll() select c).ToList();
-						log.Info("Import children (#{0})", children.Count);
+					ImportChildren(log, importTime, db, import);
 
-						foreach (var child in children)
-						{
-							var update_child = db.Children.FindById(child.Id);
+					ImportMembers(log, importTime, db, import);
 
-							if (update_child == null)
-							{
-								log.Info("Import child: {0}. {1}", child.Id, child.GetFullName());
-								child.Updated = importTime;
-								db.Children.Insert(child);
-							}
-							else
-							{
-								log.Info("Update child: {0}. {1}", child.Id, child.GetFullName());
-								child.Updated = importTime;
-								db.Children.Update(child);
-							}
+					ImportAccounts(log, importTime, db, import);
 
-							if (string.IsNullOrEmpty(child.FileId) == false)
-							{
-								var file = import.FileStorage.FindById(child.FileId);
-								if (file != null)
-								{
-									if (db.FileStorage.Exists(child.FileId))
-									{
-										log.Info("Update child: remove picture");
-										db.FileStorage.Delete(child.FileId);
-									}
-									log.Info("Update child: upload picture");
-									db.FileStorage.Upload(child.FileId, file.OpenRead());
-								}								
-							}
-						}
-					}
-
-					if (import.Members.Count() != 0)
-					{
-						var members = (from m in import.Members.FindAll() select m).ToList();
-						log.Info("Import members (#{0})", members.Count);
-
-						foreach (var member in members)
-						{
-							var update_member = db.Members.FindById(member.Id);
-
-							if (update_member == null)
-							{
-								log.Info("Import member: {0}. {1}", member.Id, member.GetFullName());
-								member.Updated = importTime;
-								db.Members.Insert(member);
-							}
-							else
-							{
-								log.Info("Update member: {0}. {1}", member.Id, member.GetFullName());
-								member.Updated = importTime;
-								db.Members.Update(member);
-							}
-						}
-					}
-
-					if (import.Accounts.Count() != 0)
-					{
-						//var accounts = (from a in import.Accounts.FindAll() select a).ToList();
-						var accounts = (from a in import.GetCollection<Account>(PetoeterDb.TableAccount).FindAll() select a).ToList();
-
-						log.Info("Import accounts (#{0})", accounts.Count);
-
-						foreach (var account in accounts)
-						{
-							//	check if account exist
-							var updateaccount = db.Accounts.FindById(account.Id);
-
-							if (updateaccount == null)
-							{
-								log.Info("Import account: #{0}. {1}", account.Id, account.Name);
-								account.Updated = importTime;
-								db.Accounts.Insert(account);
-							}
-							else
-							{
-								log.Info("Update account: #{0}. {1}", account.Id, account.Name);
-								account.Updated = importTime;
-								db.Accounts.Update(account);
-							}
-						}
-					}
-
-					if (import.Holidays.Count() != 0)
-					{
-						var holidays = (from h in import.Holidays.FindAll() select h).ToList();
-
-						log.Info("Import holidays (#{0})", holidays.Count);
-
-						foreach (var holiday in holidays)
-						{
-							//	check if account exist
-							var updateholiday = db.Accounts.FindById(holiday.Id);
-
-							if (updateholiday == null)
-							{
-								log.Info("Import holiday: #{0}. {1}", holiday.Id, holiday.Day);
-								holiday.Updated = importTime;
-								db.Holidays.Insert(holiday);
-							}
-							else
-							{
-								log.Info("Update holiday: #{0}. {1}", holiday.Id, holiday.Day);
-								holiday.Updated = importTime;
-								db.Holidays.Update(holiday);
-							}
-						}
-					}
+					ImportHoliday(log, importTime, db, import);
 
 					log.Info("Drop all");
 					import.DropAll();
+				}
+			}
+		}
+
+		private static void ImportHoliday(ILog log, DateTime importTime, PetoeterDb db, PetoeterDb import)
+		{
+			if (import.Holidays.Count() != 0)
+			{
+				var holidays = (from h in import.Holidays.FindAll() select h).ToList();
+				log.Info("Import holidays (#{0})", holidays.Count);
+
+				foreach (var holiday in holidays)
+				{
+					try
+					{
+						//	check if account exist
+						var updateholiday = db.Holidays.FindById(holiday.Id);
+
+						if (updateholiday == null)
+						{
+							log.Info("Import holiday: #{0}. {1}", holiday.Id, holiday.Day);
+							holiday.Updated = importTime;
+							db.Holidays.Insert(holiday);
+						}
+						else
+						{
+							log.Info("Update holiday: #{0}. {1}", holiday.Id, holiday.Day);
+							holiday.Updated = importTime;
+							db.Holidays.Update(holiday);
+						}
+					}
+					catch (Exception ex)
+					{
+						log.Error(ex);
+					}
+				}
+			}
+		}
+
+		private static void ImportAccounts(ILog log, DateTime importTime, PetoeterDb db, PetoeterDb import)
+		{
+			if (import.Accounts.Count() != 0)
+			{
+				var accounts = (from a in import.GetCollection<Account>(PetoeterDb.TableAccount).FindAll() select a).ToList();
+				log.Info("Import accounts (#{0})", accounts.Count);
+
+				foreach (var account in accounts)
+				{
+					try
+					{
+						//	check if account exist
+						var updateaccount = db.Accounts.FindById(account.Id);
+
+						if (updateaccount == null)
+						{
+							log.Info("Import account: #{0}. {1}", account.Id, account.Name);
+							account.Updated = importTime;
+							db.Accounts.Insert(account);
+						}
+						else
+						{
+							log.Info("Update account: #{0}. {1}", account.Id, account.Name);
+							account.Updated = importTime;
+							db.Accounts.Update(account);
+						}
+					}
+					catch (Exception ex)
+					{
+						log.Error(ex);
+					}
+				}
+			}
+		}
+
+		private static void ImportMembers(ILog log, DateTime importTime, PetoeterDb db, PetoeterDb import)
+		{
+			if (import.Members.Count() != 0)
+			{
+				var members = (from m in import.Members.FindAll() select m).ToList();
+				log.Info("Import members (#{0})", members.Count);
+
+				foreach (var member in members)
+				{
+					try
+					{
+						var update_member = db.Members.FindById(member.Id);
+
+						if (update_member == null)
+						{
+							log.Info("Import member: {0}. {1}", member.Id, member.GetFullName());
+							member.Updated = importTime;
+							db.Members.Insert(member);
+						}
+						else
+						{
+							log.Info("Update member: {0}. {1}", member.Id, member.GetFullName());
+							member.Updated = importTime;
+							db.Members.Update(member);
+						}
+					}
+					catch (Exception ex)
+					{
+						log.Error(ex);
+					}
+				}
+			}
+		}
+
+		private static void ImportChildren(ILog log, DateTime importTime, PetoeterDb db, PetoeterDb import)
+		{
+			if (import.Children.Count() != 0)
+			{
+				var children = (from c in import.Children.FindAll() select c).ToList();
+				log.Info("Import children (#{0})", children.Count);
+
+				foreach (var child in children)
+				{
+					try
+					{
+						var update_child = db.Children.FindById(child.Id);
+						
+						if (update_child == null)						
+						{
+							log.Info("Import child: {0}. {1}", child.Id, child.GetFullName());
+							child.Updated = importTime;
+							db.Children.Insert(child);
+						}
+						else
+						{
+							log.Info("Update child: {0}. {1}", child.Id, child.GetFullName());
+							child.Updated = importTime;
+							db.Children.Update(child);
+						}
+
+						if (string.IsNullOrEmpty(child.FileId) == false)
+						{
+							var file = import.FileStorage.FindById(child.FileId);
+							if (file != null)
+							{
+								if (db.FileStorage.Exists(child.FileId))
+								{
+									log.Info("Update child: remove picture");
+									db.FileStorage.Delete(child.FileId);
+								}
+								log.Info("Update child: upload picture");
+								db.FileStorage.Upload(child.FileId, file.OpenRead());
+							}
+						}
+					}
+					catch (Exception ex)
+					{
+						log.Error(ex);
+					}					
 				}
 			}
 		}

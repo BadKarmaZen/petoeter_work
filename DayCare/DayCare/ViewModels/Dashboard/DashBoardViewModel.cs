@@ -101,6 +101,7 @@ namespace DayCare.ViewModels.Dashboard
 				new Core.Events.SwitchTask
 				{
 					Task = new AccountMainViewModel()
+					//Task = new DayCare.ViewModels.Images.PasportImageViewModel()
 				});
 		}
 

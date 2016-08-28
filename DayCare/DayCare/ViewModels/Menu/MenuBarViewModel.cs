@@ -13,16 +13,26 @@ namespace DayCare.ViewModels.Menu
 		public string Caption { get; set; }
 		public string Id { get; set; }
 		public System.Action Action { get; set; }
+		public int Level { get; set; }
 	}
+
 	public class MenuBarViewModel : Screen, IHandle<Events.RegisterMenu>
 	{
-		private List<MenuItem> _menuItems = new List<MenuItem>();
+		#region Members
 
+		private List<MenuItem> _menuItems = new List<MenuItem>();
+		public int CurrentLevel { get; set; }
+
+		#endregion
+
+		#region Properties
 		public List<MenuItem> MenuItems
 		{
 			get { return new List<MenuItem>(_menuItems); }
 			set { _menuItems = value; }
 		}
+		
+		#endregion
 
 		public MenuBarViewModel()
 		{
@@ -40,6 +50,7 @@ namespace DayCare.ViewModels.Menu
 			if (message.Add)
 			{
 				LogManager.GetLog(GetType()).Info("Handle.Add");
+
 				var menu = _menuItems.Find(m => m.Id == message.Id);
 
 				if (menu != null)
@@ -51,7 +62,8 @@ namespace DayCare.ViewModels.Menu
 				{
 					Caption = message.Caption,
 					Id = message.Id,
-					Action = message.Action
+					Action = message.Action,
+					Level = CurrentLevel++
 				});
 
 				NotifyOfPropertyChange(() => MenuItems);
@@ -59,8 +71,14 @@ namespace DayCare.ViewModels.Menu
 			else
 			{
 				LogManager.GetLog(GetType()).Info("Handle.Add=false");
-				_menuItems.RemoveAll(m => m.Id == message.Id);
-				NotifyOfPropertyChange(() => MenuItems);
+
+				var menu = _menuItems.FirstOrDefault(m => m.Id == message.Id);
+
+				if (menu != null)
+				{
+					_menuItems.RemoveAll(m => m.Level >= menu.Level);
+					NotifyOfPropertyChange(() => MenuItems);					
+				}
 			}
 		}
 	}

@@ -8,29 +8,44 @@
         xmlns:vc="clr-namespace:DayCare.Converters"
         mc:Ignorable="d"
         WindowStyle="None" ResizeMode="NoResize"  
-        WindowStartupLocation="CenterScreen" WindowState="Maximized"><!--Width="1366" Height="768"-->
-    <Window.Resources>
-        <ResourceDictionary>
-            <vc:BooleanVisibilityConverter x:Key="BooleanVisibilityConverter" />
-        </ResourceDictionary>
-    </Window.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        WindowStartupLocation="CenterScreen" WindowState="Maximized">
+	<!--Width="1366" Height="768"-->
+	<Window.Resources>
+		<ResourceDictionary>
+			<vc:BooleanVisibilityConverter x:Key="BooleanVisibilityConverter" />
+		</ResourceDictionary>
+	</Window.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
 
-        <ContentControl cal:View.Model="{Binding Menu}" VerticalAlignment="Stretch" />
-        <ContentControl cal:View.Model="{Binding Task}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1"/>
+		<ContentControl cal:View.Model="{Binding Menu}" VerticalAlignment="Stretch" />
+		<ContentControl cal:View.Model="{Binding Task}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1"/>
+		
+		<TextBlock Text="{Binding ApplicationVersion}" Grid.Row="2" HorizontalAlignment="Center" FontFamily="Comic Sans MS" FontSize="20" Margin="3"/>
 
-        <Border Grid.RowSpan="2" Background="#19000000"
+		<Border Grid.RowSpan="3" Background="#19000000"
                 Visibility="{Binding ShowDialog, Converter={StaticResource BooleanVisibilityConverter}}">
-            <GroupBox VerticalAlignment="Center" HorizontalAlignment="Center" >
-                <GroupBox.Header>
-                    <TextBlock Text="DayCare" Style="{DynamicResource GroupBoxHeaderStyle}" />
-                </GroupBox.Header>
-                <ContentControl cal:View.Model="{Binding Dialog}" Margin="10" />
-            </GroupBox>
-        </Border>
-    </Grid>
+			<GroupBox VerticalAlignment="Center" HorizontalAlignment="Center" >
+				<GroupBox.Header>
+					<TextBlock Text="DayCare" Style="{DynamicResource GroupBoxHeaderStyle}" />
+				</GroupBox.Header>
+				<ContentControl cal:View.Model="{Binding Dialog}" Margin="10" />
+			</GroupBox>
+		</Border>
+		
+		<Border Grid.RowSpan="3" Background="#19000000"
+                Visibility="{Binding ShowSnapshotViewer, Converter={StaticResource BooleanVisibilityConverter}}">
+			<GroupBox VerticalAlignment="Center" HorizontalAlignment="Center" >
+				<GroupBox.Header>
+					<TextBlock Text="DayCare" Style="{DynamicResource GroupBoxHeaderStyle}" />
+				</GroupBox.Header>
+				<ContentControl cal:View.Model="{Binding SnapshotViewer}" Margin="10" />
+			</GroupBox>
+		</Border>
+		
+	</Grid>
 </Window>
