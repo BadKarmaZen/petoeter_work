@@ -25,7 +25,7 @@ namespace DayCare.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool PresenseMode {
             get {
                 return ((bool)(this["PresenseMode"]));
@@ -38,6 +38,15 @@ namespace DayCare.Properties {
         public global::System.DateTime SleepTime {
             get {
                 return ((global::System.DateTime)(this["SleepTime"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("E:\\Temp\\Invoices")]
+        public string InvoiceFolder {
+            get {
+                return ((string)(this["InvoiceFolder"]));
             }
         }
     }

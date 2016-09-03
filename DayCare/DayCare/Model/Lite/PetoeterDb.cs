@@ -1,6 +1,7 @@
 ﻿using LiteDB;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -115,6 +116,14 @@ namespace DayCare.Model.Lite
 			var fileIds = (from fs in FileStorage.FindAll()
 										 select fs.Id).ToList();
 			fileIds.ForEach(id => FileStorage.Delete(id));
+		}
+
+		public static void CreateBackup()
+		{
+			var backup_folder = Directory.CreateDirectory("Backups").FullName;
+			var backup_file = Path.Combine(backup_folder, string.Format("{0}_{1}.ldb", Path.GetFileNameWithoutExtension(FileName), DateTime.Now.ToString("yyyyMMdd_HHmmss")));
+
+			File.Copy(FileName, backup_file);
 		}
 	}
 

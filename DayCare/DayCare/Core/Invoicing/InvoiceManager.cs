@@ -17,7 +17,7 @@ namespace DayCare.Core.Invoicing
 		public InvoiceManager()
 		{
 			TemplateFolder = "InvoiceTemplates";
-			Folder = @"E:\Temp\Invoices";	//	TODO
+			Folder = Directory.CreateDirectory(Properties.Settings.Default.InvoiceFolder).FullName;		//	@"E:\Temp\Invoices";
 		}
 
 		public InvoicePriceDetails GetCurrentPrices() 
@@ -55,7 +55,8 @@ namespace DayCare.Core.Invoicing
 		public Invoice FindInvoice(Child child, int year) 
 		{
 			var id = MakeSafeName(child);
-			var invoiceFile = Path.Combine(Folder, year.ToString(), string.Format("{0}.xlsx", id));
+			var year_invoice = Directory.CreateDirectory(Path.Combine(Folder, year.ToString())).FullName;
+			var invoiceFile = Path.Combine(year_invoice, string.Format("{0}.xlsx", id));
 			
 			if (!File.Exists(invoiceFile))
 			{
@@ -71,7 +72,6 @@ namespace DayCare.Core.Invoicing
 
 					var cell = wsYear.Cell(12, "G");
 					cell.Value = child.GetFullName();
-
 				}
 				else
 				{

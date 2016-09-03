@@ -33,8 +33,12 @@ namespace DayCare.ViewModels.Dialogs
 
 			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
-				var all = db.Children.FindAll().ToList();
+				var all = (from c in db.Children.FindAll()	//.ToList();
+									 where c.Deleted == false
+									 select c).ToList();
+
 				var exceptions = (from p in db.Presences.FindAll()
+													where p.Date != today
 													select p.Child.Id).ToList();
 
 				exceptions.ForEach(e => all.RemoveAll(c => c.Id == e));

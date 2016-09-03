@@ -438,7 +438,6 @@ namespace DayCare.Model
 
 		public void Export(string path)
 		{
-			//ForceExport();
 			if (Properties.Settings.Default.PresenseMode)
 			{
 				ExportPresence(Path.Combine(path, PresenceExportFilename));
@@ -585,6 +584,8 @@ namespace DayCare.Model
 
 		public void Import(string path)
 		{
+			PetoeterDb.CreateBackup();
+
 			if (Properties.Settings.Default.PresenseMode)
 			{
 				ImportAdministration(Path.Combine(path, AdminExportFilename));
@@ -611,9 +612,27 @@ namespace DayCare.Model
 
 					foreach (var presence in presences)
 					{
-						log.Info("Import presence: {0}. [{1}] {2})", presence.Id, presence.Date.ToShortDateString(), presence.Child.GetFullName());
-						presence.Updated = importTime;
-						db.Presences.Insert(presence);
+						try
+						{
+							log.Info("Import presence: {0}. [{1}] {2})", presence.Id, presence.Date.ToShortDateString(), presence.Child.GetFullName());
+							presence.Updated = importTime;
+
+							var pres = db.Presences.FindById(presence.Id);
+
+							if (pres != null)
+							{
+								//	update
+								db.Presences.Update(presence);
+							}
+							else
+							{
+								db.Presences.Insert(presence);
+							}
+						}
+						catch (Exception ex)
+						{
+							log.Error(ex);
+						}
 					}
 
 					import.DropAll();
