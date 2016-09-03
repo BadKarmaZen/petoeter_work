@@ -62,21 +62,21 @@ namespace DayCare.Core.Reports
 
 				daycell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 				daycell.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-				Enbox(daycell.Style);
+				SetBorder(daycell.Style);
 
 				cell = ws.Cell(3, colid.ToString());
 				cell.Value = "uur";
-				Enbox(cell.Style);
+				SetBorder(cell.Style);
 				colid.Increment();
 
 				cell = ws.Cell(3, colid.ToString());
 				cell.Value = "wie";
-				Enbox(cell.Style);
+				SetBorder(cell.Style);
 				colid.Increment();
 
 				cell = ws.Cell(3, colid.ToString());
 				cell.Value = "paraaf";
-				Enbox(cell.Style);
+				SetBorder(cell.Style);
 				colid.Increment();
 
 				dayCol += 3;
@@ -109,7 +109,7 @@ namespace DayCare.Core.Reports
 						nr.Value = string.Format("{0}.", childIndex);
 						nr.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 						nr.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-						Enbox(nr.Style);
+						SetBorder(nr.Style);
 
 
 						var cname = ws.Range(rowIndex, 2, rowIndex + 1, 2).Merge();
@@ -118,16 +118,16 @@ namespace DayCare.Core.Reports
 						cname.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 						cname.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
 						cname.Style.Alignment.WrapText = true;
-						Enbox(cname.Style);
+						SetBorder(cname.Style);
 
 						cell = ws.Cell(rowIndex, "C");
 						cell.Value = "Aankomst";
-						Enbox(cell.Style);
+						SetBorder(cell.Style);
 						ws.Row(rowIndex).Height = rowSize;
 
 						cell = ws.Cell(rowIndex + 1, "C");
 						cell.Value = "Vertrek";
-						Enbox(cell.Style);
+						SetBorder(cell.Style);
 						ws.Row(rowIndex + 1).Height = rowSize;
 
 						foreach (var day in from p in presence orderby p.Date select p)
@@ -184,7 +184,7 @@ namespace DayCare.Core.Reports
 						nr.Value = string.Format("{0}.", childIndex);
 						nr.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 						nr.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-						Enbox(nr.Style);
+						SetBorder(nr.Style);
 
 
 						var cname = ws.Range(rowIndex, 2, rowIndex + 1, 2).Merge();
@@ -192,25 +192,25 @@ namespace DayCare.Core.Reports
 						cname.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 						cname.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
 						cname.Style.Alignment.WrapText = true;
-						Enbox(cname.Style);
+						SetBorder(cname.Style);
 
 						cell = ws.Cell(rowIndex, "C");
 						cell.Value = "Aankomst";
-						Enbox(cell.Style);
+						SetBorder(cell.Style);
 						ws.Row(rowIndex).Height = rowSize;
 
 						cell = ws.Cell(rowIndex + 1, "C");
 						cell.Value = "Vertrek";
-						Enbox(cell.Style);
+						SetBorder(cell.Style);
 						ws.Row(rowIndex + 1).Height = rowSize;
 
 						colid = new ColumnId('D');
 						for (int index = 0; index < 15; index++)
 						{
 							cell = ws.Cell(rowIndex, colid.ToString());
-							Enbox(cell.Style);
+							SetBorder(cell.Style);
 							cell = ws.Cell(rowIndex + 1, colid.ToString());
-							Enbox(cell.Style);
+							SetBorder(cell.Style);
 
 							colid.Increment();
 						}
@@ -267,12 +267,12 @@ namespace DayCare.Core.Reports
 
 		}
 
-		private static void Enbox(IXLStyle style)
+		private static void SetBorder(IXLStyle style, XLBorderStyleValues borderstyle = XLBorderStyleValues.Thin)
 		{
-			style.Border.LeftBorder = XLBorderStyleValues.Thin;
-			style.Border.RightBorder = XLBorderStyleValues.Thin;
-			style.Border.TopBorder = XLBorderStyleValues.Thin;
-			style.Border.BottomBorder = XLBorderStyleValues.Thin;
+			style.Border.LeftBorder = borderstyle;
+			style.Border.RightBorder = borderstyle;
+			style.Border.TopBorder = borderstyle;
+			style.Border.BottomBorder = borderstyle;
 		}
 
 		public static string GetTempFilePathWithExtension(string extension)

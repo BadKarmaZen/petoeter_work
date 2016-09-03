@@ -21,21 +21,24 @@
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
 			<RowDefinition/>
 		</Grid.RowDefinitions>
 
 		<TextBlock Text="Voornaam" Style="{DynamicResource LabelStyle}" />
 		<TextBlock Grid.Row="1" Text="Achternaam" Style="{DynamicResource LabelStyle}" />
 		<TextBlock Grid.Row="2" Text="Geboorte datum" Style="{DynamicResource LabelStyle}" />
-			<TextBlock Text="Foto" Grid.Row="3" Style="{DynamicResource LabelStyle}"  />
-		
+		<TextBlock Grid.Row="3" Text="Aanwezigheid" Style="{DynamicResource LabelStyle}" />
+		<TextBlock Grid.Row="4" Text="Foto" Style="{DynamicResource LabelStyle}" />
+
 
 		<TextBox Text="{Binding FirstName}" Grid.Column="2" Style="{DynamicResource TextBoxStyle}" Margin="4" MinWidth="200"/>
 		<TextBox Text="{Binding LastName}" Grid.Column="2" Grid.Row="1" Style="{DynamicResource TextBoxStyle}" Margin="4" MinWidth="200"/>
 		<DatePicker SelectedDate="{Binding BirthDay}" Grid.Column="2" Grid.Row="2" VerticalAlignment="Center" FirstDayOfWeek="Monday" FontFamily="Calibri" FontSize="18" Margin="4,0"
 								CalendarStyle="{StaticResource LargeCalendarStyle}"/>
-		
-		<StackPanel Grid.Row="3" Grid.Column="3" Orientation="Vertical" >
+		<TextBox Text="{Binding PresenceInfo}" Grid.Column="2" Grid.Row="3" Style="{DynamicResource TextBoxStyle}" Margin="4" MinWidth="200"/>
+
+		<StackPanel Grid.Row="4" Grid.Column="3" Orientation="Vertical" >
 			<Button x:Name="SelectImageAction" Content="Selecteer" Style="{DynamicResource ButtonStyle}" Height="24" Margin="2" 
 							Visibility="{Binding ShowSelect, Converter={StaticResource BooleanVisibilityConverter}}"/>
 			<Button x:Name="RemoveImageAction" Content="Verwijder" Style="{DynamicResource ButtonStyle}" Height="24" Margin="2" 
@@ -44,8 +47,8 @@
 			<Border  BorderBrush="Black" Background="White" BorderThickness="2" CornerRadius="20"	Margin="2"
 								Visibility="{Binding ShowRemove, Converter={StaticResource BooleanVisibilityConverter}}" ClipToBounds="True">
 				<Image Width="200" Height="240" Source="{Binding ImageData}" ClipToBounds="True"/>
-			</Border>		
-		
+			</Border>
+
 		</StackPanel>
 
 	</Grid>

@@ -16,6 +16,7 @@ namespace DayCare.ViewModels.Children
 		#region Member
 		private string _firstName;
 		private string _lastName;
+		private string _presenceInfo;
 		private DateTime _birthDay;
 		private string _fileId;
 		private BitmapImage _imageData;
@@ -77,6 +78,13 @@ namespace DayCare.ViewModels.Children
 			get { return _lastName; }
 			set { _lastName = value; NotifyOfPropertyChange(() => FirstName); }
 		}
+
+		public string PresenceInfo
+		{
+			get { return _presenceInfo; }
+			set { _presenceInfo = value; NotifyOfPropertyChange(() => PresenceInfo); }
+		}
+
 		#endregion
 
 		public int ChildId { get; set; }
@@ -89,6 +97,8 @@ namespace DayCare.ViewModels.Children
 				_firstName = child.FirstName;
 				_lastName = child.LastName;
 				_birthDay = child.BirthDay;
+				_presenceInfo = child.PresenceInfo;
+
 				FileID = child.FileId;
 			}
 
@@ -101,6 +111,7 @@ namespace DayCare.ViewModels.Children
 			child.LastName = _lastName;
 			child.BirthDay = _birthDay;
 			child.FileId = _fileId;
+			child.PresenceInfo = _presenceInfo;
 		}
 
 		public void SelectImageAction()

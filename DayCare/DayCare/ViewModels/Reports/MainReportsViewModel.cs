@@ -48,5 +48,12 @@ namespace DayCare.ViewModels.Reports
 
 			PhoneListReport.Create();
 		}
+
+		public void ExitReportAction()
+		{
+			LogManager.GetLog(GetType()).Info("Exit report");
+
+			ExitReport.Create();
+		}
 	}
 }

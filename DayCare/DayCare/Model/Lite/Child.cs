@@ -17,6 +17,8 @@ namespace DayCare.Model.Lite
 
 		public string FileId { get; set; }
 
+		public string PresenceInfo { get; set; }
+
 		public Child()
 		{
 			Schedule = new List<Date>();

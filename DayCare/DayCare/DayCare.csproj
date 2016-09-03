@@ -121,11 +121,13 @@
     <Compile Include="Core\Invoicing\InvoicePriceDetails.cs" />
     <Compile Include="Core\Log.cs" />
     <Compile Include="Core\ReactivatableScreen.cs" />
+    <Compile Include="Core\Reports\BaseReport.cs" />
     <Compile Include="Core\Reports\ColumnId.cs" />
     <Compile Include="Core\Reports\CustomStyleSheet.cs" />
     <Compile Include="Core\Reports\DateCell.cs" />
     <Compile Include="Core\Reports\DayInfo.cs" />
     <Compile Include="Core\Reports\ExcelFile.cs" />
+    <Compile Include="Core\Reports\ExitReport.cs" />
     <Compile Include="Core\Reports\MonthListReport.cs" />
     <Compile Include="Core\Reports\PhoneListReport.cs" />
     <Compile Include="Core\Reports\TextCell.cs" />
