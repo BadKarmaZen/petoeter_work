@@ -82,7 +82,11 @@ namespace DayCare.ViewModels.Scheduler
 				endDate = endDate.NextFriday();
 			}
 
-			var weekDate = startDate;
+      //  remove all scheduled entries in the updated period
+      //
+      _child.Schedule.RemoveAll(d => StartDate.Value.Date <= d.Day && d.Day <= EndDate.Value.Date);
+
+      var weekDate = startDate;
 
 			while (weekDate < endDate)
 			{
@@ -96,7 +100,7 @@ namespace DayCare.ViewModels.Scheduler
 					{
 						if (period.Schedule[day].Morning || period.Schedule[day].Afternoon)
 						{
-							_child.Schedule.RemoveAll(d => d.Day == weekDate);
+							//_child.Schedule.RemoveAll(d => d.Day == weekDate);
 							_child.Schedule.Add(new Model.Lite.Date 
 							{
  								Day = weekDate,
