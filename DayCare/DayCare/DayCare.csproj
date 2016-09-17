@@ -207,6 +207,7 @@
     <Compile Include="ViewModels\Invoice\InvoiceMainViewModel.cs" />
     <Compile Include="ViewModels\Members\MemberUI.cs" />
     <Compile Include="ViewModels\Precense\PresenceScheduleViewModel.cs" />
+    <Compile Include="ViewModels\Precense\UpdatePresenceEntryViewModel.cs" />
     <Compile Include="ViewModels\Scheduler\EditChildCalendarViewModel.cs" />
     <Compile Include="ViewModels\Scheduler\ScheduleExceptionViewModel.cs" />
     <Compile Include="ViewModels\UICore\BackMenu.cs" />

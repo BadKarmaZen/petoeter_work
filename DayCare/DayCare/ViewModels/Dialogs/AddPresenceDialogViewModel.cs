@@ -38,7 +38,7 @@ namespace DayCare.ViewModels.Dialogs
 									 select c).ToList();
 
 				var exceptions = (from p in db.Presences.FindAll()
-													where p.Date != today
+													where p.Date == today
 													select p.Child.Id).ToList();
 
 				exceptions.ForEach(e => all.RemoveAll(c => c.Id == e));

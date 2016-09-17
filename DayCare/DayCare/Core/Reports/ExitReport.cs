@@ -18,6 +18,8 @@ namespace DayCare.Core.Reports
 
 	public class ExitReport : BaseReport
 	{
+		static readonly char[] _splitter = { '/' };
+
 		public static void Create()
 		{
 			using(var db = new PetoeterDb(PetoeterDb.FileName))
@@ -100,20 +102,23 @@ namespace DayCare.Core.Reports
 				range.Style.Font.FontSize = 16;
 
 
-				int currentYear = 0;
-				int currentMonth = 0;
+				//int currentYear = 0;
+				//int currentMonth = 0;
 
 				int row = 3;
 				int monthRow = 0;
 
 				foreach (var month in months)
-				{
-					if (currentMonth != month.Date.Month || currentYear != month.Date.Year)
-					{
-						//	New Month
-						//
-						currentMonth = month.Date.Month;
-						currentYear = month.Date.Year;
+				{	
+					int coming_row_counter = 0;				
+					int leaving_row_counter = 0;
+					
+					//if (currentMonth != month.Date.Month || currentYear != month.Date.Year)
+					//{
+					//	//	New Month
+					//	//
+					//	currentMonth = month.Date.Month;
+					//	currentYear = month.Date.Year;
 
 						range = ws.Range(row, 1, row, 4).Merge();
 
@@ -133,39 +138,70 @@ namespace DayCare.Core.Reports
 
 						row++;
 						monthRow = row;
-					}
+					//}
 
+					//	leaving
+					//
 					foreach (var child in month.Leaving)
 					{
-						var child_cell = ws.Cell(row, "A");
-						child_cell.Value = child.GetFullName();
-						
-						child_cell = ws.Cell(row, "B");
-						child_cell.Value = child.PresenceInfo;
-						
-						row++;
+						string[] weekinfo = { "" };
+
+						if (child.PresenceInfo != null)
+						{
+							weekinfo = child.PresenceInfo.Split(_splitter);
+						}
+
+						leaving_row_counter += weekinfo.Length;
+
+						//range = ws.Range(row, 1, row + weekinfo.Length, 1).Merge();
+						//range.Value = child.GetFullName();
+						//range.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+						//range.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+						var cell = ws.Cell(row, "A");
+						cell.Value = child.GetFullName();
+
+						for (int index = 0; index < weekinfo.Length; index++)
+						{
+							var child_cell = ws.Cell(row, "B");
+							child_cell.Value = weekinfo[index].Trim();
+
+							row++;
+						}
 					}
 
 					row = monthRow;
 
 					foreach (var child in month.Coming)
 					{
+						string[] weekinfo = { "" };
+
+						if (child.PresenceInfo != null)
+						{
+							weekinfo = child.PresenceInfo.Split(_splitter);
+						}
+
+						leaving_row_counter += weekinfo.Length;
+
 						var child_cell = ws.Cell(row, "C");
 						child_cell.Value = child.GetFullName();
 
-						child_cell = ws.Cell(row, "D");
-						child_cell.Value = child.PresenceInfo;
+						for (int index = 0; index < weekinfo.Length; index++)
+						{
+							child_cell = ws.Cell(row, "D");
+							child_cell.Value = weekinfo[index].Trim();
 
-						row++;
+							row++;
+						}
 					}
 
-					var size = Math.Max(month.Coming.Count, month.Leaving.Count);
+					var size = Math.Max(leaving_row_counter, coming_row_counter);
 					for (int index = 0; index < size; index++)
 					{
 						ws.Cell(monthRow + index, "A").Style.Border.LeftBorder = XLBorderStyleValues.Thin;
 						ws.Cell(monthRow + index, "B").Style.Border.RightBorder = XLBorderStyleValues.Thin;
 						ws.Cell(monthRow + index, "D").Style.Border.RightBorder = XLBorderStyleValues.Thin;
 					}
+					
 					row = monthRow + size;
 
 					range = ws.Range(row, 1, row, 4).Merge();

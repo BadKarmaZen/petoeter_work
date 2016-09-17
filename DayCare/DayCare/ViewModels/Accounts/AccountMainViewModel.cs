@@ -111,8 +111,16 @@ namespace DayCare.ViewModels.Accounts
 			//	No real delete
 			using (var db = new PetoeterDb(PetoeterDb.FileName))
 			{
+				var update = DateTime.Now;
+
 				SelectedItem.Tag.Deleted = true;
-				SelectedItem.Tag.Updated = DateTime.Now;
+				SelectedItem.Tag.Updated = update;
+
+				foreach (var child in SelectedItem.Tag.Children)
+				{
+					child.Deleted = true;
+					child.Updated = update;
+				}
 
 				db.Accounts.Update(SelectedItem.Tag);
 			}
